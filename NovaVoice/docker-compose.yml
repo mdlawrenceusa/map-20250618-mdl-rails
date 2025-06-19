@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  rails:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - RAILS_ENV=development
+      - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+      - MICROSERVICE_URL=http://microservice:8080
+      - VONAGE_API_KEY=${VONAGE_API_KEY}
+      - VONAGE_API_SECRET=${VONAGE_API_SECRET}
+      - VONAGE_OUTBOUND_APPLICATION_ID=${VONAGE_OUTBOUND_APPLICATION_ID}
+      - VONAGE_INBOUND_APPLICATION_ID=${VONAGE_INBOUND_APPLICATION_ID}
+    volumes:
+      - .:/app
+      - /home/ec2-user/keys:/app/keys:ro
+    depends_on:
+      - microservice
+    command: bundle exec rails server -b 0.0.0.0
+
+  microservice:
+    build: ./microservice
+    ports:
+      - "8080:8080"
+    environment:
+      - VONAGE_API_KEY=${VONAGE_API_KEY}
+      - VONAGE_API_SECRET=${VONAGE_API_SECRET}
+      - VONAGE_OUTBOUND_APPLICATION_ID=${VONAGE_OUTBOUND_APPLICATION_ID}
+      - VONAGE_OUTBOUND_PRIVATE_KEY_PATH=/app/keys/vonage_private.key
+      - VONAGE_OUTBOUND_NUMBER=${VONAGE_OUTBOUND_NUMBER}
+      - VONAGE_INBOUND_APPLICATION_ID=${VONAGE_INBOUND_APPLICATION_ID}
+      - VONAGE_INBOUND_PRIVATE_KEY_PATH=/app/keys/vonage_private.key
+      - WEBHOOK_BASE_URL=${WEBHOOK_BASE_URL:-https://gospelshare.io}
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - DEFAULT_INBOUND_PROMPT=${DEFAULT_INBOUND_PROMPT}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    volumes:
+      - ./microservice:/app
+      - /home/ec2-user/keys:/app/keys:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+networks:
+  default:
+    name: voice-streaming-network
