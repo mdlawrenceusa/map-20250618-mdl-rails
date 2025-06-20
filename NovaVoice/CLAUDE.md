@@ -16,19 +16,19 @@ NovaVoice is a Rails 8 application that provides real-time voice interactions us
 ## Development Commands
 
 ```bash
-# Setup Vonage integration
-./setup.sh
+# Cloud9 Development Setup
+# Rails runs on port 8080 for Cloud9 preview
+PORT=8080 bin/rails server -b 0.0.0.0
 
-# Start all services with Docker Compose
+# Microservice runs on port 3000 for CloudFront/Vonage access
+cd microservice && PORT=3000 npm run dev
+
+# Docker Compose (production-like)
 docker-compose up -d
 
 # View logs
 docker-compose logs -f rails
 docker-compose logs -f microservice
-
-# Manual startup (development)
-bin/rails server
-cd microservice && npm run dev
 
 # Run tests
 bin/rails test
@@ -109,31 +109,86 @@ Uses SQLite3 with separate databases for scaling:
 - `solid_queue` for background jobs  
 - `solid_cable` for ActionCable persistence
 
-## Production Deployment
+## Production Infrastructure
 
-Configured for Docker deployment with:
+**CloudFront Configuration (Microservice Only):**
+- **Distribution ID**: EB6EO1Q0TFWQ5
+- **Domain**: gospelshare.io, www.gospelshare.io (for Vonage webhooks)
+- **SSL Certificate**: ACM certificate arn:aws:acm:us-east-1:302296110959:certificate/69a168d3-0d03-4f46-b85c-7e237b763991
+- **Origin**: Microservice only - ec2-54-208-194-221.compute-1.amazonaws.com:3000 (HTTP only)
+- **Cache Behaviors**:
+  - `/webhooks/*` → Microservice (for Vonage webhooks)
+  - `/ws/*` → Microservice (for WebSocket connections)
+  - All other paths → Microservice
+- **Note**: Rails app (port 8080) is NOT exposed through CloudFront - only accessible via Cloud9 preview
+
+**WAF Protection:**
+- **Web ACL**: NovaSenicGospelShareWAF (ID: 0b2c7664-0b04-4e48-999f-be8f735b508d)
+- **Rules**: Vonage IP whitelist, rate limiting (2000 req/5min), AWS managed rules
+- **Default Action**: Allow (for development access)
+
+**Route 53 DNS:**
+- **Hosted Zone**: Z075223437JLVVBIVE60G
+- **A Records**: gospelshare.io and www.gospelshare.io → CloudFront distribution
+- **Validation**: ACM certificate validation records
+
+**Cloud9 Security Groups:**
+- **Group ID**: sg-0ac41270e9c4d0565
+- **Ports**: 
+  - 22 (SSH) - restricted to Cloud9 IP ranges
+  - 3000 (Microservice) - open to 0.0.0.0/0 for CloudFront/Vonage
+  - 80, 443 - open for HTTP/HTTPS traffic
+- **Note**: Port 8080 (Rails) doesn't need external access - only Cloud9 preview
+
+**Vonage Configuration:**
+- **API Key**: 7f45e88f
+- **Outbound Number**: +12135235735 (App ID: 891be877-9a63-45e1-bdd3-f66d74f206a0)
+- **Inbound Number**: +12135235700 (App ID: f7fb73da-1cfb-4376-a701-b71c4672f30d)
+- **Webhook URLs**: https://gospelshare.io/webhooks/* and /outbound/webhooks/*
+- **Private Key**: Stored securely in /home/ec2-user/keys/vonage_private.key
+
+**Deployment:**
 - Multi-stage Dockerfiles for optimization
-- Kamal deployment automation
-- SSL via Let's Encrypt
+- Kamal deployment automation available
 - Health check endpoints at `/up`
 - Asset precompilation and optimization
 
 ## Testing Voice Features
 
-When testing Nova Sonic bidirectional streaming:
-- Use modern browser with microphone permissions and HTTP/2 support
-- Test WebSocket connections via browser dev tools Network tab
-- Monitor ActionCable logs for audio chunk processing and stream events
-- Check AWS CloudWatch for Bedrock API calls and bidirectional stream metrics
+**Local Development Testing:**
+- Rails server: `http://localhost:8080` (bound to 0.0.0.0:8080 for Cloud9 preview)
+- Microservice: `http://localhost:3000` (bound to 0.0.0.0:3000 for CloudFront access)
+- Health checks: `curl http://localhost:8080/up` (Rails) and `curl http://localhost:3000/health` (Microservice)
+- Cloud9 Preview: Click "Preview Running Application" to view Rails app
+
+**Vonage Webhook Testing:**
+- Inbound webhooks: `POST https://gospelshare.io/webhooks/answer` and `/webhooks/events`
+- Outbound webhooks: `POST https://gospelshare.io/outbound/webhooks/answer` and `/outbound/webhooks/events`
+- WebSocket audio: `wss://gospelshare.io/ws/` (handled by microservice)
+
+**CloudFront Testing:**
+- Note: In Cloud9 development environment, direct external access may be limited
+- CloudFront routes requests to appropriate origins based on path patterns
+- SSL termination handled by CloudFront with ACM certificate
+- WAF provides basic protection while allowing development access
+
+**Nova Sonic Testing:**
+- Monitor AWS CloudWatch for Bedrock API calls and bidirectional stream metrics
 - Test Nova Sonic events: sessionStart, audioOutput, textOutput, contentEnd
-- Verify audio format conversion from WebM to PCM in logs
+- Verify audio format conversion from Vonage WebM to PCM for Nova Sonic
 - Test fallback behavior when Nova Sonic is unavailable
 - Monitor HTTP/2 stream connections and proper cleanup on disconnect
 
 **Audio Format Requirements:**
-- Frontend: 16kHz sample rate, mono channel, optimal for Nova Sonic
-- Backend: Converts WebM/Opus to PCM 16-bit for Nova Sonic compatibility
-- Real-time streaming: 100ms audio chunks for low-latency interaction
+- Vonage: 16kHz sample rate, mono channel, L16 PCM format
+- Nova Sonic: 16-bit PCM format for bidirectional streaming
+- Real-time streaming: Low-latency audio processing with WebSocket transport
+
+**Troubleshooting:**
+- Check security group rules if external access fails (sg-0ac41270e9c4d0565)
+- Verify CloudFront origin configuration matches running service ports
+- Monitor Rails and microservice logs for webhook processing errors
+- Check Vonage application configuration in dashboard matches webhook URLs
 
 ## Available AWS MCP Tools
 
