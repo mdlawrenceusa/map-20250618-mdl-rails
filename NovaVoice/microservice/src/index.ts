@@ -3,7 +3,8 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { VonageService } from './vonage';
 import { BedrockService } from './bedrock';
 import { AudioProcessor } from './audio-processor';
-import { NovaSonicProperClient } from './nova-sonic-proper';
+import { NovaSonicBidirectionalStreamClient, StreamSession } from './nova-sonic-client';
+import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
 import { CallRequest, CallResponse, InboundRequest, InboundResponse, ActiveCall } from './types';
 import { IsString, IsOptional, IsNumber, validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
@@ -52,8 +53,22 @@ const server = createServer(app);
 const wss = new WebSocketServer({ server });
 
 const vonageService = new VonageService();
-const novaSonicClient = new NovaSonicProperClient();
+
+// Initialize Nova Sonic client with proper configuration
+const novaSonicClient = new NovaSonicBidirectionalStreamClient({
+  clientConfig: {
+    credentials: fromNodeProviderChain(),
+    region: process.env.AWS_REGION || 'us-east-1',
+  },
+  inferenceConfig: {
+    maxTokens: 1024,
+    topP: 0.9,
+    temperature: 0.7,
+  },
+});
+
 const activeCalls = new Map<string, ActiveCall>();
+const activeSessions = new Map<string, StreamSession>();
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
@@ -230,18 +245,21 @@ app.get('/webhooks/answer', async (req: Request, res: Response) => {
     });
   }
 
-  // Return NCCO for WebSocket connection
-  // CloudFront provides SSL termination, so WSS will work
+  // Return NCCO with initial greeting and WebSocket connection (like working PoC)
   const webhookBaseUrl = process.env.WEBHOOK_BASE_URL || 'https://gospelshare.io';
   
   res.json([
     {
+      action: 'talk',
+      text: 'Hello, this is Esther from Mike Lawrence Productions. How can I help you today?'
+    },
+    {
       action: 'connect',
+      from: 'Esther - Mike Lawrence Productions',
       endpoint: [{
         type: 'websocket',
-        uri: `wss://${webhookBaseUrl.replace('https://', '')}/ws/${callId}`,
-        'content-type': 'audio/l16;rate=16000',
-        headers: {}
+        uri: `wss://${webhookBaseUrl.replace('https://', '')}/socket?channel=${callId}`,
+        'content-type': 'audio/l16;rate=16000'
       }]
     }
   ]);
@@ -277,17 +295,21 @@ app.get('/outbound/webhooks/answer', async (req: Request, res: Response) => {
     });
   }
 
-  // Return NCCO for WebSocket connection
+  // Return NCCO for outbound WebSocket connection (like working PoC)
   const webhookBaseUrl = process.env.WEBHOOK_BASE_URL || 'https://gospelshare.io';
   
   res.json([
     {
+      action: 'talk',
+      text: 'Hello, this is Esther calling from Mike Lawrence Productions. Could I please speak with your senior pastor or lead pastor?'
+    },
+    {
       action: 'connect',
+      from: 'Esther - Mike Lawrence Productions',
       endpoint: [{
         type: 'websocket',
-        uri: `wss://${webhookBaseUrl.replace('https://', '')}/ws/${callId}`,
-        'content-type': 'audio/l16;rate=16000',
-        headers: {}
+        uri: `wss://${webhookBaseUrl.replace('https://', '')}/socket?channel=${callId}`,
+        'content-type': 'audio/l16;rate=16000'
       }]
     }
   ]);
@@ -423,15 +445,17 @@ app.post('/vonage/:type/events', (req: Request, res: Response) => {
   res.sendStatus(200);
 });
 
-// WebSocket handling
-wss.on('connection', (ws: WebSocket, req) => {
-  // Extract call ID from URL path: /ws/callId
-  const urlMatch = req.url?.match(/^\/ws\/(.+)$/);
-  const callId = urlMatch?.[1];
+// WebSocket handling - using /socket with channel parameter like working PoC
+wss.on('connection', async (ws: WebSocket, req) => {
+  // Extract channel (callId) from query parameter: /socket?channel=callId
+  const url = new URL(req.url || '', 'ws://localhost');
+  const callId = url.searchParams.get('channel') || url.pathname.split('/').pop();
   
   logger.info('WebSocket connection attempt', { 
     url: req.url,
     callId,
+    pathname: url.pathname,
+    searchParams: Object.fromEntries(url.searchParams),
     headers: req.headers
   });
   
@@ -446,67 +470,102 @@ wss.on('connection', (ws: WebSocket, req) => {
   const call = activeCalls.get(callId)!;
   call.ws = ws;
   
-  // Create stream session for this call
-  const streamSession = novaSonicClient.createStreamSession(callId);
-  
-  // Store stream session reference for cleanup
-  (call as any).streamSession = streamSession;
-  
-  // Set up event handlers using the PoC pattern
-  streamSession
-    .onEvent('audioOutput', (data: any) => {
-      if (ws.readyState === WebSocket.OPEN && data.content) {
-        const audioBuffer = Buffer.from(data.content, 'base64');
-        ws.send(audioBuffer);
-        logger.debug('Sent audio response to caller', { 
-          callId, 
-          audioSize: audioBuffer.length 
-        });
-      }
-    })
-    .onEvent('textOutput', (data: any) => {
-      if (data.content) {
+  try {
+    logger.info('🚀 STEP 1: Creating stream session', { callId });
+    const session = novaSonicClient.createStreamSession(callId);
+    activeSessions.set(callId, session);
+    logger.info('✅ STEP 1 COMPLETE: Stream session created', { callId });
+    
+    logger.info('🎧 STEP 2: Setting up event handlers', { callId });
+    // Set up event handlers matching AWS sample
+    session
+      .onEvent('audioOutput', (data: any) => {
+        if (ws.readyState === WebSocket.OPEN) {
+          const audioBuffer = Buffer.from(data.content, 'base64');
+          ws.send(audioBuffer);
+          logger.debug('Sent audio response to caller', { 
+            callId, 
+            audioSize: audioBuffer.length 
+          });
+        }
+      })
+      .onEvent('textOutput', (data: any) => {
         call.transcript.push(data.content);
         logger.info('Nova Sonic response', { callId, text: data.content });
-      }
-    })
-    .onEvent('error', (data: any) => {
-      logger.error('Nova Sonic error', { callId, error: data });
+      })
+      .onEvent('contentStart', (data: any) => {
+        logger.debug('Content started', { callId, data });
+      })
+      .onEvent('contentEnd', (data: any) => {
+        logger.debug('Content ended', { callId, data });
+      })
+      .onEvent('error', (data: any) => {
+        logger.error('Nova Sonic error', { callId, error: data });
+      });
+    logger.info('✅ STEP 2 COMPLETE: Event handlers set', { callId });
+
+    logger.info('🔗 STEP 3: Initiating Nova Sonic session (with new fast async iterator)', { callId });
+    const startTime = Date.now();
+    await novaSonicClient.initiateSession(callId, ws);
+    const totalTime = Date.now() - startTime;
+    logger.info('🎉 COMPLETE: Nova Sonic session fully initialized', { 
+      callId, 
+      totalDuration: `${totalTime}ms`
     });
 
-  // Initialize session following PoC pattern
-  (async () => {
-    try {
-      await streamSession.setupPromptStart();
-      await streamSession.setupSystemPrompt(undefined, call.prompt);
-      await streamSession.setupStartAudio();
-      await novaSonicClient.initiateSession(callId);
-      logger.info('Nova Sonic bidirectional stream started', { callId });
-    } catch (error: any) {
-      logger.error('Failed to start Nova Sonic stream', { callId, error: error.message });
-    }
-  })();
+  } catch (error: any) {
+    logger.error('💥 INITIALIZATION FAILED at step', { callId, error: error.message, stack: error.stack });
+    ws.close();
+    return;
+  }
 
   ws.on('message', async (data: Buffer) => {
     try {
-      // Vonage sends raw audio data (L16 PCM 16kHz)
-      logger.debug('Received audio from caller', { 
-        callId, 
-        audioSize: data.length 
+      // Log ALL WebSocket messages for debugging
+      logger.info('📨 WebSocket message received', { 
+        callId,
+        dataType: typeof data,
+        isBuffer: Buffer.isBuffer(data),
+        dataLength: data.length,
+        firstBytes: data.slice(0, 16).toString('hex')
       });
-      
-      // Send audio to Nova Sonic for processing
-      await streamSession.streamAudio(data);
+
+      // Check if this is actually audio data
+      if (data.length > 100) { // Audio chunks are typically larger
+        logger.info('🎵 AUDIO RECEIVED from caller', { 
+          callId, 
+          audioSize: data.length,
+          firstBytes: data.slice(0, 8).toString('hex')
+        });
+        
+        const session = activeSessions.get(callId);
+        if (session) {
+          logger.info('📤 SENDING AUDIO to Nova Sonic session', { callId });
+          // Send audio to Nova Sonic for processing
+          await session.streamAudio(data);
+          logger.info('✅ AUDIO SENT to Nova Sonic', { callId, audioSize: data.length });
+        } else {
+          logger.error('❌ NO SESSION FOUND for audio', { callId });
+        }
+      } else {
+        // Log small messages as potential control messages
+        logger.info('📝 Control message received', { 
+          callId, 
+          size: data.length,
+          content: data.toString('utf8')
+        });
+      }
       
     } catch (error: any) {
-      logger.error('Error processing WebSocket audio', { 
+      logger.error('💥 ERROR processing WebSocket message', { 
         callId, 
-        error: error.message 
+        error: error.message,
+        stack: error.stack
       });
     }
   });
 
-  ws.on('close', () => {
+  ws.on('close', async () => {
     logger.info('WebSocket disconnected', { callId });
     
     const call = activeCalls.get(callId);
@@ -514,12 +573,27 @@ wss.on('connection', (ws: WebSocket, req) => {
       call.ws = null;
     }
     
-    // Clean up Nova Sonic session
-    const sessionToClose = (call as any)?.streamSession;
-    if (sessionToClose) {
-      sessionToClose.close().catch((error: any) => {
-        logger.error('Error ending Nova Sonic session', { callId, error: error.message });
-      });
+    // Clean up Nova Sonic session properly
+    const session = activeSessions.get(callId);
+    if (session) {
+      try {
+        logger.info('🔚 Closing audio content and prompt for session', { callId });
+        
+        // End the audio content first
+        await session.endAudioContent();
+        logger.debug('Audio content ended', { callId });
+        
+        // Then end the prompt 
+        await session.endPrompt();
+        logger.debug('Prompt ended', { callId });
+        
+        // Finally close the session
+        await session.close();
+        activeSessions.delete(callId);
+        logger.info('Nova Sonic session fully closed', { callId });
+      } catch (error: any) {
+        logger.error('Error closing Nova Sonic session', { callId, error: error.message });
+      }
     }
   });
 

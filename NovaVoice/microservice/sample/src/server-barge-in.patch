@@ -1,0 +1,42 @@
+--- server.ts.original	2024-12-05 12:00:00.000000000 +0000
++++ server.ts	2024-12-05 12:00:00.000000000 +0000
+@@ -3,7 +3,8 @@
+ import expressWs from "express-ws";
+ import * as https from "https";
+ import { fromEnv } from "@aws-sdk/credential-providers";
+-import { NovaSonicBidirectionalStreamClient } from "./client";
++// import { NovaSonicBidirectionalStreamClient } from "./client";
++import { EnhancedNovaSonicClient } from "./enhanced-client";
+ import { Buffer } from "node:buffer";
+ import WebSocket from "ws";
+ import {
+@@ -104,7 +105,8 @@
+ });
+ 
+ const AWS_PROFILE_NAME: string = process.env.AWS_PROFILE || "";
+-const bedrockClient = new NovaSonicBidirectionalStreamClient({
++// Use enhanced client with barge-in support
++const bedrockClient = new EnhancedNovaSonicClient({
+   requestHandlerConfig: {
+     maxConcurrentStreams: 10,
+   },
+@@ -356,6 +358,18 @@
+       } catch (e) {
+         if (vonage.isOn) await vonage.processAudioData(msg as Buffer, session)
+       } finally {
++        // Handle clearAudio events from interruptions
++        if (session && session.onEvent) {
++          session.onEvent('clearAudio', (data: any) => {
++            console.log(`🚫 Clearing audio for channel ${channelId} due to interruption`);
++            // Send clear message to all connected clients
++            const clients = channelClients.get(channelId) || new Set();
++            clients.forEach((client) => {
++              if (client.readyState === WebSocket.OPEN) {
++                client.send(JSON.stringify({ event: 'clearAudio', data }));
++              }
++            });
++          });
++        }
+         if (useJson) {
+           const msgJson = JSON.parse(msg.toString());
+           // TODO: We shouldn't do this.

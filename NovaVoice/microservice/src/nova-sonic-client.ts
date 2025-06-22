@@ -1,243 +1,817 @@
-/**
- * Nova Sonic Bidirectional Streaming Client
- * Based on the working PoC implementation
- */
-
 import {
   BedrockRuntimeClient,
   InvokeModelWithBidirectionalStreamCommand,
   InvokeModelWithBidirectionalStreamInput,
 } from "@aws-sdk/client-bedrock-runtime";
 import { NodeHttp2Handler } from "@smithy/node-http-handler";
-import { EventEmitter } from 'events';
+import { Buffer } from "node:buffer";
+import { randomUUID } from "node:crypto";
+import { Subject } from "rxjs";
+import { take } from "rxjs/operators";
+import { firstValueFrom } from "rxjs";
+import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
+import { WebSocket } from "ws";
 import { logger } from './logger';
 
-interface SessionData {
-  sessionId: string;
-  stream?: any;
-  isActive: boolean;
-  startTime: number;
-  transcript: string[];
+// Types
+export interface InferenceConfig {
+  maxTokens: number;
+  topP: number;
+  temperature: number;
 }
 
-export class NovaSonicBidirectionalStreamClient extends EventEmitter {
-  private client: BedrockRuntimeClient;
-  private sessions = new Map<string, SessionData>();
-  private modelId = 'amazon.nova-sonic-v1:0';
+export interface SessionData {
+  queue: any[];
+  queueSignal: Subject<void>;
+  closeSignal: Subject<void>;
+  responseSubject: Subject<any>;
+  toolUseContent: any;
+  toolUseId: string;
+  toolName: string;
+  responseHandlers: Map<string, (data: any) => void>;
+  promptName: string;
+  inferenceConfig: InferenceConfig;
+  isActive: boolean;
+  isPromptStartSent: boolean;
+  isAudioContentStartSent: boolean;
+  audioContentId: string;
+}
 
-  constructor() {
-    super();
-    
-    // Initialize with HTTP/2 handler for bidirectional streaming
-    this.client = new BedrockRuntimeClient({
-      region: process.env.AWS_REGION || 'us-east-1',
-      requestHandler: new NodeHttp2Handler({
-        maxConcurrentStreams: 10,
-      }),
+export interface NovaSonicBidirectionalStreamClientConfig {
+  requestHandlerConfig?: any;
+  clientConfig: {
+    region?: string;
+    credentials?: any;
+  };
+  inferenceConfig?: InferenceConfig;
+}
+
+// Constants
+const DefaultTextConfiguration = {
+  mediaType: "text/plain",
+};
+
+const DefaultAudioInputConfiguration = {
+  mediaType: "audio/lpcm",
+  sampleRateHertz: 16000,
+  sampleSizeBits: 16,
+  channelCount: 1,
+  audioType: "SPEECH",
+  encoding: "base64",
+};
+
+const DefaultAudioOutputConfiguration = {
+  mediaType: "audio/lpcm",
+  sampleRateHertz: 24000,
+  sampleSizeBits: 16,
+  channelCount: 1,
+  voiceId: "matthew",
+  encoding: "base64",
+  audioType: "SPEECH",
+};
+
+const DefaultSystemPrompt = `You are Esther, Mike Lawrence Productions' scheduling assistant. 
+Your ONLY job is to schedule 15-minute web meetings between senior pastors and Mike Lawrence about our Gospel outreach program.
+Keep responses brief (under 25 words) and always redirect to scheduling.`;
+
+// StreamSession class
+export class StreamSession {
+  private audioBufferQueue: Buffer[] = [];
+  private maxQueueSize = 200;
+  private isProcessingAudio = false;
+  private isActive = true;
+
+  constructor(
+    private sessionId: string,
+    private client: NovaSonicBidirectionalStreamClient
+  ) {}
+
+  public onEvent(
+    eventType: string,
+    handler: (data: any) => void
+  ): StreamSession {
+    this.client.registerEventHandler(this.sessionId, eventType, handler);
+    return this;
+  }
+
+  public async setupPromptStart(): Promise<void> {
+    this.client.setupPromptStartEvent(this.sessionId);
+  }
+
+  public async setupSystemPrompt(
+    textConfig: typeof DefaultTextConfiguration = DefaultTextConfiguration,
+    systemPromptContent: string = DefaultSystemPrompt
+  ): Promise<void> {
+    this.client.setupSystemPromptEvent(
+      this.sessionId,
+      textConfig,
+      systemPromptContent
+    );
+  }
+
+  public async setupStartAudio(
+    audioConfig: typeof DefaultAudioInputConfiguration = DefaultAudioInputConfiguration
+  ): Promise<void> {
+    this.client.setupStartAudioEvent(this.sessionId, audioConfig);
+  }
+
+  public async streamAudio(audioData: Buffer): Promise<void> {
+    logger.info('🎤 StreamSession.streamAudio called', { 
+      sessionId: this.sessionId,
+      audioSize: audioData.length,
+      queueLength: this.audioBufferQueue.length 
     });
 
-    logger.info('Nova Sonic Bidirectional Client initialized', {
-      region: process.env.AWS_REGION || 'us-east-1',
-      modelId: this.modelId
+    if (this.audioBufferQueue.length >= this.maxQueueSize) {
+      this.audioBufferQueue.shift();
+      logger.debug(`Audio queue full, dropping oldest chunk`, { sessionId: this.sessionId });
+    }
+
+    this.audioBufferQueue.push(audioData);
+    logger.info('🔄 Audio added to queue, processing...', { 
+      sessionId: this.sessionId,
+      newQueueLength: this.audioBufferQueue.length 
     });
+    this.processAudioQueue();
   }
 
-  async startSession(sessionId: string, systemPrompt: string): Promise<void> {
+  private async processAudioQueue() {
+    if (
+      this.isProcessingAudio ||
+      this.audioBufferQueue.length === 0 ||
+      !this.isActive
+    )
+      return;
+
+    this.isProcessingAudio = true;
     try {
-      logger.info('Starting Nova Sonic bidirectional stream', { sessionId });
+      let processedChunks = 0;
+      const maxChunksPerBatch = 5;
 
-      // Create session data
-      const sessionData: SessionData = {
-        sessionId,
-        isActive: true,
-        startTime: Date.now(),
-        transcript: []
-      };
-
-      // Prepare the bidirectional stream input
-      const input = {
-        modelId: this.modelId,
-        inputEventStream: this.createInputStream(sessionId, systemPrompt),
-      };
-
-      // Start the bidirectional stream
-      const command = new InvokeModelWithBidirectionalStreamCommand(input);
-      const response = await this.client.send(command);
-
-      if (response.outputStream) {
-        sessionData.stream = response.outputStream;
-        this.sessions.set(sessionId, sessionData);
-        
-        // Process the output stream
-        this.processOutputStream(sessionId, response.outputStream);
-        
-        this.emit('sessionStarted', sessionId);
-        logger.info('Nova Sonic bidirectional stream started', { sessionId });
-      } else {
-        throw new Error('Failed to start bidirectional stream');
+      while (
+        this.audioBufferQueue.length > 0 &&
+        processedChunks < maxChunksPerBatch &&
+        this.isActive
+      ) {
+        const audioChunk = this.audioBufferQueue.shift();
+        if (audioChunk) {
+          await this.client.streamAudioChunk(this.sessionId, audioChunk);
+          processedChunks++;
+        }
       }
+    } finally {
+      this.isProcessingAudio = false;
 
-    } catch (error: any) {
-      logger.error('Failed to start Nova Sonic session', {
-        sessionId,
-        error: error.message,
-        stack: error.stack
-      });
-      throw error;
+      if (this.audioBufferQueue.length > 0 && this.isActive) {
+        setTimeout(() => this.processAudioQueue(), 0);
+      }
     }
   }
 
-  private async *createInputStream(sessionId: string, systemPrompt: string) {
-    logger.debug('Creating input stream for Nova Sonic', { sessionId });
+  public getSessionId(): string {
+    return this.sessionId;
+  }
 
-    // Send system prompt first
-    yield {
-      systemPromptEvent: {
-        textConfiguration: {
-          text: systemPrompt
-        }
-      }
+  public async endAudioContent(): Promise<void> {
+    if (!this.isActive) return;
+    await this.client.sendContentEnd(this.sessionId);
+  }
+
+  public async endPrompt(): Promise<void> {
+    if (!this.isActive) return;
+    await this.client.sendPromptEnd(this.sessionId);
+  }
+
+  public async close(): Promise<void> {
+    if (!this.isActive) return;
+
+    this.isActive = false;
+    this.audioBufferQueue = [];
+
+    await this.client.sendSessionEnd(this.sessionId);
+    logger.info(`Session ${this.sessionId} close completed`);
+  }
+}
+
+// Main client class
+export class NovaSonicBidirectionalStreamClient {
+  private bedrockRuntimeClient: BedrockRuntimeClient;
+  private inferenceConfig: InferenceConfig;
+  private activeSessions: Map<string, SessionData> = new Map();
+  private sessionLastActivity: Map<string, number> = new Map();
+  private sessionCleanupInProgress = new Set<string>();
+  public contentNames: Map<string, string> = new Map();
+
+  constructor(config: NovaSonicBidirectionalStreamClientConfig) {
+    const nodeHttp2Handler = new NodeHttp2Handler({
+      requestTimeout: 300000,
+      sessionTimeout: 300000,
+      disableConcurrentStreams: false,
+      maxConcurrentStreams: 20,
+      ...config.requestHandlerConfig,
+    });
+
+    if (!config.clientConfig.credentials) {
+      config.clientConfig.credentials = fromNodeProviderChain();
+    }
+
+    this.bedrockRuntimeClient = new BedrockRuntimeClient({
+      ...config.clientConfig,
+      credentials: config.clientConfig.credentials,
+      region: config.clientConfig.region || "us-east-1",
+      requestHandler: nodeHttp2Handler,
+    });
+
+    this.inferenceConfig = config.inferenceConfig ?? {
+      maxTokens: 1024,
+      topP: 0.9,
+      temperature: 0.7,
     };
 
-    // Send audio configuration
-    yield {
-      startAudioEvent: {
-        audioConfiguration: {
-          format: "pcm",
-          sampleRateHertz: 16000
-        }
-      }
-    };
-
-    // The stream will be fed audio chunks via sendAudio method
-  }
-
-  private async processOutputStream(sessionId: string, outputStream: any): Promise<void> {
-    try {
-      for await (const event of outputStream) {
-        if (event.audioOutputEvent) {
-          const audioData = Buffer.from(event.audioOutputEvent.audioChunk, 'base64');
-          this.emit('audioOutput', sessionId, audioData);
-          
-          logger.debug('Received audio from Nova Sonic', {
-            sessionId,
-            audioSize: audioData.length
-          });
-        }
-
-        if (event.textOutputEvent) {
-          const text = event.textOutputEvent.text;
-          const session = this.sessions.get(sessionId);
-          if (session) {
-            session.transcript.push(text);
-          }
-          
-          this.emit('textOutput', sessionId, text);
-          logger.info('Received text from Nova Sonic', { sessionId, text });
-        }
-
-        if (event.contentEndEvent) {
-          logger.info('Nova Sonic content end event', { sessionId });
-          this.emit('contentEnd', sessionId);
-        }
-
-        if (event.toolsOutputEvent) {
-          logger.debug('Nova Sonic tools output', { sessionId });
-          this.emit('toolsOutput', sessionId, event.toolsOutputEvent);
-        }
-      }
-    } catch (error: any) {
-      logger.error('Error processing Nova Sonic output stream', {
-        sessionId,
-        error: error.message
-      });
-      this.emit('error', sessionId, error);
-    }
-  }
-
-  async sendAudio(sessionId: string, audioData: Buffer): Promise<void> {
-    const session = this.sessions.get(sessionId);
-    if (!session || !session.isActive) {
-      logger.warn('Attempted to send audio to inactive session', { sessionId });
-      return;
-    }
-
-    try {
-      // Convert audio to base64 and send as audio event
-      const audioBase64 = audioData.toString('base64');
-      
-      // Create audio input event
-      const audioEvent = {
-        audioInputEvent: {
-          audioChunk: audioBase64
-        }
-      };
-
-      // Send to the input stream
-      // Note: In the real implementation, this would be sent through the input stream generator
-      // For now, we'll emit it as an event that the stream can consume
-      this.emit('audioInput', sessionId, audioEvent);
-      
-      logger.debug('Sent audio to Nova Sonic', {
-        sessionId,
-        audioSize: audioData.length
-      });
-
-    } catch (error: any) {
-      logger.error('Failed to send audio to Nova Sonic', {
-        sessionId,
-        error: error.message
-      });
-      throw error;
-    }
-  }
-
-  async endSession(sessionId: string): Promise<void> {
-    const session = this.sessions.get(sessionId);
-    if (!session) {
-      return;
-    }
-
-    try {
-      session.isActive = false;
-      
-      // Send end event
-      const endEvent = {
-        endStreamEvent: {}
-      };
-      
-      this.emit('sessionEnd', sessionId, endEvent);
-      
-      // Clean up
-      this.sessions.delete(sessionId);
-      
-      logger.info('Nova Sonic session ended', { 
-        sessionId,
-        duration: Date.now() - session.startTime,
-        transcriptLength: session.transcript.length
-      });
-
-    } catch (error: any) {
-      logger.error('Error ending Nova Sonic session', {
-        sessionId,
-        error: error.message
-      });
-    }
-  }
-
-  getSessionTranscript(sessionId: string): string[] {
-    const session = this.sessions.get(sessionId);
-    return session ? session.transcript : [];
+    logger.info('NovaSonicBidirectionalStreamClient initialized');
   }
 
   isSessionActive(sessionId: string): boolean {
-    const session = this.sessions.get(sessionId);
-    return session ? session.isActive : false;
+    const session = this.activeSessions.get(sessionId);
+    return !!session && session.isActive;
   }
 
-  getActiveSessions(): string[] {
-    return Array.from(this.sessions.keys()).filter(sessionId => 
-      this.sessions.get(sessionId)?.isActive
-    );
+  public getActiveSessions(): string[] {
+    return Array.from(this.activeSessions.keys());
+  }
+
+  public getLastActivityTime(sessionId: string): number {
+    return this.sessionLastActivity.get(sessionId) || 0;
+  }
+
+  private updateSessionActivity(sessionId: string): void {
+    this.sessionLastActivity.set(sessionId, Date.now());
+  }
+
+  public isCleanupInProgress(sessionId: string): boolean {
+    return this.sessionCleanupInProgress.has(sessionId);
+  }
+
+  public createStreamSession(
+    sessionId: string = randomUUID(),
+    config?: NovaSonicBidirectionalStreamClientConfig
+  ): StreamSession {
+    if (this.activeSessions.has(sessionId)) {
+      throw new Error(`Stream session with ID ${sessionId} already exists`);
+    }
+
+    const session: SessionData = {
+      queue: [],
+      queueSignal: new Subject<void>(),
+      closeSignal: new Subject<void>(),
+      responseSubject: new Subject<any>(),
+      toolUseContent: null,
+      toolUseId: "",
+      toolName: "",
+      responseHandlers: new Map(),
+      promptName: randomUUID(),
+      inferenceConfig: config?.inferenceConfig ?? this.inferenceConfig,
+      isActive: true,
+      isPromptStartSent: false,
+      isAudioContentStartSent: false,
+      audioContentId: randomUUID(),
+    };
+
+    this.activeSessions.set(sessionId, session);
+
+    return new StreamSession(sessionId, this);
+  }
+
+  public async initiateSession(
+    sessionId: string,
+    ws: WebSocket
+  ): Promise<void> {
+    const session = this.activeSessions.get(sessionId);
+    if (!session) {
+      throw new Error(`Stream session ${sessionId} not found`);
+    }
+
+    try {
+      this.setupSessionStartEvent(sessionId);
+
+      const asyncIterable = this.createSessionAsyncIterable(sessionId);
+
+      logger.info(`Starting bidirectional stream for session ${sessionId}...`);
+
+      const response = await this.bedrockRuntimeClient.send(
+        new InvokeModelWithBidirectionalStreamCommand({
+          modelId: "amazon.nova-sonic-v1:0",
+          body: asyncIterable,
+        })
+      );
+
+      logger.info(`Stream established for session ${sessionId}, processing responses...`);
+
+      await this.processResponseStream(sessionId, ws, response);
+    } catch (error) {
+      logger.error(`Error in session ${sessionId}: `, error);
+      this.dispatchEventForSession(sessionId, "error", {
+        source: "bidirectionalStream",
+        error,
+      });
+
+      if (session.isActive) this.closeSession(sessionId);
+    }
+  }
+
+  public registerEventHandler(
+    sessionId: string,
+    eventType: string,
+    handler: (data: any) => void
+  ): void {
+    const session = this.activeSessions.get(sessionId);
+    if (!session) return;
+    session.responseHandlers.set(eventType, handler);
+  }
+
+  private dispatchEventForSession(
+    sessionId: string,
+    eventType: string,
+    data: any
+  ): void {
+    const session = this.activeSessions.get(sessionId);
+    if (!session) return;
+
+    const handler = session.responseHandlers.get(eventType);
+    if (handler) {
+      try {
+        handler(data);
+      } catch (e) {
+        logger.error(`Error in ${eventType} handler for session ${sessionId}: `, e);
+      }
+    }
+
+    const anyHandler = session.responseHandlers.get("any");
+    if (anyHandler) {
+      try {
+        anyHandler({ type: eventType, data });
+      } catch (e) {
+        logger.error(`Error in 'any' handler for session ${sessionId}: `, e);
+      }
+    }
+  }
+
+  private createSessionAsyncIterable(
+    sessionId: string
+  ): AsyncIterable<InvokeModelWithBidirectionalStreamInput> {
+    const session = this.activeSessions.get(sessionId);
+    if (!session || !session.isActive) {
+      logger.debug(`Cannot create async iterable: Session ${sessionId} not active`);
+      return {
+        [Symbol.asyncIterator]: () => ({
+          next: async () => ({ value: undefined, done: true }),
+        }),
+      };
+    }
+
+    // Create a combined iterator that handles both initial events and ongoing audio
+    return {
+      [Symbol.asyncIterator]: () => {
+        let initialEventsSent = false;
+        let eventIndex = 0;
+        
+        // Define initial events
+        const systemContentId = randomUUID();
+        const initialEvents = [
+          // 1. Session start
+          {
+            event: {
+              sessionStart: {
+                inferenceConfiguration: session.inferenceConfig,
+              },
+            },
+          },
+          // 2. Prompt start  
+          {
+            event: {
+              promptStart: {
+                promptName: session.promptName,
+                textOutputConfiguration: {
+                  mediaType: "text/plain",
+                },
+                audioOutputConfiguration: DefaultAudioOutputConfiguration,
+              },
+            },
+          },
+          // 3. System prompt content start
+          {
+            event: {
+              contentStart: {
+                promptName: session.promptName,
+                contentName: systemContentId,
+                type: "TEXT",
+                interactive: true,
+                role: "SYSTEM",
+                textInputConfiguration: {
+                  mediaType: "text/plain",
+                },
+              },
+            },
+          },
+          // 4. System prompt text
+          {
+            event: {
+              textInput: {
+                promptName: session.promptName,
+                contentName: systemContentId,
+                content: DefaultSystemPrompt,
+              },
+            },
+          },
+          // 5. System prompt content end
+          {
+            event: {
+              contentEnd: {
+                promptName: session.promptName,
+                contentName: systemContentId,
+              },
+            },
+          },
+          // 6. Audio content start
+          {
+            event: {
+              contentStart: {
+                promptName: session.promptName,
+                contentName: session.audioContentId,
+                type: "AUDIO",
+                interactive: true,
+                role: "USER",
+                audioInputConfiguration: DefaultAudioInputConfiguration,
+              },
+            },
+          },
+        ];
+
+        logger.info(`Created ${initialEvents.length} initial events for session ${sessionId}`);
+        
+        return {
+          next: async (): Promise<IteratorResult<InvokeModelWithBidirectionalStreamInput>> => {
+            try {
+              if (!session.isActive) {
+                logger.debug(`Session ${sessionId} not active, iterator done`);
+                return { value: undefined, done: true };
+              }
+
+              // Send initial events first
+              if (!initialEventsSent) {
+                if (eventIndex < initialEvents.length) {
+                  const event = initialEvents[eventIndex];
+                  eventIndex++;
+                  
+                  logger.info(`Sending initial event ${eventIndex}/${initialEvents.length} for session ${sessionId}:`, Object.keys(event.event)[0]);
+
+                  return {
+                    value: {
+                      chunk: {
+                        bytes: new TextEncoder().encode(JSON.stringify(event)),
+                      },
+                    },
+                    done: false,
+                  };
+                } else {
+                  initialEventsSent = true;
+                  logger.info(`✅ All initial events sent for session ${sessionId}, now handling audio queue`);
+                }
+              }
+
+              // Check for queued events (audio input, content end, prompt end, etc.)
+              if (session.queue.length > 0) {
+                const event = session.queue.shift();
+                const eventType = Object.keys(event.event)[0];
+                logger.debug(`Sending queued ${eventType} event for session ${sessionId}`);
+                
+                return {
+                  value: {
+                    chunk: {
+                      bytes: new TextEncoder().encode(JSON.stringify(event)),
+                    },
+                  },
+                  done: false,
+                };
+              }
+
+              // Use timeout to avoid indefinite blocking
+              try {
+                const timeoutPromise = new Promise<void>((_, reject) => 
+                  setTimeout(() => reject(new Error('timeout')), 5000)
+                );
+                
+                const queueSignalPromise = firstValueFrom(session.queueSignal.pipe(take(1)));
+                
+                await Promise.race([queueSignalPromise, timeoutPromise]);
+                
+                // Check if session was closed while waiting
+                if (!session.isActive) {
+                  return { value: undefined, done: true };
+                }
+
+                // Process the next queued event if available
+                if (session.queue.length > 0) {
+                  const event = session.queue.shift();
+                  const eventType = Object.keys(event.event)[0];
+                  logger.debug(`Sending queued ${eventType} event for session ${sessionId}`);
+                  
+                  return {
+                    value: {
+                      chunk: {
+                        bytes: new TextEncoder().encode(JSON.stringify(event)),
+                      },
+                    },
+                    done: false,
+                  };
+                }
+              } catch (error) {
+                // Timeout or other error - continue processing
+                logger.debug(`Queue wait timeout/error for session ${sessionId}, continuing...`);
+              }
+
+              // No events to process, keep waiting
+              return { value: undefined, done: true };
+              
+            } catch (error) {
+              logger.error(`Error in session ${sessionId} iterator: `, error);
+              session.isActive = false;
+              return { value: undefined, done: true };
+            }
+          },
+        };
+      },
+    };
+  }
+
+  private async processResponseStream(
+    sessionId: string,
+    ws: WebSocket,
+    response: any
+  ): Promise<void> {
+    const session = this.activeSessions.get(sessionId);
+    if (!session) return;
+
+    try {
+      for await (const event of response.body) {
+        if (!session.isActive) {
+          logger.info(`Session ${sessionId} is no longer active, stopping response processing`);
+          break;
+        }
+        if (event.chunk?.bytes) {
+          try {
+            this.updateSessionActivity(sessionId);
+            const textResponse = new TextDecoder().decode(event.chunk.bytes);
+
+            try {
+              const jsonResponse = JSON.parse(textResponse);
+              if (jsonResponse.event?.contentStart) {
+                this.dispatchEventForSession(
+                  sessionId,
+                  "contentStart",
+                  jsonResponse.event.contentStart
+                );
+              } else if (jsonResponse.event?.textOutput) {
+                this.dispatchEventForSession(
+                  sessionId,
+                  "textOutput",
+                  jsonResponse.event.textOutput
+                );
+              } else if (jsonResponse.event?.audioOutput) {
+                this.dispatchEventForSession(
+                  sessionId,
+                  "audioOutput",
+                  jsonResponse.event.audioOutput
+                );
+              } else if (jsonResponse.event?.contentEnd) {
+                this.dispatchEventForSession(
+                  sessionId,
+                  "contentEnd",
+                  jsonResponse.event.contentEnd
+                );
+              } else {
+                const eventKeys = Object.keys(jsonResponse.event || {});
+                if (eventKeys.length > 0) {
+                  this.dispatchEventForSession(sessionId, eventKeys[0], jsonResponse.event);
+                }
+              }
+            } catch (e) {
+              logger.debug(`Raw text response for session ${sessionId} (parse error): `, textResponse);
+            }
+          } catch (e) {
+            logger.error(`Error processing response chunk for session ${sessionId}: `, e);
+          }
+        } else if (event.modelStreamErrorException) {
+          logger.error(`Model stream error for session ${sessionId}: `, event.modelStreamErrorException);
+          this.dispatchEventForSession(sessionId, "error", {
+            type: "modelStreamErrorException",
+            details: event.modelStreamErrorException,
+          });
+        }
+      }
+
+      logger.info(`Response stream processing complete for session ${sessionId}`);
+    } catch (error) {
+      logger.error(`Error processing response stream for session ${sessionId}: `, error);
+      this.dispatchEventForSession(sessionId, "error", {
+        source: "responseStream",
+        message: "Error processing response stream",
+        details: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+
+  private addEventToSessionQueue(sessionId: string, event: any): void {
+    const session = this.activeSessions.get(sessionId);
+    if (!session || !session.isActive) return;
+
+    this.updateSessionActivity(sessionId);
+    session.queue.push(event);
+    session.queueSignal.next();
+  }
+
+  private setupSessionStartEvent(sessionId: string): void {
+    const session = this.activeSessions.get(sessionId);
+    if (!session) return;
+
+    this.addEventToSessionQueue(sessionId, {
+      event: {
+        sessionStart: {
+          inferenceConfiguration: session.inferenceConfig,
+        },
+      },
+    });
+  }
+
+  public setupPromptStartEvent(sessionId: string): void {
+    const session = this.activeSessions.get(sessionId);
+    if (!session) return;
+
+    this.addEventToSessionQueue(sessionId, {
+      event: {
+        promptStart: {
+          promptName: session.promptName,
+          textOutputConfiguration: {
+            mediaType: "text/plain",
+          },
+          audioOutputConfiguration: DefaultAudioOutputConfiguration,
+        },
+      },
+    });
+    session.isPromptStartSent = true;
+  }
+
+  public setupSystemPromptEvent(
+    sessionId: string,
+    textConfig: any,
+    systemPromptContent: string
+  ): void {
+    const session = this.activeSessions.get(sessionId);
+    if (!session) return;
+
+    const textPromptID = randomUUID();
+    this.addEventToSessionQueue(sessionId, {
+      event: {
+        contentStart: {
+          promptName: session.promptName,
+          contentName: textPromptID,
+          type: "TEXT",
+          interactive: true,
+          role: "SYSTEM",
+          textInputConfiguration: textConfig,
+        },
+      },
+    });
+
+    this.addEventToSessionQueue(sessionId, {
+      event: {
+        textInput: {
+          promptName: session.promptName,
+          contentName: textPromptID,
+          content: systemPromptContent,
+        },
+      },
+    });
+
+    this.addEventToSessionQueue(sessionId, {
+      event: {
+        contentEnd: {
+          promptName: session.promptName,
+          contentName: textPromptID,
+        },
+      },
+    });
+  }
+
+  public setupStartAudioEvent(
+    sessionId: string,
+    audioConfig: typeof DefaultAudioInputConfiguration = DefaultAudioInputConfiguration
+  ): void {
+    logger.info(`Setting up startAudioContent event for session ${sessionId}...`);
+    const session = this.activeSessions.get(sessionId);
+    if (!session) return;
+
+    logger.info(`Using audio content ID: ${session.audioContentId}`);
+    this.addEventToSessionQueue(sessionId, {
+      event: {
+        contentStart: {
+          promptName: session.promptName,
+          contentName: session.audioContentId,
+          type: "AUDIO",
+          interactive: true,
+          role: "USER",
+          audioInputConfiguration: audioConfig,
+        },
+      },
+    });
+    session.isAudioContentStartSent = true;
+  }
+
+  public async streamAudioChunk(sessionId: string, audioData: Buffer): Promise<void> {
+    logger.info('🎯 streamAudioChunk called', { sessionId, audioSize: audioData.length });
+    
+    const session = this.activeSessions.get(sessionId);
+    if (!session || !session.isActive || !session.audioContentId) {
+      throw new Error(`Invalid session ${sessionId} for audio streaming`);
+    }
+
+    const base64Data = audioData.toString("base64");
+    logger.info('📡 Adding audioInput event to queue', { 
+      sessionId, 
+      audioContentId: session.audioContentId,
+      base64Length: base64Data.length 
+    });
+    
+    this.addEventToSessionQueue(sessionId, {
+      event: {
+        audioInput: {
+          promptName: session.promptName,
+          contentName: session.audioContentId,
+          content: base64Data,
+        },
+      },
+    });
+    
+    logger.info('✅ audioInput event queued', { sessionId });
+  }
+
+  public async sendContentEnd(sessionId: string): Promise<void> {
+    const session = this.activeSessions.get(sessionId);
+    if (!session || !session.isActive) return;
+
+    if (session.audioContentId) {
+      this.addEventToSessionQueue(sessionId, {
+        event: {
+          contentEnd: {
+            promptName: session.promptName,
+            contentName: session.audioContentId,
+          },
+        },
+      });
+    }
+  }
+
+  public async sendPromptEnd(sessionId: string): Promise<void> {
+    const session = this.activeSessions.get(sessionId);
+    if (!session || !session.isActive) return;
+
+    this.addEventToSessionQueue(sessionId, {
+      event: {
+        promptEnd: {
+          promptName: session.promptName,
+        },
+      },
+    });
+  }
+
+  public async sendSessionEnd(sessionId: string): Promise<void> {
+    const session = this.activeSessions.get(sessionId);
+    if (!session || !session.isActive) return;
+
+    this.addEventToSessionQueue(sessionId, {
+      event: {
+        sessionEnd: {},
+      },
+    });
+  }
+
+  public closeSession(sessionId: string): void {
+    if (this.sessionCleanupInProgress.has(sessionId)) {
+      return;
+    }
+    
+    const session = this.activeSessions.get(sessionId);
+    if (!session) return;
+
+    this.sessionCleanupInProgress.add(sessionId);
+    try {
+      session.isActive = false;
+      session.closeSignal.next();
+      session.closeSignal.complete();
+      this.activeSessions.delete(sessionId);
+      this.sessionLastActivity.delete(sessionId);
+    } finally {
+      this.sessionCleanupInProgress.delete(sessionId);
+    }
   }
 }

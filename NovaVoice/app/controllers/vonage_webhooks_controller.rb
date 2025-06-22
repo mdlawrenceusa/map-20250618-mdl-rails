@@ -6,27 +6,19 @@ class VonageWebhooksController < ApplicationController
 
   # Outbound call answer webhook
   def outbound_answer
-    # The microservice handles the NCCO generation
-    # We just need to forward the request
-    call_id = params[:uuid]
-    
-    # Forward to microservice which will return the NCCO
-    response = forward_to_microservice('/vonage/outbound/answer')
+    # Forward the GET request with query parameters to microservice webhook endpoint
+    response = forward_webhook_to_microservice('/outbound/webhooks/answer', 'GET')
     render json: response
   rescue StandardError => e
     Rails.logger.error "Outbound answer webhook error: #{e.message}"
     render json: default_error_ncco
   end
 
-  # Inbound call answer webhook
+  # Inbound call answer webhook  
   def inbound_answer
-    call_id = params[:uuid]
-    from = params[:from]
-    to = params[:to]
-    
-    # Get NCCO from microservice
-    result = @client.handle_inbound_call(call_id, from, to)
-    render json: result[:ncco]
+    # Forward the GET request with query parameters to microservice webhook endpoint
+    response = forward_webhook_to_microservice('/webhooks/answer', 'GET')
+    render json: response
   rescue StandardError => e
     Rails.logger.error "Inbound answer webhook error: #{e.message}"
     render json: default_error_ncco
@@ -68,6 +60,37 @@ class VonageWebhooksController < ApplicationController
     }
   end
 
+  def forward_webhook_to_microservice(path, method = 'GET')
+    # Use localhost:3000 since microservice runs on port 3000, not 8080
+    base_url = 'http://localhost:3000'
+    uri = URI.parse("#{base_url}#{path}")
+    
+    # Add query parameters for GET requests
+    if method == 'GET' && params.present?
+      query_params = params.except(:controller, :action).to_query
+      uri.query = query_params
+    end
+    
+    http = Net::HTTP.new(uri.host, uri.port)
+    
+    if method == 'GET'
+      request = Net::HTTP::Get.new(uri.request_uri)
+    else
+      request = Net::HTTP::Post.new(uri.path)
+      request['Content-Type'] = 'application/json'
+      request.body = params.except(:controller, :action).to_json
+    end
+    
+    response = http.request(request)
+    JSON.parse(response.body)
+  rescue StandardError => e
+    Rails.logger.error "Failed to forward webhook to microservice: #{e.message}"
+    Rails.logger.error "URI: #{uri}"
+    Rails.logger.error "Method: #{method}"
+    Rails.logger.error "Params: #{params.except(:controller, :action)}"
+    default_error_ncco
+  end
+  
   def forward_to_microservice(path)
     uri = URI.parse("#{ENV['MICROSERVICE_URL'] || 'http://microservice:8080'}#{path}")
     http = Net::HTTP.new(uri.host, uri.port)

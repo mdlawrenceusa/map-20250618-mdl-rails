@@ -1,0 +1,4 @@
+Vonage integration initialized.
+OutboundCallManager created without config - call configure() to set credentials
+Server running on HTTP port 3001
+Server listening on 0.0.0.0:3001

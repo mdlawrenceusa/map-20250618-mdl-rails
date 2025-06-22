@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist-test"
+  },
+  "exclude": [
+    "node_modules",
+    "src/middleware/cognitoAuth.ts",
+    "src/server-with-auth.ts"
+  ]
+}

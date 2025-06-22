@@ -1,0 +1,20 @@
+Serving static files from: /home/ec2-user/environment/nova-telephony-poc/
+Frontend files from: /home/ec2-user/environment/nova-telephony-poc/src/frontend
+OutboundCallManager created without config - call configure() to set credentials
+Vonage integration initialized.
+Server running on HTTP port 3001
+📚 Knowledge Base MCP routes configured
+   Visit https://gospelshare.io/kb-setup to configure
+Server listening on 0.0.0.0:3001
+📚 Loaded KB config: YOUR_KB_ID_HERE
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check

@@ -10,9 +10,10 @@ Rails.application.routes.draw do
   resources :calls, only: [:create, :show]
   
   # Vonage webhooks - matching your dashboard configuration
-  post '/outbound/webhooks/answer', to: 'vonage_webhooks#outbound_answer'
+  # IMPORTANT: Answer webhooks use GET, events use POST!
+  get '/outbound/webhooks/answer', to: 'vonage_webhooks#outbound_answer'
   post '/outbound/webhooks/events', to: 'vonage_webhooks#outbound_events'
-  post '/webhooks/answer', to: 'vonage_webhooks#inbound_answer'
+  get '/webhooks/answer', to: 'vonage_webhooks#inbound_answer'
   post '/webhooks/events', to: 'vonage_webhooks#inbound_events'
   
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)

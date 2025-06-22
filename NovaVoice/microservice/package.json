@@ -7,17 +7,25 @@
     "start": "ts-node src/index.ts",
     "build": "tsc",
     "prod": "node dist/index.js",
-    "dev": "ts-node-dev --respawn src/index.ts"
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "dev-sample": "ts-node-dev --respawn src/index-sample.ts"
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.830.0",
+    "@aws-sdk/credential-providers": "^3.830.0",
+    "@aws-sdk/types": "^3.821.0",
     "@smithy/node-http-handler": "^4.0.6",
     "@vonage/auth": "^1.12.0",
-    "@vonage/server-sdk": "^3.0.0",
+    "@vonage/server-sdk": "^3.20.1",
+    "@vonage/voice": "^1.18.0",
+    "axios": "^1.10.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "dotenv": "^16.0.0",
     "express": "^4.18.0",
+    "express-ws": "^5.0.2",
+    "rxjs": "^7.8.2",
+    "uuid": "^11.1.0",
     "winston": "^3.0.0",
     "ws": "^8.0.0"
   },
