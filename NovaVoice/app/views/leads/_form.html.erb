@@ -1,0 +1,72 @@
+<%= form_with(model: lead, class: "contents") do |form| %>
+  <% if lead.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+      <h2><%= pluralize(lead.errors.count, "error") %> prohibited this lead from being saved:</h2>
+
+      <ul class="list-disc ml-6">
+        <% lead.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": lead.errors[:name].none?, "border-red-400 focus:outline-red-600": lead.errors[:name].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :company %>
+    <%= form.text_field :company, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": lead.errors[:company].none?, "border-red-400 focus:outline-red-600": lead.errors[:company].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :phone %>
+    <%= form.text_field :phone, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": lead.errors[:phone].none?, "border-red-400 focus:outline-red-600": lead.errors[:phone].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :website %>
+    <%= form.text_field :website, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": lead.errors[:website].none?, "border-red-400 focus:outline-red-600": lead.errors[:website].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :state_province %>
+    <%= form.text_field :state_province, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": lead.errors[:state_province].none?, "border-red-400 focus:outline-red-600": lead.errors[:state_province].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :lead_source %>
+    <%= form.text_field :lead_source, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": lead.errors[:lead_source].none?, "border-red-400 focus:outline-red-600": lead.errors[:lead_source].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :email %>
+    <%= form.text_field :email, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": lead.errors[:email].none?, "border-red-400 focus:outline-red-600": lead.errors[:email].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :lead_status %>
+    <%= form.text_field :lead_status, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": lead.errors[:lead_status].none?, "border-red-400 focus:outline-red-600": lead.errors[:lead_status].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :created_date %>
+    <%= form.datetime_field :created_date, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": lead.errors[:created_date].none?, "border-red-400 focus:outline-red-600": lead.errors[:created_date].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :owner_alias %>
+    <%= form.text_field :owner_alias, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": lead.errors[:owner_alias].none?, "border-red-400 focus:outline-red-600": lead.errors[:owner_alias].any?}] %>
+  </div>
+
+  <div class="my-5 flex items-center gap-2">
+    <%= form.label :unread_by_owner %>
+    <%= form.checkbox :unread_by_owner, class: ["block shadow-sm rounded-md border order-first h-5 w-5", {"border-gray-400 focus:outline-blue-600": lead.errors[:unread_by_owner].none?, "border-red-400 focus:outline-red-600": lead.errors[:unread_by_owner].any?}] %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

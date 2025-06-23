@@ -1,0 +1,658 @@
+
+> amazon-nova-sonic-server@1.0.0 dev
+> ts-node src/server.ts
+
+📝 Minimal transcript logger initialized
+Serving static files from: /home/ec2-user/environment/map-20250618-mdl-rails/
+Frontend files from: /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/frontend
+OutboundCallManager created without config - call configure() to set credentials
+Vonage integration initialized with barge-in support.
+Server running on HTTP port 3000
+Server listening on 0.0.0.0:3000
+Using JWT authentication with Application ID
+Generated custom JWT with iss claim
+OutboundCallManager initialized with config
+✅ Vonage credentials configured successfully
+Initiating AI-powered outbound call to +13472005533
+AI call initiated successfully. UUID: b639338c-55a7-4ad7-afd9-c5598ddbcf12
+Vonage event received: {
+  headers: {},
+  from: '+12135235735',
+  to: '+13472005533',
+  uuid: 'b639338c-55a7-4ad7-afd9-c5598ddbcf12',
+  conversation_uuid: 'CON-9f18efcd-8646-4ea6-8f7f-35bee83a7ae6',
+  status: 'started',
+  direction: 'outbound',
+  timestamp: '2025-06-23T00:38:15.097Z'
+}
+Vonage event received: {
+  headers: {},
+  from: '+12135235735',
+  to: '+13472005533',
+  uuid: 'b639338c-55a7-4ad7-afd9-c5598ddbcf12',
+  conversation_uuid: 'CON-9f18efcd-8646-4ea6-8f7f-35bee83a7ae6',
+  status: 'ringing',
+  direction: 'outbound',
+  timestamp: '2025-06-23T00:38:15.097Z'
+}
+Vonage event received: {
+  start_time: null,
+  headers: {},
+  rate: null,
+  from: '+12135235735',
+  to: '+13472005533',
+  uuid: 'b639338c-55a7-4ad7-afd9-c5598ddbcf12',
+  conversation_uuid: 'CON-9f18efcd-8646-4ea6-8f7f-35bee83a7ae6',
+  status: 'answered',
+  direction: 'outbound',
+  network: null,
+  timestamp: '2025-06-23T00:38:17.623Z'
+}
+[WEBHOOK] Handling outbound call from +12135235735 to +13472005533, UUID: b639338c-55a7-4ad7-afd9-c5598ddbcf12
+[WEBHOOK] Responding with WebSocket URI: wss://gospelshare.io/socket?channel=b639338c-55a7-4ad7-afd9-c5598ddbcf12
+Client requesting connection to channel: b639338c-55a7-4ad7-afd9-c5598ddbcf12
+Creating new channel: b639338c-55a7-4ad7-afd9-c5598ddbcf12
+Setting up initial events for session b639338c-55a7-4ad7-afd9-c5598ddbcf12...
+Starting bidirectional stream for session b639338c-55a7-4ad7-afd9-c5598ddbcf12...
+Setting up prompt start event for session b639338c-55a7-4ad7-afd9-c5598ddbcf12...
+Websocket connection is open
+[PROMPT DEBUG] Attempting to read prompt from: /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/church-outreach-prompt.txt
+[PROMPT DEBUG] Successfully loaded church prompt, length: 4941 characters
+[PROMPT DEBUG] First 200 chars: # Revised Esther Prompt - Brief and Focused - Version 1.0
+
+## Role
+You are Esther, Mike Lawrence Productions' scheduling assistant. Your ONLY job is to schedule 15-minute web meetings between senior p...
+[PROMPT DEBUG] Setting system prompt for channel b639338c-55a7-4ad7-afd9-c5598ddbcf12
+Setting up systemPrompt events for session b639338c-55a7-4ad7-afd9-c5598ddbcf12...
+[PROMPT DEBUG] System prompt content length: 4941 characters
+[PROMPT DEBUG] System prompt preview: # Revised Esther Prompt - Brief and Focused - Version 1.0
+
+## Role
+You are Esther, Mike Lawrence Productions' scheduling assistant. Your ONLY job is to schedule 15-minute web meetings between senior p...
+[PROMPT DEBUG] Adding textInput event with system prompt to queue
+Setting up startAudioContent event for session b639338c-55a7-4ad7-afd9-c5598ddbcf12...
+Using audio content ID: 3df740fe-2363-4248-80f9-de5e006813c0
+Initial events setup complete for session b639338c-55a7-4ad7-afd9-c5598ddbcf12
+Channel b639338c-55a7-4ad7-afd9-c5598ddbcf12 has 1 connected clients
+AsyncIterable iterator requested for session b639338c-55a7-4ad7-afd9-c5598ddbcf12
+[BARGE-IN] 🎯 Created barge-in handler for session b639338c-55a7-4ad7-afd9-c5598ddbcf12
+Stream established for session b639338c-55a7-4ad7-afd9-c5598ddbcf12, processing responses...
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'completionStart' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Human text: yes how can i help you...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text: Hello! This is Esther from Mike Lawrence Productio...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text: Hello! This is Esther from Mike Lawrence Productio...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Running session cleanup check
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Human text: um do you have a website...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text: Yes, we do! You can find more information on our w...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text:  Would you like me to schedule a meeting with your...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text: Yes, we do! You can find more information on our w...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text:  Would you like me to schedule a meeting with your...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Human text: what's the basic idea why are you calling...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text: We're calling to discuss our Off-Broadway illusion...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text:  I'd love to schedule a 15-minute meeting with you...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text:  Would this week or next work for you?...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text: We're calling to discuss our Off-Broadway illusion...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text:  I'd love to schedule a 15-minute meeting with you...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text:  Would this week or next work for you?...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Human text: uh this week would be fine...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text: Great! This week works for us too. Could you pleas...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text: Great! This week works for us too. Could you pleas...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Human text: yeah uh why don't we do it um...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Running session cleanup check
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Human text: twelve pm um on...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Human text: wednesday do you need the name and email uh...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Human text: what all information do you need...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text: That sounds perfect! For the meeting link, I'll ne...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text:  Is there a specific email address you'd prefer to...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text: That sounds perfect! For the meeting link, I'll ne...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text:  Is there a specific email address you'd prefer to...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Human text: uh pastor's name is pastor johnson and the email...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Human text: is mjohnsonatme dot com dot...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text: Thank you! I've got the information. I'll send a m...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text:   If you have any questions or need to reschedule,...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text: Thank you! I've got the information. I'll send a m...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text:   If you have any questions or need to reschedule,...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Human text: what's the best number to reach you on...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text: The best number to reach me is 3473005533....
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text:  If you have any questions or need to reschedule, ...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text: The best number to reach me is 3473005533....
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: true
+[TRANSCRIPT] Adding Assistant text:  If you have any questions or need to reschedule, ...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for b639338c-55a7-4ad7-afd9-c5598ddbcf12: false
+Vonage event received: {
+  headers: {},
+  end_time: '2025-06-23T00:40:40.000Z',
+  uuid: 'b639338c-55a7-4ad7-afd9-c5598ddbcf12',
+  network: '310260',
+  duration: '143',
+  disconnected_by: 'user',
+  start_time: '2025-06-23T00:38:17.000Z',
+  rate: '0.01314000',
+  price: '0.03131700',
+  from: '12135235735',
+  to: '13472005533',
+  conversation_uuid: 'CON-9f18efcd-8646-4ea6-8f7f-35bee83a7ae6',
+  status: 'completed',
+  direction: 'outbound',
+  timestamp: '2025-06-23T00:40:40.101Z'
+}
+Client disconnected from channel b639338c-55a7-4ad7-afd9-c5598ddbcf12, 0 clients remaining
+Last client left channel b639338c-55a7-4ad7-afd9-c5598ddbcf12, cleaning up resources
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'usageEvent' ]
+Handling other events
+Event keys for session b639338c-55a7-4ad7-afd9-c5598ddbcf12:  [ 'completionEnd' ]
+Handling other events
+Response stream processing complete for session b639338c-55a7-4ad7-afd9-c5598ddbcf12
+Stream completed for channel: b639338c-55a7-4ad7-afd9-c5598ddbcf12
+Closing session b639338c-55a7-4ad7-afd9-c5598ddbcf12
+Session b639338c-55a7-4ad7-afd9-c5598ddbcf12 closed.
+Queue empty or session inactive: b639338c-55a7-4ad7-afd9-c5598ddbcf12 
+Session b639338c-55a7-4ad7-afd9-c5598ddbcf12 close completed
+Successfully cleaned up channel: b639338c-55a7-4ad7-afd9-c5598ddbcf12
+[BARGE-IN] 🧹 Cleaned up barge-in handler for session b639338c-55a7-4ad7-afd9-c5598ddbcf12
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Dashboard request from: 18.68.41.245
+Serving index.html from: /home/ec2-user/environment/map-20250618-mdl-rails/index.html
+Error: ENOENT: no such file or directory, stat '/home/ec2-user/environment/map-20250618-mdl-rails/index.html'
+Running session cleanup check

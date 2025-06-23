@@ -1,0 +1,282 @@
+{
+  "version": "44.0.0",
+  "artifacts": {
+    "LeadsETLPipelineStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "LeadsETLPipelineStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "LeadsETLPipelineStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://302296110959/us-east-1",
+      "properties": {
+        "templateFile": "LeadsETLPipelineStack.template.json",
+        "terminationProtection": false,
+        "tags": {
+          "ManagedBy": "CDK",
+          "Project": "NovaVoice",
+          "Purpose": "LeadsETL"
+        },
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::302296110959:role/cdk-hnb659fds-deploy-role-302296110959-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::302296110959:role/cdk-hnb659fds-cfn-exec-role-302296110959-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-302296110959-us-east-1/f8552af1ed68c4795205cd1e848eea727785cb70249386ea8b3ff0891cf8efaf.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "LeadsETLPipelineStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::302296110959:role/cdk-hnb659fds-lookup-role-302296110959-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "LeadsETLPipelineStack.assets"
+      ],
+      "metadata": {
+        "/LeadsETLPipelineStack": [
+          {
+            "type": "aws:cdk:stack-tags",
+            "data": [
+              {
+                "Key": "ManagedBy",
+                "Value": "CDK"
+              },
+              {
+                "Key": "Project",
+                "Value": "NovaVoice"
+              },
+              {
+                "Key": "Purpose",
+                "Value": "LeadsETL"
+              }
+            ]
+          }
+        ],
+        "/LeadsETLPipelineStack/LeadsProcessedOutput/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LeadsProcessedOutputC85726B7"
+          }
+        ],
+        "/LeadsETLPipelineStack/GlueScriptsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GlueScriptsBucketCD60B14C"
+          }
+        ],
+        "/LeadsETLPipelineStack/GlueScriptsBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GlueScriptsBucketPolicyEBE0FD6F"
+          }
+        ],
+        "/LeadsETLPipelineStack/GlueScriptsBucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GlueScriptsBucketAutoDeleteObjectsCustomResource5EF6A9DF"
+          }
+        ],
+        "/LeadsETLPipelineStack/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/LeadsETLPipelineStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/LeadsETLPipelineStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/LeadsETLPipelineStack/ChurchesTable": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "ChurchesTableBCC5909B"
+            }
+          }
+        ],
+        "/LeadsETLPipelineStack/ChurchesTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChurchesTableBCC5909B"
+          }
+        ],
+        "/LeadsETLPipelineStack/GlueETLRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GlueETLRoleD6A3A0E8"
+          }
+        ],
+        "/LeadsETLPipelineStack/GlueETLRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GlueETLRoleDefaultPolicy5E2EA745"
+          }
+        ],
+        "/LeadsETLPipelineStack/GlueScriptDeployment/AwsCliLayer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GlueScriptDeploymentAwsCliLayer5E81A6C7"
+          }
+        ],
+        "/LeadsETLPipelineStack/GlueScriptDeployment/CustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GlueScriptDeploymentCustomResource8BFD593F"
+          }
+        ],
+        "/LeadsETLPipelineStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-singleton",
+            "data": true
+          },
+          {
+            "type": "aws:cdk:is-custom-resource-handler-runtime-family",
+            "data": 2
+          }
+        ],
+        "/LeadsETLPipelineStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+          }
+        ],
+        "/LeadsETLPipelineStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF"
+          }
+        ],
+        "/LeadsETLPipelineStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536"
+          }
+        ],
+        "/LeadsETLPipelineStack/LeadsParserJob": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LeadsParserJob"
+          }
+        ],
+        "/LeadsETLPipelineStack/LambdaETLRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LambdaETLRole09759C96"
+          }
+        ],
+        "/LeadsETLPipelineStack/LambdaETLRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LambdaETLRoleDefaultPolicy84F253C6"
+          }
+        ],
+        "/LeadsETLPipelineStack/DynamoLoaderFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DynamoLoaderFunctionDDDB5041"
+          }
+        ],
+        "/LeadsETLPipelineStack/SeedsGeneratorFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SeedsGeneratorFunction48889090"
+          }
+        ],
+        "/LeadsETLPipelineStack/DataValidationFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DataValidationFunction54FE76C7"
+          }
+        ],
+        "/LeadsETLPipelineStack/ETLNotificationTopic/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ETLNotificationTopicD458CA32"
+          }
+        ],
+        "/LeadsETLPipelineStack/LeadsETLStateMachine/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LeadsETLStateMachineRole3BC10384"
+          }
+        ],
+        "/LeadsETLPipelineStack/LeadsETLStateMachine/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LeadsETLStateMachineRoleDefaultPolicyCC7C16D2"
+          }
+        ],
+        "/LeadsETLPipelineStack/LeadsETLStateMachine/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LeadsETLStateMachine2886A060"
+          }
+        ],
+        "/LeadsETLPipelineStack/ETLDashboard/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ETLDashboard9C6EC1E3"
+          }
+        ],
+        "/LeadsETLPipelineStack/OutputBucketName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OutputBucketName"
+          }
+        ],
+        "/LeadsETLPipelineStack/DynamoTableName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DynamoTableName"
+          }
+        ],
+        "/LeadsETLPipelineStack/StateMachineArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StateMachineArn"
+          }
+        ],
+        "/LeadsETLPipelineStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/LeadsETLPipelineStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/LeadsETLPipelineStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "LeadsETLPipelineStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  },
+  "minimumCliVersion": "2.1019.1"
+}

@@ -1,0 +1,46 @@
+<div id="<%= dom_id lead %>" class="w-full sm:w-auto my-5 space-y-5">
+  <div>
+    <strong class="block font-medium mb-1">Name:</strong>
+    <%= lead.name %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Company:</strong>
+    <%= lead.company %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Phone:</strong>
+    <%= lead.phone %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Website:</strong>
+    <%= lead.website %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">State province:</strong>
+    <%= lead.state_province %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Lead source:</strong>
+    <%= lead.lead_source %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Email:</strong>
+    <%= lead.email %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Lead status:</strong>
+    <%= lead.lead_status %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Created date:</strong>
+    <%= lead.created_date %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Owner alias:</strong>
+    <%= lead.owner_alias %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Unread by owner:</strong>
+    <%= lead.unread_by_owner? ? "Yes" : "No" %>
+  </div>
+</div>

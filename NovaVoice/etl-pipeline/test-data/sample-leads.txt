@@ -1,0 +1,64 @@
+Jong Hoon Kim
+Company:
+Yale Presbyterian Church in New York
+Phone:
+(516) 938-0383
+Website:
+State/Province:
+NY
+Lead Source:
+web
+Email:
+jongjoy04@yahoo.com
+Lead Status:
+Open - Not Contacted
+Created Date:
+9/2/2018 11:20 PM
+Owner Alias:
+MDL
+Unread By Owner:
+False
+
+Sarah Johnson
+Company:
+First Baptist Church of Dallas
+Phone:
+(214) 555-0123
+Website:
+www.fbcdallas.org
+State/Province:
+TX
+Lead Source:
+referral
+Email:
+sarah.johnson@fbcdallas.org
+Lead Status:
+Open - Not Contacted
+Created Date:
+10/15/2023 2:30 PM
+Owner Alias:
+MDL
+Unread By Owner:
+True
+
+Michael Chen
+Company:
+Grace Community Church
+Phone:
+310-555-4567
+Website:
+gracechurch.org
+State/Province:
+CA
+Lead Source:
+web
+Email:
+mchen@gracechurch.org
+Lead Status:
+Working - Contacted
+Created Date:
+11/20/2023 9:45 AM
+Owner Alias:
+MDL
+Unread By Owner:
+False

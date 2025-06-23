@@ -1,0 +1,1276 @@
+{
+ "Description": "ETL Pipeline for processing church leads from S3 to DynamoDB",
+ "Resources": {
+  "LeadsProcessedOutputC85726B7": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "AES256"
+       }
+      }
+     ]
+    },
+    "BucketName": "leads-processed-output-302296110959-us-east-1",
+    "LifecycleConfiguration": {
+     "Rules": [
+      {
+       "ExpirationInDays": 90,
+       "Id": "DeleteOldProcessedFiles",
+       "Prefix": "processed/",
+       "Status": "Enabled"
+      }
+     ]
+    },
+    "VersioningConfiguration": {
+     "Status": "Enabled"
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/LeadsProcessedOutput/Resource"
+   }
+  },
+  "GlueScriptsBucketCD60B14C": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "AES256"
+       }
+      }
+     ]
+    },
+    "BucketName": "glue-scripts-302296110959-us-east-1",
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     },
+     {
+      "Key": "aws-cdk:cr-owned:scripts/:e7c7bd22",
+      "Value": "true"
+     }
+    ],
+    "VersioningConfiguration": {
+     "Status": "Enabled"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/GlueScriptsBucket/Resource"
+   }
+  },
+  "GlueScriptsBucketPolicyEBE0FD6F": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "GlueScriptsBucketCD60B14C"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:PutBucketPolicy",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "GlueScriptsBucketCD60B14C",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "GlueScriptsBucketCD60B14C",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/GlueScriptsBucket/Policy/Resource"
+   }
+  },
+  "GlueScriptsBucketAutoDeleteObjectsCustomResource5EF6A9DF": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "GlueScriptsBucketCD60B14C"
+    }
+   },
+   "DependsOn": [
+    "GlueScriptsBucketPolicyEBE0FD6F"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/GlueScriptsBucket/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-302296110959-us-east-1",
+     "S3Key": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Description": {
+     "Fn::Join": [
+      "",
+      [
+       "Lambda function for auto-deleting objects in ",
+       {
+        "Ref": "GlueScriptsBucketCD60B14C"
+       },
+       " S3 bucket."
+      ]
+     ]
+    }
+   },
+   "DependsOn": [
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6",
+    "aws:asset:property": "Code"
+   }
+  },
+  "ChurchesTableBCC5909B": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "phone",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "lead_status",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "owner_alias",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "lead_status-index",
+      "KeySchema": [
+       {
+        "AttributeName": "lead_status",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "owner_alias-index",
+      "KeySchema": [
+       {
+        "AttributeName": "owner_alias",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "phone",
+      "KeyType": "HASH"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "SSESpecification": {
+     "SSEEnabled": true
+    },
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TableName": "Churches"
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/ChurchesTable/Resource"
+   }
+  },
+  "GlueETLRoleD6A3A0E8": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "glue.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSGlueServiceRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/GlueETLRole/Resource"
+   }
+  },
+  "GlueETLRoleDefaultPolicy5E2EA745": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:GetObject",
+        "s3:ListBucket"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        "arn:aws:s3:::globaloutreachevent.com",
+        "arn:aws:s3:::globaloutreachevent.com/*"
+       ]
+      },
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging",
+        "s3:Abort*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "LeadsProcessedOutputC85726B7",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "LeadsProcessedOutputC85726B7",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "GlueScriptsBucketCD60B14C",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "GlueScriptsBucketCD60B14C",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "GlueETLRoleDefaultPolicy5E2EA745",
+    "Roles": [
+     {
+      "Ref": "GlueETLRoleD6A3A0E8"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/GlueETLRole/DefaultPolicy/Resource"
+   }
+  },
+  "GlueScriptDeploymentAwsCliLayer5E81A6C7": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": "cdk-hnb659fds-assets-302296110959-us-east-1",
+     "S3Key": "1b2c92f2cd21c170884393633bd4c732676df6290562199b6e3ca5e2a1be7d18.zip"
+    },
+    "Description": "/opt/awscli/aws"
+   },
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/GlueScriptDeployment/AwsCliLayer/Resource",
+    "aws:asset:path": "asset.1b2c92f2cd21c170884393633bd4c732676df6290562199b6e3ca5e2a1be7d18.zip",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Content"
+   }
+  },
+  "GlueScriptDeploymentCustomResource8BFD593F": {
+   "Type": "Custom::CDKBucketDeployment",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536",
+      "Arn"
+     ]
+    },
+    "SourceBucketNames": [
+     "cdk-hnb659fds-assets-302296110959-us-east-1"
+    ],
+    "SourceObjectKeys": [
+     "784fd9bfbf4527f0e6e05082b6aea1d192e3b5ed1dad4d49ef6492792411e789.zip"
+    ],
+    "DestinationBucketName": {
+     "Ref": "GlueScriptsBucketCD60B14C"
+    },
+    "DestinationBucketKeyPrefix": "scripts/",
+    "Prune": true,
+    "OutputObjectKeys": true
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/GlueScriptDeployment/CustomResource/Default"
+   }
+  },
+  "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource"
+   }
+  },
+  "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":s3:::cdk-hnb659fds-assets-302296110959-us-east-1"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":s3:::cdk-hnb659fds-assets-302296110959-us-east-1/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging",
+        "s3:Abort*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "GlueScriptsBucketCD60B14C",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "GlueScriptsBucketCD60B14C",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+    "Roles": [
+     {
+      "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-302296110959-us-east-1",
+     "S3Key": "9a1fcb4a7ecba81ad70e9d3fb241f6794497da945dae5f25924e4dd002b65f2d.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "AWS_CA_BUNDLE": "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
+     }
+    },
+    "Handler": "index.handler",
+    "Layers": [
+     {
+      "Ref": "GlueScriptDeploymentAwsCliLayer5E81A6C7"
+     }
+    ],
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.11",
+    "Timeout": 900
+   },
+   "DependsOn": [
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource",
+    "aws:asset:path": "asset.9a1fcb4a7ecba81ad70e9d3fb241f6794497da945dae5f25924e4dd002b65f2d",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LeadsParserJob": {
+   "Type": "AWS::Glue::Job",
+   "Properties": {
+    "Command": {
+     "Name": "glueetl",
+     "PythonVersion": "3",
+     "ScriptLocation": {
+      "Fn::Join": [
+       "",
+       [
+        "s3://",
+        {
+         "Ref": "GlueScriptsBucketCD60B14C"
+        },
+        "/scripts/parse-leads.py"
+       ]
+      ]
+     }
+    },
+    "DefaultArguments": {
+     "--SOURCE_BUCKET": "globaloutreachevent.com",
+     "--SOURCE_KEY": "leads.txt",
+     "--OUTPUT_BUCKET": {
+      "Ref": "LeadsProcessedOutputC85726B7"
+     },
+     "--enable-metrics": "",
+     "--enable-continuous-cloudwatch-log": "true",
+     "--enable-spark-ui": "true",
+     "--spark-event-logs-path": {
+      "Fn::Join": [
+       "",
+       [
+        "s3://",
+        {
+         "Ref": "LeadsProcessedOutputC85726B7"
+        },
+        "/spark-logs/"
+       ]
+      ]
+     },
+     "--job-language": "python"
+    },
+    "ExecutionProperty": {
+     "MaxConcurrentRuns": 1
+    },
+    "GlueVersion": "4.0",
+    "MaxRetries": 2,
+    "Name": "leads-parser-job",
+    "Role": {
+     "Fn::GetAtt": [
+      "GlueETLRoleD6A3A0E8",
+      "Arn"
+     ]
+    },
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "GlueScriptDeploymentAwsCliLayer5E81A6C7",
+    "GlueScriptDeploymentCustomResource8BFD593F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/LeadsParserJob"
+   }
+  },
+  "LambdaETLRole09759C96": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/LambdaETLRole/Resource"
+   }
+  },
+  "LambdaETLRoleDefaultPolicy84F253C6": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging",
+        "s3:Abort*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "LeadsProcessedOutputC85726B7",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "LeadsProcessedOutputC85726B7",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "ChurchesTableBCC5909B",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "ChurchesTableBCC5909B",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdaETLRoleDefaultPolicy84F253C6",
+    "Roles": [
+     {
+      "Ref": "LambdaETLRole09759C96"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/LambdaETLRole/DefaultPolicy/Resource"
+   }
+  },
+  "DynamoLoaderFunctionDDDB5041": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-302296110959-us-east-1",
+     "S3Key": "1527932aba2a0619ad0e7c1c90959a4f48010d2e0fabf5f4928999bf546df45d.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "ChurchesTableBCC5909B"
+      },
+      "OUTPUT_BUCKET": {
+       "Ref": "LeadsProcessedOutputC85726B7"
+      }
+     }
+    },
+    "FunctionName": "leads-dynamo-loader",
+    "Handler": "index.handler",
+    "MemorySize": 1024,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdaETLRole09759C96",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 900
+   },
+   "DependsOn": [
+    "LambdaETLRoleDefaultPolicy84F253C6",
+    "LambdaETLRole09759C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/DynamoLoaderFunction/Resource",
+    "aws:asset:path": "asset.1527932aba2a0619ad0e7c1c90959a4f48010d2e0fabf5f4928999bf546df45d",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "SeedsGeneratorFunction48889090": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-302296110959-us-east-1",
+     "S3Key": "43f4cc18a78a626642e653657b2931a4da902df311816f2afb31e1ca0f947183.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "OUTPUT_BUCKET": {
+       "Ref": "LeadsProcessedOutputC85726B7"
+      }
+     }
+    },
+    "FunctionName": "rails-seeds-generator",
+    "Handler": "index.handler",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdaETLRole09759C96",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 600
+   },
+   "DependsOn": [
+    "LambdaETLRoleDefaultPolicy84F253C6",
+    "LambdaETLRole09759C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/SeedsGeneratorFunction/Resource",
+    "aws:asset:path": "asset.43f4cc18a78a626642e653657b2931a4da902df311816f2afb31e1ca0f947183",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "DataValidationFunction54FE76C7": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-302296110959-us-east-1",
+     "S3Key": "f05a48e519f3c4a469d7a9c72e385a4942fcded3c3c291d1b3134e7fe47376d5.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "ChurchesTableBCC5909B"
+      },
+      "OUTPUT_BUCKET": {
+       "Ref": "LeadsProcessedOutputC85726B7"
+      }
+     }
+    },
+    "FunctionName": "leads-data-validation",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdaETLRole09759C96",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 300
+   },
+   "DependsOn": [
+    "LambdaETLRoleDefaultPolicy84F253C6",
+    "LambdaETLRole09759C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/DataValidationFunction/Resource",
+    "aws:asset:path": "asset.f05a48e519f3c4a469d7a9c72e385a4942fcded3c3c291d1b3134e7fe47376d5",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ETLNotificationTopicD458CA32": {
+   "Type": "AWS::SNS::Topic",
+   "Properties": {
+    "DisplayName": "Leads ETL Pipeline Notifications",
+    "TopicName": "leads-etl-notifications"
+   },
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/ETLNotificationTopic/Resource"
+   }
+  },
+  "LeadsETLStateMachineRole3BC10384": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "states.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/LeadsETLStateMachine/Role/Resource"
+   }
+  },
+  "LeadsETLStateMachineRoleDefaultPolicyCC7C16D2": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sns:Publish",
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "ETLNotificationTopicD458CA32"
+       }
+      },
+      {
+       "Action": [
+        "glue:StartJobRun",
+        "glue:GetJobRun",
+        "glue:GetJobRuns",
+        "glue:BatchStopJobRun"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":glue:us-east-1:302296110959:job/leads-parser-job"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoLoaderFunctionDDDB5041",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoLoaderFunctionDDDB5041",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "SeedsGeneratorFunction48889090",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "SeedsGeneratorFunction48889090",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DataValidationFunction54FE76C7",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DataValidationFunction54FE76C7",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords",
+        "xray:GetSamplingRules",
+        "xray:GetSamplingTargets"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LeadsETLStateMachineRoleDefaultPolicyCC7C16D2",
+    "Roles": [
+     {
+      "Ref": "LeadsETLStateMachineRole3BC10384"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/LeadsETLStateMachine/Role/DefaultPolicy/Resource"
+   }
+  },
+  "LeadsETLStateMachine2886A060": {
+   "Type": "AWS::StepFunctions::StateMachine",
+   "Properties": {
+    "DefinitionString": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"StartAt\":\"ETLPipelineWithErrorHandling\",\"States\":{\"ETLPipelineWithErrorHandling\":{\"Type\":\"Parallel\",\"End\":true,\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"ResultPath\":\"$.error\",\"Next\":\"SendFailureNotification\"}],\"Branches\":[{\"StartAt\":\"RunGlueETL\",\"States\":{\"RunGlueETL\":{\"Next\":\"LoadToDynamoDB\",\"Type\":\"Task\",\"ResultPath\":\"$.glueResult\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"leads-parser-job\"}},\"LoadToDynamoDB\":{\"Next\":\"ParallelProcessing\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"OutputPath\":\"$.Payload\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+       {
+        "Fn::GetAtt": [
+         "DynamoLoaderFunctionDDDB5041",
+         "Arn"
+        ]
+       },
+       "\",\"Payload.$\":\"$\"}},\"ParallelProcessing\":{\"Type\":\"Parallel\",\"Next\":\"SendSuccessNotification\",\"Branches\":[{\"StartAt\":\"GenerateRailsSeeds\",\"States\":{\"GenerateRailsSeeds\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"OutputPath\":\"$.Payload\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+       {
+        "Fn::GetAtt": [
+         "SeedsGeneratorFunction48889090",
+         "Arn"
+        ]
+       },
+       "\",\"Payload.$\":\"$\"}}}},{\"StartAt\":\"ValidateData\",\"States\":{\"ValidateData\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"OutputPath\":\"$.Payload\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+       {
+        "Fn::GetAtt": [
+         "DataValidationFunction54FE76C7",
+         "Arn"
+        ]
+       },
+       "\",\"Payload.$\":\"$\"}}}}]},\"SendSuccessNotification\":{\"End\":true,\"Type\":\"Task\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::sns:publish\",\"Parameters\":{\"TopicArn\":\"",
+       {
+        "Ref": "ETLNotificationTopicD458CA32"
+       },
+       "\",\"Message\":\"ETL Pipeline completed successfully!\"}}}}]},\"SendFailureNotification\":{\"Next\":\"ETLFailed\",\"Type\":\"Task\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::sns:publish\",\"Parameters\":{\"TopicArn\":\"",
+       {
+        "Ref": "ETLNotificationTopicD458CA32"
+       },
+       "\",\"Message.$\":\"$.error\"}},\"ETLFailed\":{\"Type\":\"Fail\",\"Error\":\"ETLPipelineError\",\"Cause\":\"Check CloudWatch Logs for details\"}},\"TimeoutSeconds\":7200}"
+      ]
+     ]
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "LeadsETLStateMachineRole3BC10384",
+      "Arn"
+     ]
+    },
+    "StateMachineName": "leads-etl-pipeline",
+    "TracingConfiguration": {
+     "Enabled": true
+    }
+   },
+   "DependsOn": [
+    "LeadsETLStateMachineRoleDefaultPolicyCC7C16D2",
+    "LeadsETLStateMachineRole3BC10384"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/LeadsETLStateMachine/Resource"
+   }
+  },
+  "ETLDashboard9C6EC1E3": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":12,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Function Duration\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "DynamoLoaderFunctionDDDB5041"
+       },
+       "\"],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "SeedsGeneratorFunction48889090"
+       },
+       "\"],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "DataValidationFunction54FE76C7"
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":12,\"height\":6,\"x\":12,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Write Throttles\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/DynamoDB\",\"UserErrors\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    },
+    "DashboardName": "leads-etl-pipeline-dashboard"
+   },
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/ETLDashboard/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/11STU/DMAz9Ldy9MLYLVzYEAg0xbYhr5SZmC02TKU42TVX/O247ysfJzy/PL9ZLZmo2nanpFZ54ok01cbZUzTahrkCoouG5ahZZV5Rg+eEvaCjr4Kw+/9CXfmgWyNSCOXusgxHLNywdddoetGCxVs0mDFxff+wG1ALPi8bQwYVzTT6pwfh+JACZKbG660oLDuvSoGrEYIVniu8U2QYPW+t3jlLwD9nr1DEjEOk3bmHnMilhnkMJ7FlWDger+5U7IOskOnxc5Fwk5EpEjzIlccUkY5vsYdVv8eSPoSLYel7n0lne/5tWzRojOkcOHtA6EIdEL6j31veB/O5b0C5kc8Kk96q5R96XAaPpZGPTtrDMnEK9IQ456iHVEf85WsdwtIZi90LQZye37SQkGAeGKAvXxVjIN9DOqrsTL53tk+3MX3M6ZEndB0Pqk6+PN7fyk9Tt1SdbO4nZJ1uT2gz1C3XNXuNlAgAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "LeadsETLPipelineStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "OutputBucketName": {
+   "Description": "S3 bucket for processed output files",
+   "Value": {
+    "Ref": "LeadsProcessedOutputC85726B7"
+   }
+  },
+  "DynamoTableName": {
+   "Description": "DynamoDB table name for church leads",
+   "Value": {
+    "Ref": "ChurchesTableBCC5909B"
+   }
+  },
+  "StateMachineArn": {
+   "Description": "Step Functions state machine ARN",
+   "Value": {
+    "Ref": "LeadsETLStateMachine2886A060"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,353 @@
+# This file should ensure the existence of records required to run the application in every environment (production,
+# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
+# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
+#
+# Example:
+#
+#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
+#     MovieGenre.find_or_create_by!(name: genre_name)
+#   end
+
+# Generate the scaffold
+# Run this command in your Rails application directory:
+# rails generate scaffold Lead name:string company:string phone:string website:string state_province:string lead_source:string email:string lead_status:string created_date:datetime owner_alias:string unread_by_owner:boolean
+
+# Then run:
+# rails db:migrate
+
+# Add this to db/seeds.rb:
+
+Lead.create!([
+  {
+    name: "Jong Hoon Kim",
+    company: "Yale Presbyterian Church in New York",
+    phone: "(516) 938-0383",
+    website: "",
+    state_province: "",
+    lead_source: "",
+    email: "jongjoy04@yahoo.com",
+    lead_status: "Open - Not Contacted",
+    created_date: DateTime.strptime("9/2/2018 11:20 PM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Tony Fontanelle",
+    company: "Revealed Word Christian Center",
+    phone: "(718) 276-0300",
+    website: "",
+    state_province: "",
+    lead_source: "",
+    email: "",
+    lead_status: "Closed - Not Converted",
+    created_date: DateTime.strptime("4/2/2012 5:23 PM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Moni Mathew",
+    company: "First Church of God",
+    phone: "(516) 633-2107",
+    website: "http://www.firstcog.com/contact-us.php",
+    state_province: "",
+    lead_source: "",
+    email: "pastor@firstcog.com",
+    lead_status: "Closed - Not Converted",
+    created_date: DateTime.strptime("4/28/2012 1:34 AM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Robert Kelly",
+    company: "Beacon Church",
+    phone: "(516) 620-5106",
+    website: "http://beaconchurchonline.com/index.php?nid=23505&s=au",
+    state_province: "",
+    lead_source: "",
+    email: "robert@beaconchurchonline.com",
+    lead_status: "Open - Not Contacted",
+    created_date: DateTime.strptime("5/2/2012 7:54 PM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Eun",
+    company: "Korean Methodist Church",
+    phone: "+1 (516) 485-2102",
+    website: "",
+    state_province: "",
+    lead_source: "",
+    email: "pastor.eun@gmail.com",
+    lead_status: "Open - Not Contacted",
+    created_date: DateTime.strptime("5/4/2012 11:23 PM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Cecil Mathew",
+    company: "First Church of God",
+    phone: "(516) 633-2107",
+    website: "http://www.firstcog.com/contact-us.php",
+    state_province: "",
+    lead_source: "",
+    email: "cemat22@gmail.com",
+    lead_status: "Closed - Not Converted",
+    created_date: DateTime.strptime("5/7/2012 1:54 AM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Shawn Knight",
+    company: "Champion Worship Center",
+    phone: "(718) 706-8719",
+    website: "http://www.championwc.org/",
+    state_province: "",
+    lead_source: "",
+    email: "pastorshawn@championwc.org",
+    lead_status: "Closed - Not Converted",
+    created_date: DateTime.strptime("5/12/2012 4:12 AM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Thomas Boyd",
+    company: "Massagequa Park Church Of The Nazarene",
+    phone: "+1 (516) 798-2203",
+    website: "http://mpknazarene.weebly.com/about-us.html",
+    state_province: "",
+    lead_source: "",
+    email: "pthomasboyd@yahoo.com",
+    lead_status: "Closed - Not Converted",
+    created_date: DateTime.strptime("5/14/2012 11:58 AM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Lester Ayars",
+    company: "Island Christian Church",
+    phone: "+1 (631) 368-5023",
+    website: "http://ichristianc.org/new-here/virtual-tour/",
+    state_province: "",
+    lead_source: "",
+    email: "",
+    lead_status: "Closed - Not Converted",
+    created_date: DateTime.strptime("5/15/2012 11:13 PM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Lynda Bates-Stepe",
+    company: "Commack United Methodist Church",
+    phone: "+1 (631) 499-7310",
+    website: "http://www.commack-umc.org/Pastor_Message.shtml",
+    state_province: "",
+    lead_source: "",
+    email: "revljb@optonline.net",
+    lead_status: "Closed - Not Converted",
+    created_date: DateTime.strptime("5/16/2012 2:33 AM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Sungmu Lee",
+    company: "United Methodist Church of Bay Shore",
+    phone: "+1 (631) 666-7194",
+    website: "http://www.gbgm-umc.org/bayshore/pastorscorner.htm",
+    state_province: "",
+    lead_source: "",
+    email: "",
+    lead_status: "Open - Not Contacted",
+    created_date: DateTime.strptime("5/16/2012 9:19 PM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Courton Reid",
+    company: "City of Faith Church of God",
+    phone: "(718) 798-3052",
+    website: "http://www.cityoffaithchurchofgod.net/index.php",
+    state_province: "",
+    lead_source: "",
+    email: "",
+    lead_status: "Closed - Not Converted",
+    created_date: DateTime.strptime("5/22/2012 2:34 AM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Gene Profeta",
+    company: "Massapequa Full Gospel Tabernacle",
+    phone: "(516) 798-1998",
+    website: "http://www.lirevival.com/home.htm",
+    state_province: "",
+    lead_source: "",
+    email: "",
+    lead_status: "Open - Not Contacted",
+    created_date: DateTime.strptime("5/22/2012 3:52 AM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Kyu Lee",
+    company: "FAITH CHURCH OF CONNECTICUT",
+    phone: "(203) 339-1526",
+    website: "https://sites.google.com/site/faithchurchofct/",
+    state_province: "",
+    lead_source: "",
+    email: "",
+    lead_status: "Closed - Not Converted",
+    created_date: DateTime.strptime("5/22/2012 2:50 AM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Livingston Clark",
+    company: "Grace Gospel Chapel",
+    phone: "(212) 281-0642",
+    website: "http://www.gracegospelchapelnyc.org/http___gracegospelchapelnyc.org/WELCOME.html",
+    state_province: "",
+    lead_source: "",
+    email: "",
+    lead_status: "Open - Not Contacted",
+    created_date: DateTime.strptime("5/22/2012 3:55 AM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Joseph Santos",
+    company: "Gospel Tabernacle Church A/G",
+    phone: "(201) 863-1000",
+    website: "http://www.gospeltab.org/",
+    state_province: "",
+    lead_source: "",
+    email: "",
+    lead_status: "Open - Not Contacted",
+    created_date: DateTime.strptime("5/22/2012 11:11 AM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "David Ortega",
+    company: "Seymour Foursquare Church",
+    phone: "(203) 881-3510",
+    website: "http://seymour4sq.wordpress.com/contact-us/",
+    state_province: "",
+    lead_source: "",
+    email: "",
+    lead_status: "Open - Not Contacted",
+    created_date: DateTime.strptime("5/22/2012 4:56 PM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "TestAccount",
+    company: "Test Account",
+    phone: "",
+    website: "",
+    state_province: "",
+    lead_source: "",
+    email: "mdlawrenceusa@gmail.com",
+    lead_status: "Open - Not Contacted",
+    created_date: DateTime.strptime("5/23/2012 11:15 AM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Marcel Snuggs",
+    company: "Harvest Christian Church",
+    phone: "(631) 234-5986",
+    website: "http://www.harvestchristianbc.org/staff",
+    state_province: "",
+    lead_source: "",
+    email: "marcelsnuggs@juno.com",
+    lead_status: "Closed - Not Converted",
+    created_date: DateTime.strptime("5/29/2012 10:34 AM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Jason Walker",
+    company: "Bay Ridge Baptist Church",
+    phone: "+1 (718) 238-0555",
+    website: "http://www.bayridgebaptistchurch.com/",
+    state_province: "",
+    lead_source: "",
+    email: "",
+    lead_status: "Open - Not Contacted",
+    created_date: DateTime.strptime("6/12/2012 8:17 AM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Marian Lin",
+    company: "Taiwan Union Christian Church",
+    phone: "+1 (718) 278-0408",
+    website: "http://www.tuccny.org/",
+    state_province: "",
+    lead_source: "",
+    email: "",
+    lead_status: "Closed - Not Converted",
+    created_date: DateTime.strptime("6/14/2012 11:34 PM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Clay Shook",
+    company: "Memorial Baptist Church",
+    phone: "(843) 563-3058",
+    website: "",
+    state_province: "",
+    lead_source: "",
+    email: "",
+    lead_status: "Open - Not Contacted",
+    created_date: DateTime.strptime("6/15/2012 7:01 PM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Sheila Gilliams",
+    company: "St. Paul's Church of Christ",
+    phone: "",
+    website: "",
+    state_province: "",
+    lead_source: "",
+    email: "sgillams@msn.com",
+    lead_status: "Closed - Not Converted",
+    created_date: DateTime.strptime("6/23/2012 4:47 PM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  },
+  {
+    name: "Aaron Owens",
+    company: "St. Paul's Church of Christ",
+    phone: "(646) 388-0328",
+    website: "",
+    state_province: "",
+    lead_source: "",
+    email: "",
+    lead_status: "Working - Contacted",
+    created_date: DateTime.strptime("6/23/2012 4:49 PM", "%m/%d/%Y %I:%M %p"),
+    owner_alias: "MDL",
+    unread_by_owner: false
+  }
+])
+
+puts "Created #{Lead.count} leads"
+
+# Optional: Add validations to your Lead model (app/models/lead.rb)
+# class Lead < ApplicationRecord
+#   validates :name, presence: true
+#   validates :company, presence: true
+#   validates :lead_status, presence: true
+#   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
+#   
+#   scope :open, -> { where(lead_status: ["Open - Not Contacted", "Working - Contacted"]) }
+#   scope :closed, -> { where(lead_status: "Closed - Not Converted") }
+#   scope :by_owner, ->(owner) { where(owner_alias: owner) }
+# end
+
+# To set up and run:
+# 1. Run: rails generate scaffold Lead name:string company:string phone:string website:string state_province:string lead_source:string email:string lead_status:string created_date:datetime owner_alias:string unread_by_owner:boolean
+# 2. Run: rails db:migrate
+# 3. Add the seed data above to db/seeds.rb
+# 4. Run: rails db:seed

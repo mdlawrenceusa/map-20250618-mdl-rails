@@ -37,27 +37,31 @@ export class VonageIntegration {
 
   private handleWebhookAnswer(req: Request, res: Response): void {
     // Get call details
-    const direction = req.query.direction as string;
     const from = req.query.from as string;
     const to = req.query.to as string;
+    const callUuid = req.query.uuid as string;
     
-    console.log(`[WEBHOOK] Handling ${direction} call from ${from} to ${to}`);
+    // Determine direction based on the webhook endpoint path
+    const isOutbound = req.path.includes('/outbound/');
+    const direction = isOutbound ? 'outbound' : 'inbound';
+    
+    console.log(`[WEBHOOK] Handling ${direction} call from ${from} to ${to}, UUID: ${callUuid}`);
     
     // Determine greeting based on call direction
     let greeting: string;
     let fromName: string;
     
-    if (direction === 'outbound') {
+    if (isOutbound) {
       // Outbound call - use Esther's greeting
       greeting = "Hello, this is Esther calling from Mike Lawrence Productions. Could I please speak with your senior pastor or lead pastor?";
       fromName = "Esther - Mike Lawrence Productions";
     } else {
-      // Inbound call - generic greeting
-      greeting = "Hello, welcome to our automated assistant. How can I help you today?";
-      fromName = "Vonage";
+      // Inbound call - use Esther's greeting for church outreach
+      greeting = "Hello, this is Esther from Mike Lawrence Productions. How can I help you today?";
+      fromName = "Esther - Mike Lawrence Productions";
     }
     
-    // Always use secure WebSocket through CloudFront
+    // Always use secure WebSocket through CloudFront with channel parameter
     const protocol = 'wss';
     const host = 'gospelshare.io';
     
@@ -72,14 +76,14 @@ export class VonageIntegration {
         endpoint: [
           {
             type: "websocket",
-            uri: `${protocol}://${host}/socket`,
+            uri: `${protocol}://${host}/socket?channel=${callUuid}`,
             "content-type": "audio/l16;rate=16000",
           },
         ],
       },
     ];
     
-    console.log(`[WEBHOOK] Responding with WebSocket URI: ${protocol}://${host}/socket`);
+    console.log(`[WEBHOOK] Responding with WebSocket URI: ${protocol}://${host}/socket?channel=${callUuid}`);
     res.status(200).json(nccoResponse);
   }
 

@@ -1,0 +1,118 @@
+📝 Minimal transcript logger initialized
+Serving static files from: /home/ec2-user/environment/map-20250618-mdl-rails/
+Frontend files from: /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/frontend
+OutboundCallManager created without config - call configure() to set credentials
+Vonage integration initialized with barge-in support.
+Server running on HTTP port 3000
+Server listening on 0.0.0.0:3000
+Running session cleanup check
+Running session cleanup check
+[WEBHOOK] Handling inbound call from 13472005533 to 12135235700, UUID: test-call
+[WEBHOOK] Responding with WebSocket URI: wss://gospelshare.io/socket?channel=test-call
+Running session cleanup check
+Vonage event received: {
+  headers: {},
+  from: '13472005533',
+  to: '12135235700',
+  uuid: 'eaaf8a909417e2de07b0d97be38b148b',
+  conversation_uuid: 'CON-8438c141-d142-4260-97a9-32f6d684b0c0',
+  status: 'started',
+  direction: 'inbound',
+  timestamp: '2025-06-22T20:15:00.054Z'
+}
+Vonage event received: {
+  headers: {},
+  from: '13472005533',
+  to: '12135235700',
+  uuid: 'eaaf8a909417e2de07b0d97be38b148b',
+  conversation_uuid: 'CON-8438c141-d142-4260-97a9-32f6d684b0c0',
+  status: 'ringing',
+  direction: 'inbound',
+  timestamp: '2025-06-22T20:15:00.054Z'
+}
+[WEBHOOK] Handling inbound call from 13472005533 to 12135235700, UUID: eaaf8a909417e2de07b0d97be38b148b
+[WEBHOOK] Responding with WebSocket URI: wss://gospelshare.io/socket?channel=eaaf8a909417e2de07b0d97be38b148b
+Vonage event received: {
+  start_time: null,
+  headers: {},
+  rate: null,
+  from: '13472005533',
+  to: '12135235700',
+  uuid: 'eaaf8a909417e2de07b0d97be38b148b',
+  conversation_uuid: 'CON-8438c141-d142-4260-97a9-32f6d684b0c0',
+  status: 'answered',
+  direction: 'inbound',
+  network: null,
+  timestamp: '2025-06-22T20:15:00.452Z'
+}
+Client requesting connection to channel: eaaf8a909417e2de07b0d97be38b148b
+Creating new channel: eaaf8a909417e2de07b0d97be38b148b
+Setting up initial events for session eaaf8a909417e2de07b0d97be38b148b...
+Starting bidirectional stream for session eaaf8a909417e2de07b0d97be38b148b...
+Setting up prompt start event for session eaaf8a909417e2de07b0d97be38b148b...
+Websocket connection is open
+[PROMPT DEBUG] Attempting to read prompt from: /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/church-outreach-prompt.txt
+[PROMPT DEBUG] Failed to read church prompt file: Error: ENOENT: no such file or directory, open '/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/church-outreach-prompt.txt'
+    at Object.openSync (node:fs:596:3)
+    at Object.readFileSync (node:fs:464:35)
+    at initializeOrJoinChannel (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/src/server.ts:328:29)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/church-outreach-prompt.txt'
+}
+[PROMPT DEBUG] Using hardcoded default church prompt
+[PROMPT DEBUG] Setting system prompt for channel eaaf8a909417e2de07b0d97be38b148b
+Setting up systemPrompt events for session eaaf8a909417e2de07b0d97be38b148b...
+[PROMPT DEBUG] System prompt content length: 816 characters
+[PROMPT DEBUG] System prompt preview: You're Esther, Mike Lawrence Productions' outreach assistant. Your job is to make warm, professional calls to church offices to schedule brief web meetings with senior pastors about our World of Illus...
+[PROMPT DEBUG] Adding textInput event with system prompt to queue
+Setting up startAudioContent event for session eaaf8a909417e2de07b0d97be38b148b...
+Using audio content ID: ea4be7e9-d179-4fb6-ad81-6150642b4035
+Initial events setup complete for session eaaf8a909417e2de07b0d97be38b148b
+Channel eaaf8a909417e2de07b0d97be38b148b has 1 connected clients
+Error in session eaaf8a909417e2de07b0d97be38b148b:  CredentialsProviderError: Unable to find environment variable credentials.
+    at /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@aws-sdk/credential-provider-env/dist-cjs/index.js:63:9
+    at coalesceProvider (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@smithy/core/dist-cjs/index.js:391:17)
+    at /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@smithy/core/dist-cjs/index.js:412:24
+    at fn (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@aws-sdk/core/dist-cjs/submodules/httpAuthSchemes/index.js:373:56)
+    at resolvedCredentials (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@aws-sdk/core/dist-cjs/submodules/httpAuthSchemes/index.js:249:73)
+    at /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@smithy/core/dist-cjs/index.js:111:23
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@aws-sdk/middleware-logger/dist-cjs/index.js:33:22
+    at async NovaSonicBidirectionalStreamClient.initiateSession (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/src/client.ts:233:24) {
+  tryNextLink: true
+}
+error {
+  source: 'bidirectionalStream',
+  error: CredentialsProviderError: Unable to find environment variable credentials.
+      at /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@aws-sdk/credential-provider-env/dist-cjs/index.js:63:9
+      at coalesceProvider (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@smithy/core/dist-cjs/index.js:391:17)
+      at /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@smithy/core/dist-cjs/index.js:412:24
+      at fn (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@aws-sdk/core/dist-cjs/submodules/httpAuthSchemes/index.js:373:56)
+      at resolvedCredentials (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@aws-sdk/core/dist-cjs/submodules/httpAuthSchemes/index.js:249:73)
+      at /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@smithy/core/dist-cjs/index.js:111:23
+      at processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@aws-sdk/middleware-logger/dist-cjs/index.js:33:22
+      at async NovaSonicBidirectionalStreamClient.initiateSession (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/src/client.ts:233:24) {
+    tryNextLink: true
+  }
+}
+Closing session eaaf8a909417e2de07b0d97be38b148b
+Session eaaf8a909417e2de07b0d97be38b148b closed.
+[BARGE-IN] 🎯 Created barge-in handler for session eaaf8a909417e2de07b0d97be38b148b
+/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/src/client.ts:691
+      throw new Error(`Invalid session ${sessionId} for audio streaming`);
+            ^
+Error: Invalid session eaaf8a909417e2de07b0d97be38b148b for audio streaming
+    at NovaSonicBidirectionalStreamClient.streamAudioChunk (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/src/client.ts:691:13)
+    at StreamSession.processAudioQueue (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/src/client.ts:96:29)
+    at StreamSession.streamAudio (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/src/client.ts:73:10)
+    at VonageIntegration.processAudioData (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/src/telephony/vonage.ts:128:21)
+    at WebSocket.handleMessage (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/src/server.ts:405:24)
+    at WebSocket.emit (node:events:517:28)
+    at WebSocket.emit (node:domain:489:12)
+    at Receiver.receiverOnMessage (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/express-ws/node_modules/ws/lib/websocket.js:1070:20)
+    at Receiver.emit (node:events:517:28)
+    at Receiver.emit (node:domain:489:12)

@@ -161,8 +161,8 @@ export class OutboundCallManager {
           type: 'phone',
           number: this.config!.fromNumber || 'VONAGE'
         },
-        answerUrl: [`${this.getServerUrl()}/outbound/ai-answer`],
-        eventUrl: [`${this.getServerUrl()}/outbound/events`]
+        answerUrl: [`${this.getServerUrl()}/outbound/webhooks/answer`],
+        eventUrl: [`${this.getServerUrl()}/outbound/webhooks/events`]
       });
 
       // Store call information
@@ -345,8 +345,8 @@ export class OutboundCallManager {
    * Get server URL for webhooks
    */
   private getServerUrl(): string {
-    // This should be your ngrok URL or deployed server URL
-    return process.env.SERVER_URL || 'http://localhost:3001';
+    // Use CloudFront domain for webhooks
+    return process.env.SERVER_URL || 'https://gospelshare.io';
   }
 }
 

@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  company: MyString
+  phone: MyString
+  website: MyString
+  state_province: MyString
+  lead_source: MyString
+  email: MyString
+  lead_status: MyString
+  created_date: 2025-06-23 03:19:31
+  owner_alias: MyString
+  unread_by_owner: false
+
+two:
+  name: MyString
+  company: MyString
+  phone: MyString
+  website: MyString
+  state_province: MyString
+  lead_source: MyString
+  email: MyString
+  lead_status: MyString
+  created_date: 2025-06-23 03:19:31
+  owner_alias: MyString
+  unread_by_owner: false

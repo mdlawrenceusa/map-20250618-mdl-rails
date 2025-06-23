@@ -1,0 +1,28 @@
+{
+  "name": "etl-pipeline",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cdk": "cdk",
+    "deploy": "npm run build && cdk deploy",
+    "diff": "npm run build && cdk diff",
+    "synth": "npm run build && cdk synth"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@aws-cdk/aws-glue-alpha": "^2.202.0-alpha.0",
+    "@aws-cdk/aws-s3-deployment": "^1.203.0",
+    "@types/node": "^24.0.3",
+    "aws-cdk": "^2.1019.1",
+    "aws-cdk-lib": "^2.202.0",
+    "constructs": "^10.4.2",
+    "source-map-support": "^0.5.21",
+    "typescript": "^5.8.3"
+  }
+}

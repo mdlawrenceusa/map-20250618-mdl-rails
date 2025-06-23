@@ -1,0 +1,417 @@
+
+> amazon-nova-sonic-server@1.0.0 dev
+> ts-node src/server.ts
+
+📝 Minimal transcript logger initialized
+Serving static files from: /home/ec2-user/environment/map-20250618-mdl-rails/
+Frontend files from: /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/frontend
+OutboundCallManager created without config - call configure() to set credentials
+Vonage integration initialized with barge-in support.
+Server running on HTTP port 3000
+Server listening on 0.0.0.0:3000
+[WEBHOOK] Handling inbound call from 13472005533 to 12135235700, UUID: test-new-prompt
+[WEBHOOK] Responding with WebSocket URI: wss://gospelshare.io/socket?channel=test-new-prompt
+Running session cleanup check
+Vonage event received: {
+  headers: {},
+  from: '13472005533',
+  to: '12135235700',
+  uuid: '17388a32120afcb8b01be84666c3a820',
+  conversation_uuid: 'CON-f4a52b27-23ad-454e-b391-d98fbff5b04a',
+  status: 'ringing',
+  direction: 'inbound',
+  timestamp: '2025-06-23T00:15:59.606Z'
+}
+Vonage event received: {
+  headers: {},
+  from: '13472005533',
+  to: '12135235700',
+  uuid: '17388a32120afcb8b01be84666c3a820',
+  conversation_uuid: 'CON-f4a52b27-23ad-454e-b391-d98fbff5b04a',
+  status: 'started',
+  direction: 'inbound',
+  timestamp: '2025-06-23T00:15:59.606Z'
+}
+[WEBHOOK] Handling inbound call from 13472005533 to 12135235700, UUID: 17388a32120afcb8b01be84666c3a820
+[WEBHOOK] Responding with WebSocket URI: wss://gospelshare.io/socket?channel=17388a32120afcb8b01be84666c3a820
+Vonage event received: {
+  start_time: null,
+  headers: {},
+  rate: null,
+  from: '13472005533',
+  to: '12135235700',
+  uuid: '17388a32120afcb8b01be84666c3a820',
+  conversation_uuid: 'CON-f4a52b27-23ad-454e-b391-d98fbff5b04a',
+  status: 'answered',
+  direction: 'inbound',
+  network: null,
+  timestamp: '2025-06-23T00:15:59.944Z'
+}
+Client requesting connection to channel: 17388a32120afcb8b01be84666c3a820
+Creating new channel: 17388a32120afcb8b01be84666c3a820
+Setting up initial events for session 17388a32120afcb8b01be84666c3a820...
+Starting bidirectional stream for session 17388a32120afcb8b01be84666c3a820...
+Setting up prompt start event for session 17388a32120afcb8b01be84666c3a820...
+Websocket connection is open
+[PROMPT DEBUG] Attempting to read prompt from: /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/church-outreach-prompt.txt
+[PROMPT DEBUG] Successfully loaded church prompt, length: 4941 characters
+[PROMPT DEBUG] First 200 chars: # Revised Esther Prompt - Brief and Focused - Version 1.0
+
+## Role
+You are Esther, Mike Lawrence Productions' scheduling assistant. Your ONLY job is to schedule 15-minute web meetings between senior p...
+[PROMPT DEBUG] Setting system prompt for channel 17388a32120afcb8b01be84666c3a820
+Setting up systemPrompt events for session 17388a32120afcb8b01be84666c3a820...
+[PROMPT DEBUG] System prompt content length: 4941 characters
+[PROMPT DEBUG] System prompt preview: # Revised Esther Prompt - Brief and Focused - Version 1.0
+
+## Role
+You are Esther, Mike Lawrence Productions' scheduling assistant. Your ONLY job is to schedule 15-minute web meetings between senior p...
+[PROMPT DEBUG] Adding textInput event with system prompt to queue
+Setting up startAudioContent event for session 17388a32120afcb8b01be84666c3a820...
+Using audio content ID: e33f485e-8b82-4b38-b1bd-830aa686af9e
+Initial events setup complete for session 17388a32120afcb8b01be84666c3a820
+Channel 17388a32120afcb8b01be84666c3a820 has 1 connected clients
+AsyncIterable iterator requested for session 17388a32120afcb8b01be84666c3a820
+[BARGE-IN] 🎯 Created barge-in handler for session 17388a32120afcb8b01be84666c3a820
+Stream established for session 17388a32120afcb8b01be84666c3a820, processing responses...
+Vonage event received: {
+  headers: {},
+  from: 'Esther - Mike Lawrence Productions',
+  to: 'wss://gospelshare.io/socket?channel=17388a32120afcb8b01be84666c3a820',
+  uuid: '6c76cfbf-ca92-4af8-8bc7-386996362384',
+  conversation_uuid: 'CON-f4a52b27-23ad-454e-b391-d98fbff5b04a',
+  status: 'ringing',
+  direction: 'outbound',
+  timestamp: '2025-06-23T00:16:05.989Z'
+}
+Vonage event received: {
+  start_time: null,
+  headers: {},
+  rate: null,
+  from: 'Esther - Mike Lawrence Productions',
+  to: 'wss://gospelshare.io/socket?channel=17388a32120afcb8b01be84666c3a820',
+  uuid: '6c76cfbf-ca92-4af8-8bc7-386996362384',
+  conversation_uuid: 'CON-f4a52b27-23ad-454e-b391-d98fbff5b04a',
+  status: 'answered',
+  direction: 'outbound',
+  network: null,
+  timestamp: '2025-06-23T00:16:05.989Z'
+}
+Vonage event received: {
+  headers: {},
+  from: 'Esther - Mike Lawrence Productions',
+  to: 'wss://gospelshare.io/socket?channel=17388a32120afcb8b01be84666c3a820',
+  uuid: '6c76cfbf-ca92-4af8-8bc7-386996362384',
+  conversation_uuid: 'CON-f4a52b27-23ad-454e-b391-d98fbff5b04a',
+  status: 'started',
+  direction: 'outbound',
+  timestamp: '2025-06-23T00:16:05.989Z'
+}
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'completionStart' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Human text: uh what's the website for the outreach programme...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Assistant text: The website for our outreach program is globaloutr...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Assistant text:  Would you like to schedule a meeting with Mike La...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Assistant text: The website for our outreach program is globaloutr...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Assistant text:  Would you like to schedule a meeting with Mike La...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Human text: uh yes um how about...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Human text: monday at two pm...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Assistant text: Great, Monday at 2 PM works. I'll schedule a 15-mi...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Assistant text:  Could you please provide the best email for the m...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Assistant text: Great, Monday at 2 PM works. I'll schedule a 15-mi...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Assistant text:  Could you please provide the best email for the m...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Human text: mdlawrence at me dot com...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Assistant text: Thank you. I've scheduled the meeting for Monday a...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Assistant text:  Have a wonderful day!...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Assistant text: Thank you. I've scheduled the meeting for Monday a...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: true
+[TRANSCRIPT] Adding Assistant text:  Have a wonderful day!...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for 17388a32120afcb8b01be84666c3a820: false
+Running session cleanup check
+Vonage event received: {
+  headers: {},
+  end_time: '2025-06-23T00:16:55.000Z',
+  uuid: '17388a32120afcb8b01be84666c3a820',
+  network: 'US-UNKNOWN',
+  duration: '56',
+  disconnected_by: 'user',
+  start_time: '2025-06-23T00:15:59.000Z',
+  rate: '0.00466000',
+  price: '0.00434934',
+  from: '13472005533',
+  to: '12135235700',
+  conversation_uuid: 'CON-f4a52b27-23ad-454e-b391-d98fbff5b04a',
+  status: 'completed',
+  direction: 'inbound',
+  timestamp: '2025-06-23T00:16:55.893Z'
+}
+Client disconnected from channel 17388a32120afcb8b01be84666c3a820, 0 clients remaining
+Last client left channel 17388a32120afcb8b01be84666c3a820, cleaning up resources
+Vonage event received: {
+  headers: {},
+  end_time: '2025-06-23T00:16:56.000Z',
+  uuid: '6c76cfbf-ca92-4af8-8bc7-386996362384',
+  network: null,
+  duration: '51',
+  disconnected_by: 'platform',
+  start_time: '2025-06-23T00:16:05.000Z',
+  rate: '0.004000',
+  price: '0.003400',
+  from: 'Esther - Mike Lawrence Productions',
+  to: 'wss://gospelshare.io/socket?channel=17388a32120afcb8b01be84666c3a820',
+  conversation_uuid: 'CON-f4a52b27-23ad-454e-b391-d98fbff5b04a',
+  status: 'completed',
+  direction: 'outbound',
+  timestamp: '2025-06-23T00:16:56.228Z'
+}
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 17388a32120afcb8b01be84666c3a820:  [ 'completionEnd' ]
+Handling other events
+Response stream processing complete for session 17388a32120afcb8b01be84666c3a820
+Stream completed for channel: 17388a32120afcb8b01be84666c3a820
+Closing session 17388a32120afcb8b01be84666c3a820
+Session 17388a32120afcb8b01be84666c3a820 closed.
+Queue empty or session inactive: 17388a32120afcb8b01be84666c3a820 
+Session 17388a32120afcb8b01be84666c3a820 close completed
+Successfully cleaned up channel: 17388a32120afcb8b01be84666c3a820
+[BARGE-IN] 🧹 Cleaned up barge-in handler for session 17388a32120afcb8b01be84666c3a820
+Running session cleanup check
+Error making AI call: Error: OutboundCallManager not configured. Call configure() with credentials first.
+    at OutboundCallManager.ensureConfigured (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/src/telephony/outbound.ts:97:13)
+    at OutboundCallManager.makeAICall (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/src/telephony/outbound.ts:150:10)
+    at /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/src/server.ts:593:46
+    at Layer.handleRequest (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/router/lib/layer.js:152:17)
+    at next (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/router/lib/route.js:157:13)
+    at Route.dispatch (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/router/lib/route.js:117:3)
+    at handle (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/router/index.js:435:11)
+    at Layer.handleRequest (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/router/lib/layer.js:152:17)
+    at /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/router/index.js:295:15
+    at processParams (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/router/index.js:582:12)
+Using JWT authentication with Application ID
+Generated custom JWT with iss claim
+OutboundCallManager initialized with config
+✅ Vonage credentials configured successfully
+Initiating AI-powered outbound call to +13472005533
+AI call initiated successfully. UUID: bb65ddcc-bd28-445f-a693-7ed22f8a7f03
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Using JWT authentication with Application ID
+Generated custom JWT with iss claim
+OutboundCallManager initialized with config
+✅ Vonage credentials configured successfully
+Initiating AI-powered outbound call to +13472005533
+AI call initiated successfully. UUID: e4ef7a7a-4757-4d24-8ff6-196bfed3a1da
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check

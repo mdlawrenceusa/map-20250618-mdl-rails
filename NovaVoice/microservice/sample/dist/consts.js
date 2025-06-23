@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultAudioOutputConfiguration = exports.DefaultSystemPrompt = exports.DefaultTextConfiguration = exports.DefaultAudioInputConfiguration = exports.DefaultInferenceConfiguration = void 0;
 exports.DefaultInferenceConfiguration = {
@@ -31,4 +20,8 @@ exports.DefaultTextConfiguration = {
 exports.DefaultSystemPrompt = "You are a friend. The user and you will engage in a spoken " +
     "dialog exchanging the transcripts of a natural real-time conversation. Keep your responses short, " +
     "generally two or three sentences for chatty scenarios.";
-exports.DefaultAudioOutputConfiguration = __assign(__assign({}, exports.DefaultAudioInputConfiguration), { sampleRateHertz: 16000, voiceId: "tiffany" });
+exports.DefaultAudioOutputConfiguration = {
+    ...exports.DefaultAudioInputConfiguration,
+    sampleRateHertz: 16000, // TODO: You may need to adjust this for your voice to sound normal
+    voiceId: "tiffany",
+};

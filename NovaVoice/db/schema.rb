@@ -10,5 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 0) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_23_031931) do
+  create_table "leads", force: :cascade do |t|
+    t.string "name"
+    t.string "company"
+    t.string "phone"
+    t.string "website"
+    t.string "state_province"
+    t.string "lead_source"
+    t.string "email"
+    t.string "lead_status"
+    t.datetime "created_date"
+    t.string "owner_alias"
+    t.boolean "unread_by_owner"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 end

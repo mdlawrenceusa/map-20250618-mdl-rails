@@ -1,0 +1,11 @@
+📝 Minimal transcript logger initialized
+Serving static files from: /home/ec2-user/environment/map-20250618-mdl-rails/
+Frontend files from: /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/frontend
+OutboundCallManager created without config - call configure() to set credentials
+Vonage integration initialized with barge-in support.
+Server running on HTTP port 3000
+Server listening on 0.0.0.0:3000
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
