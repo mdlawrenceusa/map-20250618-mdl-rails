@@ -362,7 +362,7 @@ class NovaSonicBidirectionalStreamClient {
                                     logger_1.logger.info(`✅ All initial events sent for session ${sessionId}, now handling audio queue`);
                                 }
                             }
-                            // Wait for queued events (audio input, content end, prompt end, etc.)
+                            // Check for queued events (audio input, content end, prompt end, etc.)
                             if (session.queue.length > 0) {
                                 const event = session.queue.shift();
                                 const eventType = Object.keys(event.event)[0];
@@ -376,27 +376,35 @@ class NovaSonicBidirectionalStreamClient {
                                     done: false,
                                 };
                             }
-                            // Wait for new events using the queue signal
-                            await (0, rxjs_2.firstValueFrom)(session.queueSignal.pipe((0, operators_1.take)(1)));
-                            // Check if session was closed while waiting
-                            if (!session.isActive) {
-                                return { value: undefined, done: true };
-                            }
-                            // Process the next queued event
-                            if (session.queue.length > 0) {
-                                const event = session.queue.shift();
-                                const eventType = Object.keys(event.event)[0];
-                                logger_1.logger.debug(`Sending queued ${eventType} event for session ${sessionId}`);
-                                return {
-                                    value: {
-                                        chunk: {
-                                            bytes: new TextEncoder().encode(JSON.stringify(event)),
+                            // Use timeout to avoid indefinite blocking
+                            try {
+                                const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000));
+                                const queueSignalPromise = (0, rxjs_2.firstValueFrom)(session.queueSignal.pipe((0, operators_1.take)(1)));
+                                await Promise.race([queueSignalPromise, timeoutPromise]);
+                                // Check if session was closed while waiting
+                                if (!session.isActive) {
+                                    return { value: undefined, done: true };
+                                }
+                                // Process the next queued event if available
+                                if (session.queue.length > 0) {
+                                    const event = session.queue.shift();
+                                    const eventType = Object.keys(event.event)[0];
+                                    logger_1.logger.debug(`Sending queued ${eventType} event for session ${sessionId}`);
+                                    return {
+                                        value: {
+                                            chunk: {
+                                                bytes: new TextEncoder().encode(JSON.stringify(event)),
+                                            },
                                         },
-                                    },
-                                    done: false,
-                                };
+                                        done: false,
+                                    };
+                                }
                             }
-                            // No events available, wait for next signal
+                            catch (error) {
+                                // Timeout or other error - continue processing
+                                logger_1.logger.debug(`Queue wait timeout/error for session ${sessionId}, continuing...`);
+                            }
+                            // No events to process, keep waiting
                             return { value: undefined, done: true };
                         }
                         catch (error) {

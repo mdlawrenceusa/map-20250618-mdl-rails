@@ -1,6 +1,8 @@
 export interface CallRequest {
   phoneNumber: string;
-  prompt: string;
+  prompt?: string;
+  leadId?: number;
+  campaignId?: string;
   novaSonicParams?: {
     maxTokens?: number;
     topP?: number;
@@ -35,4 +37,6 @@ export interface ActiveCall {
   phoneNumber: string;
   startTime: Date;
   transcript: string[];
+  leadId?: number;
+  campaignId?: string;
 }

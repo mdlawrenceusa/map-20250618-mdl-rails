@@ -5,7 +5,10 @@ class CallsController < ApplicationController
 
   def create
     phone_number = params[:phone_number]
-    prompt = params[:prompt] || default_outbound_prompt
+    prompt = params[:prompt]
+    lead_id = params[:lead_id]
+    campaign_id = params[:campaign_id]
+    
     nova_sonic_params = {
       maxTokens: params[:max_tokens]&.to_i || 1024,
       topP: params[:top_p]&.to_f || 0.9,
@@ -17,7 +20,18 @@ class CallsController < ApplicationController
       return
     end
 
-    result = @client.initiate_outbound_call(phone_number, prompt, nova_sonic_params)
+    # If no prompt provided and no lead/campaign specified, use default
+    if prompt.blank? && lead_id.blank? && campaign_id.blank?
+      prompt = default_outbound_prompt
+    end
+
+    result = @client.initiate_outbound_call(
+      phone_number, 
+      prompt,
+      lead_id: lead_id,
+      campaign_id: campaign_id,
+      nova_sonic_params: nova_sonic_params
+    )
     render json: result
   rescue MicroserviceClient::Error => e
     Rails.logger.error "Failed to initiate call: #{e.message}"

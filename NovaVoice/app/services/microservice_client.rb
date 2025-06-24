@@ -11,14 +11,20 @@ class MicroserviceClient
     @timeout = 30
   end
 
-  def initiate_outbound_call(phone_number, prompt, nova_sonic_params = {})
-    Rails.logger.info "Initiating outbound call to #{phone_number}"
+  def initiate_outbound_call(phone_number, prompt = nil, lead_id: nil, campaign_id: nil, nova_sonic_params: {})
+    Rails.logger.info "Initiating outbound call to #{phone_number} (lead: #{lead_id}, campaign: #{campaign_id})"
     
-    response = post_request('/calls', {
+    payload = {
       phoneNumber: phone_number,
-      prompt: prompt,
       novaSonicParams: nova_sonic_params
-    })
+    }
+    
+    # Only include these fields if they have values
+    payload[:prompt] = prompt if prompt.present?
+    payload[:leadId] = lead_id if lead_id.present?
+    payload[:campaignId] = campaign_id if campaign_id.present?
+    
+    response = post_request('/calls', payload)
 
     if response[:success]
       response[:data]

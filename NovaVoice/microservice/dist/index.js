@@ -22,6 +22,7 @@ const credential_providers_1 = require("@aws-sdk/credential-providers");
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
 const logger_1 = require("./logger");
+const prompt_client_1 = require("./prompt-client");
 const dotenv_1 = __importDefault(require("dotenv"));
 const http_1 = require("http");
 // Load environment variables
@@ -35,8 +36,19 @@ __decorate([
 ], CallRequestDTO.prototype, "phoneNumber", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CallRequestDTO.prototype, "prompt", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CallRequestDTO.prototype, "leadId", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CallRequestDTO.prototype, "campaignId", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Object)
@@ -111,20 +123,38 @@ app.post('/calls', async (req, res) => {
                 details: errors.map(e => Object.values(e.constraints || {})).flat()
             });
         }
-        const { phoneNumber, prompt, novaSonicParams } = callRequest;
+        const { phoneNumber, prompt, leadId, campaignId, novaSonicParams } = callRequest;
         const callId = `call-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-        logger_1.logger.info('Creating outbound call', { phoneNumber, callId });
+        logger_1.logger.info('Creating outbound call', { phoneNumber, callId, leadId, campaignId });
+        // Fetch prompts from Rails API if not provided
+        let systemPrompt = prompt;
+        if (!systemPrompt) {
+            try {
+                const prompts = await prompt_client_1.promptClient.getDefaultPrompts(leadId, campaignId);
+                systemPrompt = prompts.system;
+                logger_1.logger.info('Fetched system prompt from Rails', {
+                    systemPrompt: systemPrompt.substring(0, 100) + '...'
+                });
+            }
+            catch (error) {
+                logger_1.logger.error('Failed to fetch prompts, using fallback', { error });
+                systemPrompt = process.env.DEFAULT_OUTBOUND_PROMPT ||
+                    'You are Esther from Mike Lawrence Productions, a scheduling assistant.';
+            }
+        }
         // Initialize call tracking
         const bedrock = new bedrock_1.BedrockService();
         const audioProcessor = new audio_processor_1.AudioProcessor();
         activeCalls.set(callId, {
             bedrock,
             ws: null,
-            prompt,
+            prompt: systemPrompt,
             params: novaSonicParams || {},
             phoneNumber,
             startTime: new Date(),
-            transcript: []
+            transcript: [],
+            leadId,
+            campaignId
         });
         // Initiate Vonage call
         const callResponse = await vonageService.initiateOutboundCall(phoneNumber, callId);
@@ -459,25 +489,43 @@ wss.on('connection', async (ws, req) => {
     }
     ws.on('message', async (data) => {
         try {
-            // Vonage sends raw audio data (L16 PCM 16kHz)
-            logger_1.logger.info('🎵 AUDIO RECEIVED from caller', {
+            // Log ALL WebSocket messages for debugging
+            logger_1.logger.info('📨 WebSocket message received', {
                 callId,
-                audioSize: data.length,
-                firstBytes: data.slice(0, 8).toString('hex')
+                dataType: typeof data,
+                isBuffer: Buffer.isBuffer(data),
+                dataLength: data.length,
+                firstBytes: data.slice(0, 16).toString('hex')
             });
-            const session = activeSessions.get(callId);
-            if (session) {
-                logger_1.logger.info('📤 SENDING AUDIO to Nova Sonic session', { callId });
-                // Send audio to Nova Sonic for processing
-                await session.streamAudio(data);
-                logger_1.logger.info('✅ AUDIO SENT to Nova Sonic', { callId, audioSize: data.length });
+            // Check if this is actually audio data
+            if (data.length > 100) { // Audio chunks are typically larger
+                logger_1.logger.info('🎵 AUDIO RECEIVED from caller', {
+                    callId,
+                    audioSize: data.length,
+                    firstBytes: data.slice(0, 8).toString('hex')
+                });
+                const session = activeSessions.get(callId);
+                if (session) {
+                    logger_1.logger.info('📤 SENDING AUDIO to Nova Sonic session', { callId });
+                    // Send audio to Nova Sonic for processing
+                    await session.streamAudio(data);
+                    logger_1.logger.info('✅ AUDIO SENT to Nova Sonic', { callId, audioSize: data.length });
+                }
+                else {
+                    logger_1.logger.error('❌ NO SESSION FOUND for audio', { callId });
+                }
             }
             else {
-                logger_1.logger.error('❌ NO SESSION FOUND for audio', { callId });
+                // Log small messages as potential control messages
+                logger_1.logger.info('📝 Control message received', {
+                    callId,
+                    size: data.length,
+                    content: data.toString('utf8')
+                });
             }
         }
         catch (error) {
-            logger_1.logger.error('💥 ERROR processing WebSocket audio', {
+            logger_1.logger.error('💥 ERROR processing WebSocket message', {
                 callId,
                 error: error.message,
                 stack: error.stack

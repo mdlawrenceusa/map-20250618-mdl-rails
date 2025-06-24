@@ -9,6 +9,7 @@ import { CallRequest, CallResponse, InboundRequest, InboundResponse, ActiveCall 
 import { IsString, IsOptional, IsNumber, validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
 import { logger } from './logger';
+import { promptClient } from './prompt-client';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
 import path from 'path';
@@ -23,7 +24,16 @@ class CallRequestDTO {
   phoneNumber!: string;
 
   @IsString()
-  prompt!: string;
+  @IsOptional()
+  prompt?: string;
+
+  @IsOptional()
+  @IsNumber()
+  leadId?: number;
+
+  @IsOptional()
+  @IsString()
+  campaignId?: string;
 
   @IsOptional()
   novaSonicParams?: {
@@ -109,10 +119,26 @@ app.post('/calls', async (req: Request, res: Response) => {
       });
     }
 
-    const { phoneNumber, prompt, novaSonicParams } = callRequest;
+    const { phoneNumber, prompt, leadId, campaignId, novaSonicParams } = callRequest;
     const callId = `call-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-    logger.info('Creating outbound call', { phoneNumber, callId });
+    logger.info('Creating outbound call', { phoneNumber, callId, leadId, campaignId });
+
+    // Fetch prompts from Rails API if not provided
+    let systemPrompt = prompt;
+    if (!systemPrompt) {
+      try {
+        const prompts = await promptClient.getDefaultPrompts(leadId, campaignId);
+        systemPrompt = prompts.system;
+        logger.info('Fetched system prompt from Rails', { 
+          systemPrompt: systemPrompt.substring(0, 100) + '...' 
+        });
+      } catch (error) {
+        logger.error('Failed to fetch prompts, using fallback', { error });
+        systemPrompt = process.env.DEFAULT_OUTBOUND_PROMPT || 
+          'You are Esther from Mike Lawrence Productions, a scheduling assistant.';
+      }
+    }
 
     // Initialize call tracking
     const bedrock = new BedrockService();
@@ -121,11 +147,13 @@ app.post('/calls', async (req: Request, res: Response) => {
     activeCalls.set(callId, {
       bedrock,
       ws: null,
-      prompt,
+      prompt: systemPrompt,
       params: novaSonicParams || {},
       phoneNumber,
       startTime: new Date(),
-      transcript: []
+      transcript: [],
+      leadId,
+      campaignId
     });
 
     // Initiate Vonage call
