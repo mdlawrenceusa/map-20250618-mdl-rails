@@ -35,6 +35,7 @@ export interface SessionData {
   isPromptStartSent: boolean;
   isAudioContentStartSent: boolean;
   audioContentId: string;
+  systemPrompt: string;
 }
 
 export interface NovaSonicBidirectionalStreamClientConfig {
@@ -275,6 +276,7 @@ export class NovaSonicBidirectionalStreamClient {
       isPromptStartSent: false,
       isAudioContentStartSent: false,
       audioContentId: randomUUID(),
+      systemPrompt: DefaultSystemPrompt,
     };
 
     this.activeSessions.set(sessionId, session);
@@ -419,7 +421,7 @@ export class NovaSonicBidirectionalStreamClient {
               textInput: {
                 promptName: session.promptName,
                 contentName: systemContentId,
-                content: DefaultSystemPrompt,
+                content: session.systemPrompt,
               },
             },
           },
@@ -668,6 +670,9 @@ export class NovaSonicBidirectionalStreamClient {
   ): void {
     const session = this.activeSessions.get(sessionId);
     if (!session) return;
+
+    // Store the system prompt in the session for use in async iterable
+    session.systemPrompt = systemPromptContent;
 
     const textPromptID = randomUUID();
     this.addEventToSessionQueue(sessionId, {

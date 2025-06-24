@@ -1,4 +1,5 @@
 class Api::V1::PromptsController < Api::V1::BaseController
+  skip_before_action :set_default_format, only: [:admin]
   before_action :set_prompt, only: [:show]
 
   # GET /api/v1/prompts/current
@@ -55,6 +56,16 @@ class Api::V1::PromptsController < Api::V1::BaseController
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
+  # PATCH/PUT /api/v1/prompts/:id
+  def update
+    prompt = Prompt.find(params[:id])
+    if prompt.update(prompt_params)
+      render json: prompt_response(prompt)
+    else
+      render json: { errors: prompt.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   # PATCH/PUT /api/v1/prompts/:id/activate
   def activate
     prompt = Prompt.find(params[:id])
@@ -103,7 +114,10 @@ class Api::V1::PromptsController < Api::V1::BaseController
 
   # GET /api/v1/prompts/admin
   def admin
-    render 'api/v1/prompts/admin'
+    respond_to do |format|
+      format.html { render 'api/v1/prompts/admin', layout: 'application' }
+      format.json { render json: { error: 'Please access this page in a web browser' }, status: :not_acceptable }
+    end
   end
 
   private

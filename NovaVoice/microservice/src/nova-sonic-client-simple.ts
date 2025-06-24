@@ -67,6 +67,7 @@ export interface SessionData {
   audioContentId: string;
   startTime: number;
   transcript: string[];
+  systemPrompt: string;
 }
 
 export class NovaSonicClient extends EventEmitter {
@@ -122,7 +123,8 @@ export class NovaSonicClient extends EventEmitter {
         isAudioContentStartSent: false,
         audioContentId: randomUUID(),
         startTime: Date.now(),
-        transcript: []
+        transcript: [],
+        systemPrompt: systemPrompt
       };
 
       this.activeSessions.set(sessionId, session);
@@ -483,6 +485,9 @@ export class NovaSonicClient extends EventEmitter {
   private setupSystemPromptEvent(sessionId: string, textConfig: any, systemPromptContent: string): void {
     const session = this.activeSessions.get(sessionId);
     if (!session) return;
+
+    // Store the system prompt in the session
+    session.systemPrompt = systemPromptContent;
 
     const textPromptID = randomUUID();
     this.addEventToSessionQueue(sessionId, {

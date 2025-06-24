@@ -532,7 +532,15 @@ wss.on('connection', async (ws: WebSocket, req) => {
       });
     logger.info('✅ STEP 2 COMPLETE: Event handlers set', { callId });
 
-    logger.info('🔗 STEP 3: Initiating Nova Sonic session (with new fast async iterator)', { callId });
+    logger.info('🎯 STEP 3: Setting up system prompt', { callId });
+    await session.setupSystemPrompt(undefined, call.prompt);
+    logger.info('✅ STEP 3 COMPLETE: System prompt configured', { 
+      callId, 
+      promptLength: call.prompt.length,
+      promptPreview: call.prompt.substring(0, 100) + '...'
+    });
+
+    logger.info('🔗 STEP 4: Initiating Nova Sonic session (with new fast async iterator)', { callId });
     const startTime = Date.now();
     await novaSonicClient.initiateSession(callId, ws);
     const totalTime = Date.now() - startTime;

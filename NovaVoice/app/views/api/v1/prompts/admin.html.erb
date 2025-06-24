@@ -1,255 +1,288 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>NovaVoice Prompt Management</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prompt Management - NovaVoice</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    body { font-family: system-ui, sans-serif; margin: 20px; background: #f5f5f5; }
-    .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .header { border-bottom: 2px solid #e0e0e0; padding-bottom: 15px; margin-bottom: 20px; }
-    .prompt-card { border: 1px solid #ddd; margin: 10px 0; padding: 15px; border-radius: 5px; background: #fafafa; }
-    .prompt-active { border-color: #28a745; background: #f8fff9; }
-    .prompt-inactive { border-color: #6c757d; background: #f8f9fa; }
-    .badge { padding: 3px 8px; border-radius: 12px; font-size: 0.8em; font-weight: bold; }
-    .badge-active { background: #28a745; color: white; }
-    .badge-inactive { background: #6c757d; color: white; }
-    .badge-system { background: #007bff; color: white; }
-    .badge-greeting { background: #17a2b8; color: white; }
-    .badge-scheduling { background: #ffc107; color: black; }
-    .badge-objection { background: #fd7e14; color: white; }
-    .badge-closing { background: #6f42c1; color: white; }
-    .badge-custom { background: #20c997; color: white; }
-    .form-group { margin: 10px 0; }
-    .form-control { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
-    .btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-    .btn-primary { background: #007bff; color: white; }
-    .btn-success { background: #28a745; color: white; }
-    .btn-warning { background: #ffc107; color: black; }
-    .btn-danger { background: #dc3545; color: white; }
-    .btn:hover { opacity: 0.9; }
-    .content-preview { max-height: 100px; overflow: hidden; font-family: monospace; font-size: 0.9em; color: #666; }
-    .controls { display: flex; gap: 10px; margin-top: 10px; }
-    .filter-bar { background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
-    .stats { display: flex; gap: 20px; margin-bottom: 20px; }
-    .stat-card { background: #007bff; color: white; padding: 15px; border-radius: 5px; text-align: center; min-width: 120px; }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { color: #333; }
+    .filters { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .filters label { margin-right: 15px; font-weight: bold; }
+    .filters select, .filters input { margin-right: 20px; padding: 5px; }
+    table { width: 100%; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    th { background: #4CAF50; color: white; padding: 12px; text-align: left; }
+    td { padding: 12px; border-bottom: 1px solid #ddd; }
+    tr:hover { background: #f5f5f5; }
+    .actions button { margin-right: 5px; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; }
+    .btn-activate { background: #4CAF50; color: white; }
+    .btn-deactivate { background: #f44336; color: white; }
+    .btn-duplicate { background: #2196F3; color: white; }
+    .btn-edit { background: #FF9800; color: white; }
+    .active { color: #4CAF50; font-weight: bold; }
+    .inactive { color: #999; }
+    .btn-new { background: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 20px; }
+    .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); }
+    .modal-content { background-color: #fefefe; margin: 5% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 8px; }
+    .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+    .close:hover { color: black; }
+    textarea { width: 100%; min-height: 200px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h1>🎤 NovaVoice Prompt Management</h1>
-      <p>Manage AI prompts for Nova Sonic voice assistant</p>
+    <h1>NovaVoice Prompt Management</h1>
+    
+    <button class="btn-new" onclick="showNewPromptModal()">Create New Prompt</button>
+    
+    <div class="filters">
+      <label>Type:</label>
+      <select id="typeFilter" onchange="loadPrompts()">
+        <option value="">All Types</option>
+        <option value="system">System</option>
+        <option value="greeting">Greeting</option>
+        <option value="scheduling">Scheduling</option>
+        <option value="objection_handling">Objection Handling</option>
+        <option value="closing">Closing</option>
+      </select>
+      
+      <label>Status:</label>
+      <select id="statusFilter" onchange="loadPrompts()">
+        <option value="">All</option>
+        <option value="active">Active Only</option>
+        <option value="inactive">Inactive Only</option>
+      </select>
+      
+      <label>Campaign:</label>
+      <input type="text" id="campaignFilter" placeholder="Campaign ID" onkeyup="loadPrompts()">
+      
+      <label>Lead ID:</label>
+      <input type="text" id="leadFilter" placeholder="Lead ID" onkeyup="loadPrompts()">
     </div>
+    
+    <table id="promptsTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Version</th>
+          <th>Status</th>
+          <th>Campaign</th>
+          <th>Lead</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="promptsBody">
+        <!-- Populated by JavaScript -->
+      </tbody>
+    </table>
+  </div>
 
-    <div class="stats">
-      <div class="stat-card">
-        <h3 id="total-prompts">-</h3>
-        <p>Total Prompts</p>
-      </div>
-      <div class="stat-card" style="background: #28a745;">
-        <h3 id="active-prompts">-</h3>
-        <p>Active Prompts</p>
-      </div>
-      <div class="stat-card" style="background: #17a2b8;">
-        <h3 id="prompt-types">-</h3>
-        <p>Prompt Types</p>
-      </div>
-    </div>
-
-    <div class="filter-bar">
-      <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-        <div>
+  <!-- New/Edit Prompt Modal -->
+  <div id="promptModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 id="modalTitle">New Prompt</h2>
+      <form id="promptForm" onsubmit="savePrompt(event)">
+        <input type="hidden" id="promptId">
+        
+        <div class="form-group">
+          <label>Name:</label>
+          <input type="text" id="promptName" required>
+        </div>
+        
+        <div class="form-group">
           <label>Type:</label>
-          <select id="filter-type" class="form-control" style="width: auto; display: inline-block;">
-            <option value="">All Types</option>
+          <select id="promptType" required>
             <option value="system">System</option>
             <option value="greeting">Greeting</option>
             <option value="scheduling">Scheduling</option>
             <option value="objection_handling">Objection Handling</option>
             <option value="closing">Closing</option>
-            <option value="custom">Custom</option>
           </select>
         </div>
-        <div>
-          <label>Status:</label>
-          <select id="filter-active" class="form-control" style="width: auto; display: inline-block;">
-            <option value="">All</option>
-            <option value="true">Active Only</option>
-            <option value="false">Inactive Only</option>
-          </select>
+        
+        <div class="form-group">
+          <label>Content:</label>
+          <textarea id="promptContent" required placeholder="Use {{variable_name}} for template variables"></textarea>
         </div>
-        <div>
-          <label>Campaign:</label>
-          <input type="text" id="filter-campaign" class="form-control" style="width: 200px; display: inline-block;" placeholder="Campaign ID">
+        
+        <div class="form-group">
+          <label>Campaign ID (optional):</label>
+          <input type="text" id="promptCampaign">
         </div>
-        <button onclick="loadPrompts()" class="btn btn-primary">Filter</button>
-        <button onclick="clearCache()" class="btn btn-warning">Clear Cache</button>
-      </div>
-    </div>
-
-    <div id="prompts-container">
-      <p>Loading prompts...</p>
-    </div>
-
-    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
-      <h3>🧪 Test Prompt Fetching</h3>
-      <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-        <select id="test-type" class="form-control" style="width: auto;">
-          <option value="system">System</option>
-          <option value="greeting">Greeting</option>
-          <option value="scheduling">Scheduling</option>
-          <option value="objection_handling">Objection Handling</option>
-          <option value="closing">Closing</option>
-        </select>
-        <input type="number" id="test-lead" class="form-control" style="width: 100px;" placeholder="Lead ID">
-        <input type="text" id="test-campaign" class="form-control" style="width: 150px;" placeholder="Campaign ID">
-        <button onclick="testFetch()" class="btn btn-success">Test Fetch</button>
-      </div>
-      <div id="test-result" style="margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 4px; display: none;"></div>
+        
+        <div class="form-group">
+          <label>Lead ID (optional):</label>
+          <input type="text" id="promptLead">
+        </div>
+        
+        <button type="submit" class="btn-activate">Save Prompt</button>
+      </form>
     </div>
   </div>
 
   <script>
-    let allPrompts = [];
-
-    function loadPrompts() {
-      const type = document.getElementById('filter-type').value;
-      const active = document.getElementById('filter-active').value;
-      const campaign = document.getElementById('filter-campaign').value;
-      
-      const params = new URLSearchParams();
-      if (type) params.append('type', type);
-      if (active) params.append('active', active);
-      if (campaign) params.append('campaign_id', campaign);
-
-      fetch(`/api/v1/prompts?${params}`)
-        .then(response => response.json())
-        .then(data => {
-          allPrompts = data.prompts;
-          renderPrompts(allPrompts);
-          updateStats(allPrompts);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          document.getElementById('prompts-container').innerHTML = '<p style="color: red;">Error loading prompts</p>';
-        });
-    }
-
-    function renderPrompts(prompts) {
-      const container = document.getElementById('prompts-container');
-      
-      if (prompts.length === 0) {
-        container.innerHTML = '<p>No prompts found matching your criteria.</p>';
-        return;
-      }
-
-      const html = prompts.map(prompt => `
-        <div class="prompt-card ${prompt.is_active ? 'prompt-active' : 'prompt-inactive'}">
-          <div style="display: flex; justify-content: between; align-items: start; margin-bottom: 10px;">
-            <div style="flex: 1;">
-              <h4 style="margin: 0 0 5px 0;">${prompt.name} <span style="color: #666;">v${prompt.version}</span></h4>
-              <div style="margin: 5px 0;">
-                <span class="badge badge-${prompt.prompt_type.replace('_', '-')}">${prompt.prompt_type}</span>
-                <span class="badge ${prompt.is_active ? 'badge-active' : 'badge-inactive'}">${prompt.is_active ? 'Active' : 'Inactive'}</span>
-                ${prompt.lead_id ? `<span class="badge" style="background: #e83e8c; color: white;">Lead #${prompt.lead_id}</span>` : ''}
-                ${prompt.campaign_id ? `<span class="badge" style="background: #6610f2; color: white;">Campaign: ${prompt.campaign_id}</span>` : ''}
-              </div>
-            </div>
-          </div>
-          <div class="content-preview">${prompt.content.substring(0, 200)}${prompt.content.length > 200 ? '...' : ''}</div>
-          <div class="controls">
-            ${!prompt.is_active ? `<button onclick="activatePrompt(${prompt.id})" class="btn btn-success">Activate</button>` : ''}
-            ${prompt.is_active ? `<button onclick="deactivatePrompt(${prompt.id})" class="btn btn-warning">Deactivate</button>` : ''}
-            <button onclick="duplicatePrompt(${prompt.id})" class="btn btn-primary">Duplicate</button>
-            <button onclick="viewPrompt(${prompt.id})" class="btn" style="background: #6c757d; color: white;">View Full</button>
-          </div>
-          <div style="margin-top: 10px; font-size: 0.8em; color: #666;">
-            Updated: ${new Date(prompt.updated_at).toLocaleString()}
-          </div>
-        </div>
-      `).join('');
-
-      container.innerHTML = html;
-    }
-
-    function updateStats(prompts) {
-      document.getElementById('total-prompts').textContent = prompts.length;
-      document.getElementById('active-prompts').textContent = prompts.filter(p => p.is_active).length;
-      const types = [...new Set(prompts.map(p => p.prompt_type))];
-      document.getElementById('prompt-types').textContent = types.length;
-    }
-
-    function activatePrompt(id) {
-      fetch(`/api/v1/prompts/${id}/activate`, { method: 'PATCH' })
-        .then(response => response.json())
-        .then(() => loadPrompts())
-        .catch(error => alert('Error activating prompt: ' + error));
-    }
-
-    function deactivatePrompt(id) {
-      fetch(`/api/v1/prompts/${id}/deactivate`, { method: 'PATCH' })
-        .then(response => response.json())
-        .then(() => loadPrompts())
-        .catch(error => alert('Error deactivating prompt: ' + error));
-    }
-
-    function duplicatePrompt(id) {
-      fetch(`/api/v1/prompts/${id}/duplicate`, { method: 'POST' })
-        .then(response => response.json())
-        .then(() => {
-          alert('Prompt duplicated successfully!');
-          loadPrompts();
-        })
-        .catch(error => alert('Error duplicating prompt: ' + error));
-    }
-
-    function viewPrompt(id) {
-      const prompt = allPrompts.find(p => p.id === id);
-      if (prompt) {
-        alert(`${prompt.name} v${prompt.version}\n\n${prompt.content}`);
-      }
-    }
-
-    function testFetch() {
-      const type = document.getElementById('test-type').value;
-      const leadId = document.getElementById('test-lead').value;
-      const campaignId = document.getElementById('test-campaign').value;
-      
-      const params = new URLSearchParams({ type });
-      if (leadId) params.append('lead_id', leadId);
-      if (campaignId) params.append('campaign_id', campaignId);
-
-      fetch(`/api/v1/prompts/current?${params}`)
-        .then(response => response.json())
-        .then(data => {
-          const resultDiv = document.getElementById('test-result');
-          if (data.error) {
-            resultDiv.innerHTML = `<strong style="color: red;">Error:</strong> ${data.error}`;
-          } else {
-            resultDiv.innerHTML = `
-              <strong style="color: green;">Found:</strong> ${data.name} v${data.version}<br>
-              <strong>Type:</strong> ${data.prompt_type}<br>
-              <strong>Content:</strong> ${data.content.substring(0, 150)}...
-            `;
-          }
-          resultDiv.style.display = 'block';
-        })
-        .catch(error => {
-          const resultDiv = document.getElementById('test-result');
-          resultDiv.innerHTML = `<strong style="color: red;">Error:</strong> ${error}`;
-          resultDiv.style.display = 'block';
-        });
-    }
-
-    function clearCache() {
-      // This would need a Rails endpoint to clear the cache
-      fetch('/api/v1/prompts/clear_cache', { method: 'POST' })
-        .then(() => alert('Cache cleared!'))
-        .catch(error => alert('Cache clear failed: ' + error));
-    }
-
+    const API_BASE = '/api/v1/prompts';
+    
     // Load prompts on page load
-    loadPrompts();
+    document.addEventListener('DOMContentLoaded', loadPrompts);
+    
+    async function loadPrompts() {
+      const type = document.getElementById('typeFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      const campaign = document.getElementById('campaignFilter').value;
+      const lead = document.getElementById('leadFilter').value;
+      
+      try {
+        const response = await fetch(API_BASE);
+        const data = await response.json();
+        const prompts = data.prompts || data; // Handle both formats
+        
+        // Filter prompts
+        const filtered = prompts.filter(prompt => {
+          if (type && prompt.prompt_type !== type) return false;
+          if (status === 'active' && !prompt.is_active) return false;
+          if (status === 'inactive' && prompt.is_active) return false;
+          if (campaign && prompt.campaign_id !== campaign) return false;
+          if (lead && prompt.lead_id != lead) return false;
+          return true;
+        });
+        
+        displayPrompts(filtered);
+      } catch (error) {
+        console.error('Error loading prompts:', error);
+        alert('Failed to load prompts');
+      }
+    }
+    
+    function displayPrompts(prompts) {
+      const tbody = document.getElementById('promptsBody');
+      tbody.innerHTML = '';
+      
+      prompts.forEach(prompt => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+          <td>${prompt.id}</td>
+          <td>${prompt.name}</td>
+          <td>${prompt.prompt_type}</td>
+          <td>${prompt.version}</td>
+          <td class="${prompt.is_active ? 'active' : 'inactive'}">${prompt.is_active ? 'Active' : 'Inactive'}</td>
+          <td>${prompt.campaign_id || '-'}</td>
+          <td>${prompt.lead_id || '-'}</td>
+          <td>${new Date(prompt.created_at).toLocaleDateString()}</td>
+          <td class="actions">
+            ${prompt.is_active ? 
+              `<button class="btn-deactivate" onclick="deactivatePrompt(${prompt.id})">Deactivate</button>` :
+              `<button class="btn-activate" onclick="activatePrompt(${prompt.id})">Activate</button>`
+            }
+            <button class="btn-duplicate" onclick="duplicatePrompt(${prompt.id})">Duplicate</button>
+            <button class="btn-edit" onclick="editPrompt(${prompt.id})">Edit</button>
+          </td>
+        `;
+      });
+    }
+    
+    async function activatePrompt(id) {
+      try {
+        await fetch(`${API_BASE}/${id}/activate`, { method: 'PATCH' });
+        loadPrompts();
+      } catch (error) {
+        alert('Failed to activate prompt');
+      }
+    }
+    
+    async function deactivatePrompt(id) {
+      try {
+        await fetch(`${API_BASE}/${id}/deactivate`, { method: 'PATCH' });
+        loadPrompts();
+      } catch (error) {
+        alert('Failed to deactivate prompt');
+      }
+    }
+    
+    async function duplicatePrompt(id) {
+      try {
+        await fetch(`${API_BASE}/${id}/duplicate`, { method: 'POST' });
+        loadPrompts();
+      } catch (error) {
+        alert('Failed to duplicate prompt');
+      }
+    }
+    
+    function showNewPromptModal() {
+      document.getElementById('modalTitle').textContent = 'New Prompt';
+      document.getElementById('promptForm').reset();
+      document.getElementById('promptId').value = '';
+      document.getElementById('promptModal').style.display = 'block';
+    }
+    
+    async function editPrompt(id) {
+      try {
+        const response = await fetch(`${API_BASE}/${id}`);
+        const prompt = await response.json();
+        
+        document.getElementById('modalTitle').textContent = 'Edit Prompt';
+        document.getElementById('promptId').value = prompt.id;
+        document.getElementById('promptName').value = prompt.name;
+        document.getElementById('promptType').value = prompt.prompt_type;
+        document.getElementById('promptContent').value = prompt.content;
+        document.getElementById('promptCampaign').value = prompt.campaign_id || '';
+        document.getElementById('promptLead').value = prompt.lead_id || '';
+        
+        document.getElementById('promptModal').style.display = 'block';
+      } catch (error) {
+        alert('Failed to load prompt details');
+      }
+    }
+    
+    function closeModal() {
+      document.getElementById('promptModal').style.display = 'none';
+    }
+    
+    async function savePrompt(event) {
+      event.preventDefault();
+      
+      const id = document.getElementById('promptId').value;
+      const data = {
+        prompt: {
+          name: document.getElementById('promptName').value,
+          prompt_type: document.getElementById('promptType').value,
+          content: document.getElementById('promptContent').value,
+          campaign_id: document.getElementById('promptCampaign').value || null,
+          lead_id: document.getElementById('promptLead').value || null
+        }
+      };
+      
+      try {
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? `${API_BASE}/${id}` : API_BASE;
+        
+        await fetch(url, {
+          method: method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        closeModal();
+        loadPrompts();
+      } catch (error) {
+        alert('Failed to save prompt');
+      }
+    }
+    
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('promptModal');
+      if (event.target == modal) {
+        closeModal();
+      }
+    }
   </script>
 </body>
 </html>

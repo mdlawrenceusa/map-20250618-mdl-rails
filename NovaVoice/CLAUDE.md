@@ -11,6 +11,8 @@ NovaVoice is a Rails 8 application that provides real-time voice interactions us
 - Inbound call handling with AI-powered conversations
 - Real-time bidirectional audio streaming with Nova Sonic
 - TypeScript/Node.js microservice for audio processing
+- **Dynamic prompt management system with Rails admin interface**
+- **Lead-specific and campaign-specific AI personalization**
 - **JSON transcript logging with simultaneous DynamoDB storage**
 - **Complete conversation analytics and call tracking**
 - Docker-based deployment on t4g.medium EC2 instance
@@ -47,6 +49,12 @@ npx ts-node src/check-dynamodb.ts           # Verify DynamoDB table
 npx ts-node src/check-transcript-db.ts      # Check specific call record
 ls -la transcripts/                         # View transcript files
 
+# Prompt Management
+rails db:migrate                            # Create prompts table
+rails runner db/seeds_prompts.rb            # Seed demo prompts
+rails runner db/seeds_master.rb             # Interactive seeding
+open http://localhost:8080/api/v1/prompts/admin  # Admin interface
+
 # Stop services
 docker-compose down
 pkill -f "ts-node"
@@ -78,6 +86,15 @@ pkill -f "ts-node"
 - `microservice/sample/src/types.ts` - TypeScript interfaces and types
 - `microservice/sample/src/barge-in-handler.ts` - Real-time interruption detection
 - `microservice/sample/src/simple-transcript-logger-minimal.ts` - Call transcription
+
+**Updated Integration Points (With Prompt Management):**
+- `microservice/src/index.ts` - Updated microservice with Rails prompt integration
+- `microservice/src/prompt-client.ts` - TypeScript client for Rails prompt API
+- `microservice/src/nova-sonic-client.ts` - Nova Sonic integration with dynamic prompt delivery
+- `app/controllers/api/v1/prompts_controller.rb` - Rails prompt management API
+- `app/models/prompt.rb` - Rails prompt model with versioning and hierarchy
+- `app/services/prompt_cache_service.rb` - Redis caching for prompt performance
+- `app/views/api/v1/prompts/admin.html.erb` - Web-based prompt admin interface
 
 **Legacy Integration Points (Not Functional):**
 - `microservice/src/index.ts` - Old microservice (replaced by sample)
@@ -131,13 +148,80 @@ The application uses AWS Cloud9 IAM role-based authentication (no hardcoded cred
 - `dynamodb:UpdateItem` - Update call transcripts and metadata
 - `dynamodb:GetItem` - Retrieve call records for analytics
 
-## Voice Assistant Behavior
+## Voice Assistant Behavior & Prompt Management
 
-The AI assistant "Esther" is configured with a specific system prompt that:
+The AI assistant "Esther" uses a sophisticated **dynamic prompt management system** that allows real-time customization without code deployment.
+
+### **Prompt Management System Architecture**
+
+**Rails-Based Control Center:**
+- **Admin Interface**: `http://localhost:8080/api/v1/prompts/admin`
+- **API Endpoints**: RESTful CRUD for prompts with smart hierarchy
+- **Real-time Updates**: Changes take effect on next call (1-minute cache TTL)
+- **Version Control**: Track prompt evolution with activation/deactivation
+
+**Prompt Types (Granular Control):**
+- **`system`** - Core AI instructions & behavior rules
+- **`greeting`** - Opening statements and call initiation
+- **`scheduling`** - Meeting coordination and time slot management
+- **`objection_handling`** - Responses to pushback or concerns
+- **`closing`** - Call endings and confirmations
+
+**Smart Hierarchy (Priority Order):**
+1. **Lead-Specific** (highest priority) - Personalized for individual pastors
+2. **Campaign-Specific** (medium priority) - Holiday, youth ministry, etc.
+3. **Global/Default** (fallback) - Base behavior for all calls
+
+**Template Variables:**
+- `{{pastor_name}}` - Pastor's name from lead data
+- `{{church_name}}` - Church name from lead data  
+- `{{meeting_time}}` - Scheduled meeting time
+- `{{alternative_slots}}` - Available alternative times
+- `{{campaign_id}}` - Current campaign identifier
+
+### **Prompt Delivery Flow to Nova Sonic**
+
+```
+Outbound Call Request
+    ↓
+PromptClient.getDefaultPrompts(leadId, campaignId)
+    ↓
+Rails API: /api/v1/prompts/current?type=system&lead_id=X&campaign_id=Y
+    ↓
+Smart Hierarchy Selection (Lead → Campaign → Global)
+    ↓
+Cache & Return System Prompt (1-minute TTL)
+    ↓
+Store in activeCalls[callId].prompt
+    ↓
+WebSocket Connection Established
+    ↓
+session.setupSystemPrompt(call.prompt)
+    ↓
+Nova Sonic Receives Custom Prompt
+    ↓
+AI Responds with Personalized Behavior
+```
+
+**Example Call Flow:**
+```javascript
+// Making a call with campaign-specific prompt
+POST /calls
+{
+  "phoneNumber": "+1234567890",
+  "campaignId": "christmas_2024"
+}
+
+// API fetches: Christmas-specific system prompt
+// Nova Sonic receives: "This is Esther calling about our special Christmas outreach..."
+```
+
+**Default Behavior:**
 - Only handles scheduling 15-minute meetings with Mike Lawrence
 - Redirects all non-scheduling conversations back to meeting scheduling
 - Maintains professional, brief responses (under 25 words)
 - Operates within Gospel outreach business context
+- **Now fully customizable via Rails admin interface**
 
 ## Database Architecture
 

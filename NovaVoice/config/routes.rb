@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     namespace :v1 do
-      resources :prompts, only: [:index, :show, :create] do
+      resources :prompts, only: [:index, :show, :create, :update] do
         collection do
           get :current
           post :render, action: :render_prompt
