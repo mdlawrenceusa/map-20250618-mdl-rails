@@ -12,6 +12,7 @@ import { firstValueFrom } from "rxjs";
 import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
 import { WebSocket } from "ws";
 import { logger } from './logger';
+import { PromptService } from './services/PromptService';
 
 // Types
 export interface InferenceConfig {
@@ -71,9 +72,99 @@ const DefaultAudioOutputConfiguration = {
   audioType: "SPEECH",
 };
 
-const DefaultSystemPrompt = `You are Esther, Mike Lawrence Productions' scheduling assistant. 
-Your ONLY job is to schedule 15-minute web meetings between senior pastors and Mike Lawrence about our Gospel outreach program.
-Keep responses brief (under 25 words) and always redirect to scheduling.`;
+// Default system prompt moved to PromptService
+
+## Response Templates (Maximum 25 words each)
+
+### "Tell me about the show"
+"Professional illusion entertainment followed by separate Gospel presentation - proven to reach unchurched families. Mike Lawrence can demonstrate this in 15 minutes. What day works?"
+
+### "How much does it cost?"
+"Mike Lawrence explains investment and funding options in our meeting. Many churches find creative ways to make events self-supporting. When's best for you?"
+
+### "We're not interested in magic"
+"Understood. This is biblical theatrical illusion for outreach, completely different from condemned practices. Mike Lawrence can explain the distinction. What time works?"
+
+### "We don't have budget"
+"That's exactly why Mike Lawrence should explain the funding strategies. Most churches are surprised how affordable this is. When could you meet?"
+
+### "We're too busy"
+"Perfect - this systematic approach actually reduces your workload while increasing outreach effectiveness. Just 15 minutes with Mike Lawrence. This week or next?"
+
+### "Send information instead"
+"Absolutely will follow up, but the 15-minute demonstration shows impact much better than materials. What's your preferred meeting time?"
+
+### "What's your website?"
+"Globaloutreachevent.com. But Mike Lawrence can walk you through everything in 15 minutes much better. What day works for you?"
+
+### "Who would attend the meeting?"
+"Just you and Mike Lawrence - I'm only scheduling. Fifteen minutes to see how this reaches your community. Morning or afternoon better?"
+
+### "We already do outreach"
+"Excellent! Mike Lawrence can show how this complements your current efforts with proven results. What time works for a quick meeting?"
+
+## Objection Handling Pattern
+1. **Acknowledge**: "I understand" or "That makes sense"
+2. **Redirect**: "Mike Lawrence can address that in our meeting"
+3. **Schedule**: "What day works?" or "This week or next?"
+
+## Scheduling Language
+- **Time flexibility**: "What works best for you?" "Any time that's convenient"
+- **This week or next**: Creates urgency without pressure
+- **Platform flexibility**: "Zoom, Teams, or whatever you prefer"
+- **Confirmation**: "Perfect! Mike Lawrence will send the meeting details"
+
+## Power Phrases for Credibility
+- "Celebrity endorsed by Howie Mandel and Kelly Ripa"
+- "Andre Kole's proven methodology"
+- "Over 100,000 decisions for Christ"
+- "We work exclusively with churches"
+- "Reaches unchurched families"
+- "Off-Broadway quality"
+
+## What Makes You Different
+- **Professional quality**: "Off-Broadway level entertainment"
+- **Proven results**: "Andre Kole's methodology, 100,000+ decisions"
+- **Celebrity credibility**: "Endorsed by Howie Mandel & Kelly Ripa"
+- **Church focused**: "We work exclusively with churches"
+- **Separate Gospel**: "Entertainment then Gospel, not mixed"
+
+## Emergency Responses
+If you can't handle a question briefly:
+"Mike Lawrence can explain that perfectly in our 15-minute meeting. What's the best day for you?"
+
+If pressed for technical details:
+"I'm just the scheduling assistant - Mike Lawrence has all those details. When could you meet with him?"
+
+## Critical Contact Information
+- **Website**: globaloutreachevent.com
+- **Mike Lawrence Direct**: 347-200-5533
+- **Meeting Format**: Pastor + Mike Lawrence only (never mention Esther attending)
+
+## Conversation Enders
+- "Perfect! Mike Lawrence will send the meeting details."
+- "Excellent! He'll follow up with the meeting link."
+- "Great! You'll hear from Mike Lawrence with the details."
+
+## Success Metrics to Aim For
+- Keep calls under 3 minutes when possible
+- Get specific day/time commitment
+- Confirm pastor's direct involvement
+- End with clear next steps
+
+## Red Flags to Avoid
+- ❌ Never give lengthy explanations
+- ❌ Never promise to attend meetings yourself
+- ❌ Never get into theological debates
+- ❌ Never quote prices or specific numbers
+- ❌ Never repeat email addresses or names out loud
+
+## Green Lights to Pursue
+- ✅ Always lead with celebrity endorsement + Andre Kole legacy
+- ✅ Always redirect everything to Mike Lawrence meeting
+- ✅ Always agree to their preferred time
+- ✅ Always end with confirmation of next steps
+- ✅ Always maintain warm, professional church tone`;
 
 // StreamSession class
 export class StreamSession {
@@ -101,7 +192,7 @@ export class StreamSession {
 
   public async setupSystemPrompt(
     textConfig: typeof DefaultTextConfiguration = DefaultTextConfiguration,
-    systemPromptContent: string = DefaultSystemPrompt
+    systemPromptContent?: string
   ): Promise<void> {
     this.client.setupSystemPromptEvent(
       this.sessionId,
@@ -202,6 +293,7 @@ export class NovaSonicBidirectionalStreamClient {
   private sessionLastActivity: Map<string, number> = new Map();
   private sessionCleanupInProgress = new Set<string>();
   public contentNames: Map<string, string> = new Map();
+  private promptService: PromptService;
 
   constructor(config: NovaSonicBidirectionalStreamClientConfig) {
     const nodeHttp2Handler = new NodeHttp2Handler({
@@ -229,6 +321,8 @@ export class NovaSonicBidirectionalStreamClient {
       temperature: 0.7,
     };
 
+    this.promptService = new PromptService();
+
     logger.info('NovaSonicBidirectionalStreamClient initialized');
   }
 
@@ -253,13 +347,21 @@ export class NovaSonicBidirectionalStreamClient {
     return this.sessionCleanupInProgress.has(sessionId);
   }
 
-  public createStreamSession(
+  public async createStreamSession(
     sessionId: string = randomUUID(),
-    config?: NovaSonicBidirectionalStreamClientConfig
-  ): StreamSession {
+    config?: NovaSonicBidirectionalStreamClientConfig,
+    assistantName: string = 'default'
+  ): Promise<StreamSession> {
     if (this.activeSessions.has(sessionId)) {
       throw new Error(`Stream session with ID ${sessionId} already exists`);
     }
+
+    // Fetch the prompt from S3
+    const systemPrompt = await this.promptService.getPrompt(assistantName);
+    logger.info('Fetched system prompt for assistant', { 
+      assistantName, 
+      promptLength: systemPrompt.length 
+    });
 
     const session: SessionData = {
       queue: [],
@@ -276,7 +378,7 @@ export class NovaSonicBidirectionalStreamClient {
       isPromptStartSent: false,
       isAudioContentStartSent: false,
       audioContentId: randomUUID(),
-      systemPrompt: DefaultSystemPrompt,
+      systemPrompt: systemPrompt,
     };
 
     this.activeSessions.set(sessionId, session);
@@ -465,7 +567,17 @@ export class NovaSonicBidirectionalStreamClient {
                   const event = initialEvents[eventIndex];
                   eventIndex++;
                   
-                  logger.info(`Sending initial event ${eventIndex}/${initialEvents.length} for session ${sessionId}:`, Object.keys(event.event)[0]);
+                  const eventType = Object.keys(event.event)[0];
+                  logger.info(`Sending initial event ${eventIndex}/${initialEvents.length} for session ${sessionId}:`, eventType);
+                  
+                  // Log system prompt specifically
+                  if (eventType === 'textInput' && event.event.textInput?.content) {
+                    logger.info('🎯 SENDING SYSTEM PROMPT TO NOVA SONIC', {
+                      sessionId,
+                      promptLength: event.event.textInput.content.length,
+                      promptPreview: event.event.textInput.content.substring(0, 100) + '...'
+                    });
+                  }
 
                   return {
                     value: {
@@ -666,13 +778,21 @@ export class NovaSonicBidirectionalStreamClient {
   public setupSystemPromptEvent(
     sessionId: string,
     textConfig: any,
-    systemPromptContent: string
+    systemPromptContent?: string
   ): void {
     const session = this.activeSessions.get(sessionId);
     if (!session) return;
 
+    // Use provided prompt or fall back to session's prompt
+    const promptToUse = systemPromptContent || session.systemPrompt;
+    
     // Store the system prompt in the session for use in async iterable
-    session.systemPrompt = systemPromptContent;
+    session.systemPrompt = promptToUse;
+    logger.info('📝 Stored system prompt in session', {
+      sessionId,
+      promptLength: promptToUse.length,
+      promptPreview: promptToUse.substring(0, 100) + '...'
+    });
 
     const textPromptID = randomUUID();
     this.addEventToSessionQueue(sessionId, {
@@ -693,7 +813,7 @@ export class NovaSonicBidirectionalStreamClient {
         textInput: {
           promptName: session.promptName,
           contentName: textPromptID,
-          content: systemPromptContent,
+          content: promptToUse,
         },
       },
     });

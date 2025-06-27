@@ -11,6 +11,7 @@ import { NodeHttp2Handler } from "@smithy/node-http-handler";
 import { EventEmitter } from 'events';
 import { randomUUID } from 'crypto';
 import { logger } from './logger';
+import { PromptService } from './services/PromptService';
 
 interface SessionData {
   sessionId: string;
@@ -59,6 +60,7 @@ export class NovaSonicProperClient extends EventEmitter {
   private client: BedrockRuntimeClient;
   private sessions = new Map<string, SessionData>();
   private modelId = 'amazon.nova-sonic-v1:0';
+  private promptService: PromptService;
 
   constructor() {
     super();
@@ -70,15 +72,24 @@ export class NovaSonicProperClient extends EventEmitter {
       }),
     });
 
+    this.promptService = new PromptService();
+
     logger.info('Nova Sonic Proper Client initialized', {
       region: process.env.AWS_REGION || 'us-east-1',
       modelId: this.modelId
     });
   }
 
-  async startSession(sessionId: string, systemPrompt: string): Promise<void> {
+  async startSession(sessionId: string, systemPrompt?: string, assistantName: string = 'default'): Promise<void> {
     try {
-      logger.info('Starting Nova Sonic bidirectional stream', { sessionId });
+      // Get system prompt from S3 if not provided
+      const promptToUse = systemPrompt || await this.promptService.getPrompt(assistantName);
+      
+      logger.info('Starting Nova Sonic bidirectional stream', { 
+        sessionId, 
+        assistantName, 
+        promptLength: promptToUse.length 
+      });
 
       const promptName = randomUUID();
       const contentName = randomUUID();
@@ -126,7 +137,7 @@ export class NovaSonicProperClient extends EventEmitter {
             textInput: {
               promptName: promptName,
               contentName: randomUUID(),
-              content: systemPrompt
+              content: promptToUse
             }
           }
         },
@@ -395,8 +406,8 @@ export class NovaSonicProperClient extends EventEmitter {
     return new StreamSession(sessionId, this);
   }
 
-  async initiateSession(sessionId: string): Promise<void> {
-    return this.startSession(sessionId, this.getDefaultSystemPrompt());
+  async initiateSession(sessionId: string, assistantName: string = 'default'): Promise<void> {
+    return this.startSession(sessionId, undefined, assistantName);
   }
 
   setupPromptStartEvent(sessionId: string): void {
@@ -412,11 +423,11 @@ export class NovaSonicProperClient extends EventEmitter {
     });
   }
 
-  setupSystemPromptEvent(sessionId: string, textConfig?: any, systemPromptContent?: string): void {
+  async setupSystemPromptEvent(sessionId: string, textConfig?: any, systemPromptContent?: string, assistantName: string = 'default'): Promise<void> {
     const session = this.sessions.get(sessionId);
     if (!session) return;
 
-    const prompt = systemPromptContent || this.getDefaultSystemPrompt();
+    const prompt = systemPromptContent || await this.promptService.getPrompt(assistantName);
     
     // Text content start
     session.queue.push({
@@ -482,18 +493,7 @@ export class NovaSonicProperClient extends EventEmitter {
     }
   }
 
-  private getDefaultSystemPrompt(): string {
-    return `You are Esther, Mike Lawrence Productions' scheduling assistant. 
-    Your ONLY job is to schedule 15-minute web meetings between senior pastors and Mike Lawrence about our Gospel outreach program. 
-    Key Facts: Program is two-phase outreach (entertainment THEN Gospel presentation), 
-    Format is 40-50 min Off-Broadway illusion show + 30 min separate Gospel message, 
-    Track Record similar to Campus Crusade approach (~100,000 decisions).
-    When asked who attends: The meeting is between your Pastor and Mike Lawrence, our founder. I'm just scheduling it for you.
-    Be Brief: 1-2 sentences maximum per response. Always redirect to scheduling the meeting.
-    Website: globaloutreachevent.com, Mike Lawrence Direct Number: 347-300-5533
-    
-    IMPORTANT: Respond with both speech audio and text. Provide clear, natural speech responses.`;
-  }
+  // Default system prompt moved to PromptService
 
   private dispatchEvent(sessionId: string, eventType: string, data: any): void {
     const session = this.sessions.get(sessionId);

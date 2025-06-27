@@ -3,6 +3,7 @@ import { createHash, createHmac } from 'crypto';
 import https from 'https';
 import { URL } from 'url';
 import { logger } from './logger';
+import { PromptService } from './services/PromptService';
 
 interface NovaSonicConfig {
   region?: string;
@@ -22,12 +23,14 @@ export class NovaSonicService extends EventEmitter {
   private sessionId?: string;
   private stream?: any;
   private isStreaming: boolean = false;
+  private promptService: PromptService;
 
   constructor(config: NovaSonicConfig = {}) {
     super();
     this.region = config.region || process.env.AWS_REGION || 'us-east-1';
     this.modelId = config.modelId || 'amazon.nova-sonic-v1:0';
-    this.systemPrompt = config.systemPrompt || this.getDefaultPrompt();
+    this.systemPrompt = config.systemPrompt || '';
+    this.promptService = new PromptService();
     
     logger.info('NovaSonicService initialized', {
       region: this.region,
@@ -35,24 +38,26 @@ export class NovaSonicService extends EventEmitter {
     });
   }
 
-  private getDefaultPrompt(): string {
-    return `You are Esther, Mike Lawrence Productions' scheduling assistant. 
-    Your ONLY job is to schedule 15-minute web meetings between senior pastors and Mike Lawrence about our Gospel outreach program.
-    Key Facts: Program is two-phase outreach (entertainment THEN Gospel presentation), 
-    Format is 40-50 min Off-Broadway illusion show + 30 min separate Gospel message, 
-    Track Record similar to Campus Crusade approach (~100,000 decisions).
-    When asked who attends: The meeting is between your Pastor and Mike Lawrence, our founder. I'm just scheduling it for you.
-    Be Brief: 1-2 sentences maximum per response. Always redirect to scheduling the meeting.
-    Website: globaloutreachevent.com, Mike Lawrence Direct Number: 347-300-5533`;
+  async initializePrompt(assistantName: string = 'default'): Promise<void> {
+    if (!this.systemPrompt) {
+      this.systemPrompt = await this.promptService.getPrompt(assistantName);
+      logger.info('Initialized system prompt', { 
+        assistantName, 
+        promptLength: this.systemPrompt.length 
+      });
+    }
   }
 
-  async startBidirectionalStream(callId: string): Promise<void> {
+  async startBidirectionalStream(callId: string, assistantName: string = 'default'): Promise<void> {
     if (this.isStreaming) {
       logger.warn('Stream already active');
       return;
     }
 
     try {
+      // Initialize prompt if not set
+      await this.initializePrompt(assistantName);
+      
       this.sessionId = callId;
       this.isStreaming = true;
       

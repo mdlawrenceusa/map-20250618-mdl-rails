@@ -22,7 +22,7 @@ export interface PromptVariables {
 export class PromptClient {
   private client: AxiosInstance;
   private cache: Map<string, { prompt: Prompt | null; timestamp: number }> = new Map();
-  private readonly CACHE_TTL = 60000; // 1 minute cache
+  private readonly CACHE_TTL = 0; // No cache - immediate updates
 
   constructor(baseUrl: string = process.env.RAILS_API_URL || 'http://localhost:8080') {
     this.client = axios.create({

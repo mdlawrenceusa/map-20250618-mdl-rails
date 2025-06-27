@@ -47,6 +47,13 @@ export class VonageIntegration {
     
     console.log(`[WEBHOOK] Handling ${direction} call from ${from} to ${to}, UUID: ${callUuid}`);
     
+    // Initialize transcript logging for this call
+    const phoneNumber = direction === 'inbound' ? from : to;
+    if (global.transcriptLogger && callUuid) {
+      console.log(`🔔 [WEBHOOK] Starting transcript logging for ${direction} call ${callUuid}`);
+      global.transcriptLogger.startCall(callUuid, phoneNumber);
+    }
+    
     // Determine greeting based on call direction
     let greeting: string;
     let fromName: string;
@@ -88,7 +95,32 @@ export class VonageIntegration {
   }
 
   private handleWebhookEvents(req: Request, res: Response): void {
-    console.log("Vonage event received:", req.body);
+    console.log("🔔 [WEBHOOK] Vonage event received:", JSON.stringify(req.body, null, 2));
+    
+    // Handle call completion events to finalize transcripts
+    const { status, uuid, conversation_uuid } = req.body;
+    
+    console.log(`🔔 [WEBHOOK] Event details - Status: ${status}, UUID: ${uuid}, ConversationUUID: ${conversation_uuid}`);
+    
+    if (status === 'completed' || status === 'failed' || status === 'cancelled') {
+      console.log(`🔔 [WEBHOOK] Call ${uuid} ended with status: ${status} - Finalizing transcript`);
+      
+      // Notify the main server about call completion
+      // We'll emit this as a global event that the server can listen to
+      if (global.transcriptLogger && uuid) {
+        console.log(`🔔 [WEBHOOK] Calling endCall for transcript logger with UUID: ${uuid}`);
+        global.transcriptLogger.endCall(uuid).then(() => {
+          console.log(`🔔 [WEBHOOK] Successfully finalized transcript for call ${uuid}`);
+        }).catch((error: any) => {
+          console.error(`🔔 [WEBHOOK] Error finalizing transcript for ${uuid}:`, error);
+        });
+      } else {
+        console.log(`🔔 [WEBHOOK] No transcript logger or UUID missing. Logger: ${!!global.transcriptLogger}, UUID: ${uuid}`);
+      }
+    } else {
+      console.log(`🔔 [WEBHOOK] Event status '${status}' - not a completion event, ignoring`);
+    }
+    
     res.sendStatus(200);
   }
 

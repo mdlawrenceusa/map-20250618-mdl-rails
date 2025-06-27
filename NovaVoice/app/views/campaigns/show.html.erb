@@ -1,0 +1,202 @@
+<div class="space-y-6">
+  <!-- Campaign Header -->
+  <div class="bg-white shadow-sm rounded-lg">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <div class="flex justify-between items-start">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900"><%= @campaign.name %></h1>
+          <p class="text-sm text-gray-600 mt-1">
+            Created <%= @campaign.created_at.strftime("%B %d, %Y at %l:%M %p") %>
+            by <%= @campaign.created_by %>
+          </p>
+          <% if @campaign.description.present? %>
+            <p class="text-gray-700 mt-2"><%= @campaign.description %></p>
+          <% end %>
+        </div>
+        <div class="flex items-center space-x-3">
+          <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full
+            <%= case @campaign.status
+                when 'draft' then 'bg-gray-100 text-gray-800'
+                when 'scheduled' then 'bg-yellow-100 text-yellow-800'
+                when 'running' then 'bg-blue-100 text-blue-800'
+                when 'paused' then 'bg-orange-100 text-orange-800'
+                when 'completed' then 'bg-green-100 text-green-800'
+                else 'bg-gray-100 text-gray-800'
+                end %>">
+            <%= @campaign.status.humanize %>
+          </span>
+          
+          <% if @campaign.status == 'draft' %>
+            <%= link_to "Edit", edit_campaign_path(@campaign), 
+                class: "bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campaign Stats -->
+    <div class="px-6 py-4 bg-gray-50">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-lg border">
+          <div class="text-sm font-medium text-gray-500">Total Calls</div>
+          <div class="text-2xl font-bold text-gray-900"><%= @progress[:total_calls] %></div>
+        </div>
+        <div class="bg-white p-4 rounded-lg border">
+          <div class="text-sm font-medium text-gray-500">Completed</div>
+          <div class="text-2xl font-bold text-green-600"><%= @progress[:completed] %></div>
+        </div>
+        <div class="bg-white p-4 rounded-lg border">
+          <div class="text-sm font-medium text-gray-500">Failed</div>
+          <div class="text-2xl font-bold text-red-600"><%= @progress[:failed] %></div>
+        </div>
+        <div class="bg-white p-4 rounded-lg border">
+          <div class="text-sm font-medium text-gray-500">Pending</div>
+          <div class="text-2xl font-bold text-yellow-600"><%= @progress[:pending] %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Launch Controls -->
+  <% if @campaign.status == 'draft' %>
+    <div class="bg-white shadow-sm rounded-lg">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-medium text-gray-900">Launch Campaign</h2>
+        <p class="text-sm text-gray-600 mt-1">Select leads to call and launch the campaign</p>
+      </div>
+
+      <%= form_with url: launch_campaign_path(@campaign), method: :patch, local: true, class: "px-6 py-4 space-y-4" do |form| %>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <%= form.label :lead_status, "Lead Status", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.select :lead_status, 
+                options_for_select([
+                  ['All Statuses', ''],
+                  ['Open - Not Contacted', 'Open - Not Contacted'],
+                  ['Working - Contacted', 'Working - Contacted'],
+                  ['Follow Up Required', 'Follow Up Required']
+                ]),
+                {},
+                { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" } %>
+          </div>
+
+          <div>
+            <%= form.label :state_province, "State", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.select :state_province,
+                options_for_select([['All States', '']] + Lead.distinct.pluck(:state_province).compact.map { |s| [s, s] }),
+                {},
+                { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" } %>
+          </div>
+
+          <div>
+            <%= form.label :lead_source, "Lead Source", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.select :lead_source,
+                options_for_select([['All Sources', '']] + Lead.distinct.pluck(:lead_source).compact.map { |s| [s, s] }),
+                {},
+                { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" } %>
+          </div>
+        </div>
+
+        <div class="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+          <div class="text-yellow-800 font-medium">Campaign Settings</div>
+          <ul class="text-yellow-700 text-sm mt-1">
+            <li>• Will call up to <strong><%= @campaign.batch_size %></strong> leads</li>
+            <li>• <strong><%= @campaign.call_spacing_seconds %></strong> seconds between calls</li>
+            <li>• Excludes leads already in active campaigns</li>
+            <% if @campaign.prompt_override.present? %>
+              <li>• Using custom prompt override</li>
+            <% else %>
+              <li>• Using default Mike Lawrence Productions prompt</li>
+            <% end %>
+          </ul>
+        </div>
+
+        <div class="flex justify-between">
+          <%= link_to "Back to Campaigns", campaigns_path, 
+              class: "bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-lg" %>
+          <%= form.submit "Launch Campaign", 
+              class: "bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg",
+              confirm: "Are you sure you want to launch this campaign? This will start making actual phone calls." %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Campaign Controls -->
+  <% if %w[scheduled running paused].include?(@campaign.status) %>
+    <div class="bg-white shadow-sm rounded-lg">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-medium text-gray-900">Campaign Controls</h2>
+      </div>
+      <div class="px-6 py-4">
+        <div class="flex space-x-3">
+          <% if @campaign.status == 'paused' %>
+            <%= link_to "Resume Campaign", resume_campaign_path(@campaign), method: :patch,
+                class: "bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg" %>
+          <% elsif @campaign.status == 'running' %>
+            <%= link_to "Pause Campaign", pause_campaign_path(@campaign), method: :patch,
+                class: "bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-lg" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Recent Calls -->
+  <div class="bg-white shadow-sm rounded-lg">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <h2 class="text-lg font-medium text-gray-900">Recent Calls</h2>
+    </div>
+    
+    <% if @recent_calls.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lead</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Scheduled</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Called</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @recent_calls.each do |call| %>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900"><%= call.lead.name %></div>
+                  <div class="text-sm text-gray-500"><%= call.lead.company %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <%= call.phone_number %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                    <%= case call.status
+                        when 'scheduled' then 'bg-yellow-100 text-yellow-800'
+                        when 'initiated' then 'bg-blue-100 text-blue-800'
+                        when 'completed' then 'bg-green-100 text-green-800'
+                        when 'failed' then 'bg-red-100 text-red-800'
+                        else 'bg-gray-100 text-gray-800'
+                        end %>">
+                    <%= call.status.humanize %>
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <%= call.scheduled_for&.strftime("%m/%d %l:%M %p") %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <%= call.called_at&.strftime("%m/%d %l:%M %p") || '-' %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="px-6 py-8 text-center text-gray-500">
+        No calls scheduled yet
+      </div>
+    <% end %>
+  </div>
+</div>

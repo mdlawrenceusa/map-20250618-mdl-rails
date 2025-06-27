@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import expressWs from "express-ws";
 import * as https from "https";
-import { fromEnv } from "@aws-sdk/credential-providers";
+import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
 import { NovaSonicBidirectionalStreamClient } from "./client";
 import { Buffer } from "node:buffer";
 import WebSocket from "ws";
@@ -20,6 +20,12 @@ import * as path from "path";
 import { minimalTranscriptLogger } from "./simple-transcript-logger-minimal";
 // import { CognitoAuth } from "./auth/cognito";
 // import cookieParser from "cookie-parser";
+
+// Make transcript logger globally accessible for Vonage webhooks
+declare global {
+  var transcriptLogger: typeof minimalTranscriptLogger;
+}
+global.transcriptLogger = minimalTranscriptLogger;
 
 const app = express();
 const wsInstance = expressWs(app);
@@ -112,7 +118,7 @@ const bedrockClient = new NovaSonicBidirectionalStreamClient({
   },
   clientConfig: {
     region: process.env.AWS_REGION || "us-east-1",
-    credentials: fromEnv(),
+    credentials: fromNodeProviderChain(),
   },
 });
 
@@ -302,39 +308,19 @@ wsInstance.app.ws("/socket", (ws: WebSocket, req: Request) => {
       } else {
         // Create new session for this channel
         console.log(`Creating new channel: ${channelId}`);
-        session = bedrockClient.createStreamSession(channelId);
+        
+        // Create session with Esther assistant (system prompt loaded from S3)
+        session = await bedrockClient.createStreamSession(channelId, 'esther');
         bedrockClient.initiateSession(channelId);
         channelStreams.set(channelId, session);
         channelClients.set(channelId, new Set());
 
         setUpEventHandlersForChannel(session, channelId);
         await session.setupPromptStart();
-        // Load church outreach prompt as default
-        const fs = require('fs');
-        const path = require('path');
-        let churchPrompt = `You're Esther, Mike Lawrence Productions' outreach assistant. Your job is to make warm, professional calls to church offices to schedule brief web meetings with senior pastors about our World of Illusion Gospel magic show ministry.
-
-You must begin each call by asking to speak with the senior pastor or lead pastor. If they're unavailable, ask for the best time to reach them and offer to schedule a callback.
-
-Your primary objective is to book a 15-minute web meeting, NOT to sell the magic show event directly. Focus on getting the meeting scheduled.
-
-Key conversation starter: "Hello, this is Esther calling from Mike Lawrence Productions. Could I please speak with your senior pastor or lead pastor?"
-
-Always maintain a professional, respectful tone and keep responses concise and conversational for phone calls.`;
-
-        try {
-          const promptPath = path.join(__dirname, '../../../church-outreach-prompt.txt');
-          console.log(`[PROMPT DEBUG] Attempting to read prompt from: ${promptPath}`);
-          churchPrompt = fs.readFileSync(promptPath, 'utf8');
-          console.log(`[PROMPT DEBUG] Successfully loaded church prompt, length: ${churchPrompt.length} characters`);
-          console.log(`[PROMPT DEBUG] First 200 chars: ${churchPrompt.substring(0, 200)}...`);
-        } catch (error) {
-          console.error('[PROMPT DEBUG] Failed to read church prompt file:', error);
-          console.log('[PROMPT DEBUG] Using hardcoded default church prompt');
-        }
-
-        console.log(`[PROMPT DEBUG] Setting system prompt for channel ${channelId}`);
-        await session.setupSystemPrompt(undefined, churchPrompt);
+        
+        // System prompt is already loaded in the session, just need to set it up
+        console.log(`[PROMPT DEBUG] Setting up system prompt for channel ${channelId} (loaded from S3)`);
+        await session.setupSystemPrompt();
         await session.setupStartAudio();
 
         isNewChannel = true;
@@ -683,62 +669,8 @@ app.get("/configure", (req: Request, res: Response) => {
   }
 });
 
-// Outbound call webhook handlers
-app.get("/outbound/answer", (req: Request, res: Response) => {
-  console.log('Outbound call answered:', req.query);
-  
-  const callUuid = req.query.uuid as string;
-  const phoneNumber = req.query.to as string || req.query.from as string || 'unknown';
-  const callInfo = outboundCallManager.getCallInfo(callUuid);
-  
-  // Initialize transcript logging for this call
-  minimalTranscriptLogger.startCall(callUuid, phoneNumber);
-  
-  let ncco;
-  
-  if ((callInfo && callInfo.useAI) || !callInfo) {
-    // AI-powered call (outbound AI or inbound call) - connect to WebSocket
-    const greeting = callInfo?.message || "Hello, this is Esther from Mike Lawrence Productions. How may I help you today?";
-    ncco = [
-      {
-        action: "talk",
-        text: greeting
-      },
-      {
-        action: "connect",
-        from: "Esther - Nova Sonic AI",
-        endpoint: [
-          {
-            type: "websocket",
-            uri: `wss://${req.hostname}/socket?channel=${callUuid}`,
-            "content-type": "audio/l16;rate=16000"
-          }
-        ]
-      }
-    ];
-  } else {
-    // Simple TTS call (outbound non-AI only)
-    ncco = [
-      {
-        action: "talk",
-        text: callInfo.message || "Hello, this is a test call from Nova Sonic."
-      }
-    ];
-  }
-  
-  res.status(200).json(ncco);
-});
-
-app.post("/outbound/events", (req: Request, res: Response) => {
-  console.log('Outbound call event:', req.body);
-  
-  const event = req.body;
-  if (event.uuid) {
-    outboundCallManager.handleCallEvent(event);
-  }
-  
-  res.status(200).send('OK');
-});
+// Outbound call webhook handlers are now handled by VonageIntegration class
+// See /outbound/webhooks/answer and /outbound/webhooks/events routes
 
 // Fallback webhook handler
 app.post("/webhook/fallback", (req: Request, res: Response) => {

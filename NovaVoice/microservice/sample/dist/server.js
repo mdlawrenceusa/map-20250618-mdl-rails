@@ -46,7 +46,6 @@ const ws_1 = __importDefault(require("ws"));
 const uuid_1 = require("uuid");
 const vonage_1 = require("./telephony/vonage");
 const outbound_1 = require("./telephony/outbound");
-const outbound_with_lead_1 = require("./telephony/outbound-with-lead");
 // import { setupKBRoutes } from "../kb-mcp-integration";
 // import { getTelephonyBridge, NovaSonicTelephonyBridge } from "./nova-sonic-telephony";
 // import { TwilioIntegration } from "./telephony/twilio";
@@ -133,12 +132,11 @@ const bedrockClient = new client_1.NovaSonicBidirectionalStreamClient({
     },
     clientConfig: {
         region: process.env.AWS_REGION || "us-east-1",
-        credentials: (0, credential_providers_1.fromNodeProviderChain)(),
+        credentials: (0, credential_providers_1.fromEnv)(),
     },
 });
-// Initialize outbound call managers
+// Initialize outbound call manager first
 const outboundCallManager = new outbound_1.OutboundCallManager();
-const outboundCallManagerWithLead = new outbound_with_lead_1.OutboundCallManagerWithLead();
 // Initialize telephony bridge for barge-in support (will be configured with port later)
 // let telephonyBridge: NovaSonicTelephonyBridge;
 // Integrations - configure AFTER static files
@@ -288,41 +286,16 @@ wsInstance.app.ws("/socket", (ws, req) => {
             else {
                 // Create new session for this channel
                 console.log(`Creating new channel: ${channelId}`);
-                session = bedrockClient.createStreamSession(channelId);
+                // Create session with Esther assistant (system prompt loaded from S3)
+                session = await bedrockClient.createStreamSession(channelId, 'esther');
                 bedrockClient.initiateSession(channelId);
                 channelStreams.set(channelId, session);
                 channelClients.set(channelId, new Set());
-                // Start transcript logging for this call
-                // TODO: Get actual phone number from Rails app or call request
-                const phoneNumber = 'pending-from-rails';
-                simple_transcript_logger_minimal_1.minimalTranscriptLogger.startCall(channelId, phoneNumber);
                 setUpEventHandlersForChannel(session, channelId);
                 await session.setupPromptStart();
-                // Load church outreach prompt as default
-                const fs = require('fs');
-                const path = require('path');
-                let churchPrompt = `You're Esther, Mike Lawrence Productions' outreach assistant. Your job is to make warm, professional calls to church offices to schedule brief web meetings with senior pastors about our World of Illusion Gospel magic show ministry.
-
-You must begin each call by asking to speak with the senior pastor or lead pastor. If they're unavailable, ask for the best time to reach them and offer to schedule a callback.
-
-Your primary objective is to book a 15-minute web meeting, NOT to sell the magic show event directly. Focus on getting the meeting scheduled.
-
-Key conversation starter: "Hello, this is Esther calling from Mike Lawrence Productions. Could I please speak with your senior pastor or lead pastor?"
-
-Always maintain a professional, respectful tone and keep responses concise and conversational for phone calls.`;
-                try {
-                    const promptPath = path.join(__dirname, '../church-outreach-prompt.txt');
-                    console.log(`[PROMPT DEBUG] Attempting to read prompt from: ${promptPath}`);
-                    churchPrompt = fs.readFileSync(promptPath, 'utf8');
-                    console.log(`[PROMPT DEBUG] Successfully loaded church prompt, length: ${churchPrompt.length} characters`);
-                    console.log(`[PROMPT DEBUG] First 200 chars: ${churchPrompt.substring(0, 200)}...`);
-                }
-                catch (error) {
-                    console.error('[PROMPT DEBUG] Failed to read church prompt file:', error);
-                    console.log('[PROMPT DEBUG] Using hardcoded default church prompt');
-                }
-                console.log(`[PROMPT DEBUG] Setting system prompt for channel ${channelId}`);
-                await session.setupSystemPrompt(undefined, churchPrompt);
+                // System prompt is already loaded in the session, just need to set it up
+                console.log(`[PROMPT DEBUG] Setting up system prompt for channel ${channelId} (loaded from S3)`);
+                await session.setupSystemPrompt();
                 await session.setupStartAudio();
                 isNewChannel = true;
             }
@@ -552,43 +525,9 @@ app.post("/call/ai", async (req, res) => {
         });
     }
 });
-// Lead-aware AI call endpoint
-app.post("/call/ai-with-lead", async (req, res) => {
-    try {
-        const { to, lead, initialMessage, systemPrompt } = req.body;
-        if (!to) {
-            res.status(400).json({
-                error: "Missing required field: 'to'"
-            });
-            return;
-        }
-        if (!lead) {
-            res.status(400).json({
-                error: "Missing required field: 'lead'"
-            });
-            return;
-        }
-        const result = await outboundCallManagerWithLead.makeAICallWithLead(to, lead, initialMessage, systemPrompt);
-        res.status(200).json({
-            success: true,
-            callId: result.uuid,
-            status: result.status
-        });
-    }
-    catch (error) {
-        console.error("Error making AI call with lead:", error);
-        res.status(500).json({
-            error: "Failed to make AI call with lead",
-            details: error instanceof Error ? error.message : String(error)
-        });
-    }
-});
 app.get("/calls/active", (req, res) => {
     const activeCalls = outboundCallManager.getActiveCalls();
-    const activeLeadCalls = outboundCallManagerWithLead.getActiveCalls();
-    res.status(200).json({
-        activeCalls: [...activeCalls, ...activeLeadCalls]
-    });
+    res.status(200).json({ activeCalls });
 });
 // Configuration endpoint
 app.post("/configure", async (req, res) => {
@@ -622,16 +561,14 @@ app.post("/configure", async (req, res) => {
             });
             return;
         }
-        // Configure both outbound call managers
-        const config = {
+        // Configure the outbound call manager
+        outboundCallManager.configure({
             apiKey,
             apiSecret,
             applicationId,
             privateKey: finalPrivateKey,
             fromNumber
-        };
-        outboundCallManager.configure(config);
-        outboundCallManagerWithLead.configure(config);
+        });
         console.log('✅ Vonage credentials configured successfully');
         res.status(200).json({
             success: true,
@@ -650,7 +587,7 @@ app.post("/configure", async (req, res) => {
 // Configuration status endpoint
 app.get("/configure", (req, res) => {
     try {
-        const isConfigured = outboundCallManager.isConfigured() && outboundCallManagerWithLead.isConfigured();
+        const isConfigured = outboundCallManager.isConfigured();
         res.status(200).json({ configured: isConfigured });
     }
     catch (error) {
@@ -665,24 +602,9 @@ app.get("/outbound/answer", (req, res) => {
     console.log('Outbound call answered:', req.query);
     const callUuid = req.query.uuid;
     const phoneNumber = req.query.to || req.query.from || 'unknown';
-    // Check both managers for call info
-    let callInfo = outboundCallManager.getCallInfo(callUuid);
-    let leadInfo = null;
-    if (!callInfo) {
-        callInfo = outboundCallManagerWithLead.getCallInfo(callUuid);
-        if (callInfo) {
-            leadInfo = outboundCallManagerWithLead.getLeadForCall(callUuid);
-        }
-    }
-    // Initialize transcript logging for this call - include lead info if available
-    if (leadInfo) {
-        const leadContext = `Lead: ${leadInfo.name} from ${leadInfo.company} (${leadInfo.state_province})`;
-        console.log(`[TRANSCRIPT] Starting call with lead context: ${leadContext}`);
-        simple_transcript_logger_minimal_1.minimalTranscriptLogger.startCall(callUuid, phoneNumber, leadContext);
-    }
-    else {
-        simple_transcript_logger_minimal_1.minimalTranscriptLogger.startCall(callUuid, phoneNumber);
-    }
+    const callInfo = outboundCallManager.getCallInfo(callUuid);
+    // Initialize transcript logging for this call
+    simple_transcript_logger_minimal_1.minimalTranscriptLogger.startCall(callUuid, phoneNumber);
     let ncco;
     if ((callInfo && callInfo.useAI) || !callInfo) {
         // AI-powered call (outbound AI or inbound call) - connect to WebSocket
@@ -720,16 +642,7 @@ app.post("/outbound/events", (req, res) => {
     console.log('Outbound call event:', req.body);
     const event = req.body;
     if (event.uuid) {
-        // Try to handle event with both managers
-        const standardCallInfo = outboundCallManager.getCallInfo(event.uuid);
-        const leadCallInfo = outboundCallManagerWithLead.getCallInfo(event.uuid);
-        if (standardCallInfo) {
-            outboundCallManager.handleCallEvent(event);
-        }
-        else if (leadCallInfo) {
-            outboundCallManagerWithLead.handleCallEvents(req, res);
-            return; // Exit early since the lead manager handles the response
-        }
+        outboundCallManager.handleCallEvent(event);
     }
     res.status(200).send('OK');
 });

@@ -94,6 +94,8 @@ interface SessionData {
   isPromptStartSent: boolean;
   isAudioContentStartSent: boolean;
   audioContentId: string;
+  systemPrompt?: string; // Pre-loaded system prompt content
+  assistantName?: string; // Name of the assistant for this session
 }
 
 interface NovaSonicBidirectionalStreamClientConfig {

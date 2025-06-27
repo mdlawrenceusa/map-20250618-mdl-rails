@@ -120,8 +120,8 @@ export class OutboundCallManager {
           type: 'phone',
           number: this.config!.fromNumber || 'VONAGE'
         },
-        answerUrl: [`${this.getServerUrl()}/outbound/answer`],
-        eventUrl: [`${this.getServerUrl()}/outbound/events`]
+        answerUrl: [`${this.getServerUrl()}/outbound/webhooks/answer`],
+        eventUrl: [`${this.getServerUrl()}/outbound/webhooks/events`]
       });
 
       // Store call information

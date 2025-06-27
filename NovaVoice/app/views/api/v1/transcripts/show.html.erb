@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Call Transcript - <%= @call[:call_id][0..7] %>... - NovaVoice</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    h1 { color: #333; }
+    
+    /* Call Header */
+    .call-header { 
+      background: white; 
+      padding: 20px; 
+      border-radius: 8px; 
+      margin-bottom: 20px; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    }
+    .call-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+    .meta-item { }
+    .meta-label { font-weight: bold; color: #666; font-size: 0.9em; }
+    .meta-value { color: #333; font-size: 1.1em; margin-top: 5px; }
+    
+    .call-status { 
+      padding: 6px 12px; 
+      border-radius: 12px; 
+      font-size: 0.9em; 
+      font-weight: bold;
+      display: inline-block;
+    }
+    .status-completed { background: #e8f5e8; color: #2e7d32; }
+    .status-failed { background: #ffebee; color: #c62828; }
+    .status-in-progress { background: #fff3e0; color: #ef6c00; }
+    
+    /* Transcript Section */
+    .transcript-section { 
+      background: white; 
+      border-radius: 8px; 
+      overflow: hidden; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    }
+    .transcript-header { 
+      background: #4CAF50; 
+      color: white; 
+      padding: 15px; 
+      font-weight: bold; 
+    }
+    .transcript-content { 
+      padding: 20px; 
+      max-height: 600px; 
+      overflow-y: auto; 
+      white-space: pre-wrap; 
+      font-family: 'Courier New', monospace; 
+      line-height: 1.6; 
+      background: #fafafa;
+    }
+    
+    /* Navigation */
+    .nav-section { margin-bottom: 20px; }
+    .nav-link { 
+      display: inline-block; 
+      margin-right: 20px; 
+      color: #4CAF50; 
+      text-decoration: none; 
+      font-weight: bold;
+      padding: 8px 16px;
+      border: 2px solid #4CAF50;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .nav-link:hover { 
+      background: #4CAF50; 
+      color: white; 
+    }
+    
+    /* Actions */
+    .actions-section { 
+      background: white; 
+      padding: 15px; 
+      border-radius: 8px; 
+      margin-bottom: 20px; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    }
+    .btn { 
+      padding: 8px 16px; 
+      border: none; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      font-weight: bold; 
+      margin-right: 10px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary { background: #4CAF50; color: white; }
+    .btn-secondary { background: #666; color: white; }
+    
+    /* Empty State */
+    .no-transcript { 
+      text-align: center; 
+      padding: 40px; 
+      color: #666; 
+      font-style: italic; 
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav-section">
+      <a href="/api/v1/transcripts" class="nav-link">← Back to All Calls</a>
+      <a href="/api/v1/prompts/admin" class="nav-link">Prompt Management</a>
+    </div>
+    
+    <h1>📞 Call Transcript Details</h1>
+    
+    <!-- Call Header Information -->
+    <div class="call-header">
+      <div class="call-meta">
+        <div class="meta-item">
+          <div class="meta-label">Call ID</div>
+          <div class="meta-value"><%= @call[:call_id] %></div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Phone Number</div>
+          <div class="meta-value">📱 <%= @call[:phone_number] || 'Unknown' %></div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Start Time</div>
+          <div class="meta-value">🕐 <%= @call[:start_time] ? Time.parse(@call[:start_time]).strftime('%B %d, %Y at %I:%M %p') : 'Unknown' %></div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Duration</div>
+          <div class="meta-value">⏱️ <%= @call[:duration] || 0 %> seconds</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Status</div>
+          <div class="meta-value">
+            <span class="call-status status-<%= @call[:status] || 'unknown' %>">
+              <%= (@call[:status] || 'unknown').humanize %>
+            </span>
+          </div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">End Time</div>
+          <div class="meta-value">🕐 <%= @call[:end_time] ? Time.parse(@call[:end_time]).strftime('%B %d, %Y at %I:%M %p') : 'Ongoing' %></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Actions -->
+    <div class="actions-section">
+      <button onclick="copyToClipboard()" class="btn btn-primary">📋 Copy Transcript</button>
+      <button onclick="downloadTranscript()" class="btn btn-secondary">💾 Download</button>
+      <a href="/api/v1/transcripts/<%= @call[:call_id] %>.json" class="btn btn-secondary">📄 View JSON</a>
+    </div>
+    
+    <!-- Transcript Content -->
+    <div class="transcript-section">
+      <div class="transcript-header">
+        💬 Conversation Transcript
+      </div>
+      <div class="transcript-content" id="transcript-content">
+        <% if @call[:transcript].present? %>
+          <%= @call[:transcript] %>
+        <% else %>
+          <div class="no-transcript">
+            No transcript content available for this call.
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function copyToClipboard() {
+      const transcriptContent = document.getElementById('transcript-content').innerText;
+      navigator.clipboard.writeText(transcriptContent).then(() => {
+        alert('Transcript copied to clipboard!');
+      }).catch(() => {
+        alert('Failed to copy transcript');
+      });
+    }
+    
+    function downloadTranscript() {
+      const transcriptContent = document.getElementById('transcript-content').innerText;
+      const callId = '<%= @call[:call_id] %>';
+      const startTime = '<%= @call[:start_time] %>';
+      
+      const content = `Call Transcript
+Call ID: ${callId}
+Start Time: ${startTime}
+Phone: <%= @call[:phone_number] || 'Unknown' %>
+Duration: <%= @call[:duration] || 0 %> seconds
+
+=== TRANSCRIPT ===
+
+${transcriptContent}`;
+      
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `transcript_${callId.substring(0, 8)}_${new Date().toISOString().split('T')[0]}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>

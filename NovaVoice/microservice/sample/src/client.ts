@@ -16,12 +16,12 @@ import { firstValueFrom } from "rxjs";
 import {
   DefaultAudioInputConfiguration,
   DefaultAudioOutputConfiguration,
-  DefaultSystemPrompt,
   DefaultTextConfiguration,
 } from "./consts";
 import { SessionData, NovaSonicBidirectionalStreamClientConfig } from "./types";
 import { ToolRegistry } from "./tools/ToolRegistry";
 import GetScriptTool from "./tools/GetScriptTool";
+import { PromptService } from "./services/PromptService";
 
 export class StreamSession {
   private audioBufferQueue: Buffer[] = [];
@@ -47,13 +47,18 @@ export class StreamSession {
   }
 
   public async setupSystemPrompt(
-    textConfig: typeof DefaultTextConfiguration = DefaultTextConfiguration,
-    systemPromptContent: string = DefaultSystemPrompt
+    textConfig: typeof DefaultTextConfiguration = DefaultTextConfiguration
   ): Promise<void> {
+    // Use the pre-loaded system prompt from the session
+    const sessionData = this.client.getSessionData(this.sessionId);
+    if (!sessionData || !sessionData.systemPrompt) {
+      throw new Error(`No system prompt loaded for session ${this.sessionId}`);
+    }
+    
     this.client.setupSystemPromptEvent(
       this.sessionId,
       textConfig,
-      systemPromptContent
+      sessionData.systemPrompt
     );
   }
 
@@ -138,8 +143,9 @@ export class NovaSonicBidirectionalStreamClient {
   private sessionLastActivity: Map<string, number> = new Map();
   private sessionCleanupInProgress = new Set<string>();
   private toolRegistry = new ToolRegistry();
+  private promptService: PromptService;
 
-  constructor(config: NovaSonicBidirectionalStreamClientConfig) {
+  constructor(config: NovaSonicBidirectionalStreamClientConfig, promptService?: PromptService) {
     const nodeHttp2Handler = new NodeHttp2Handler({
       requestTimeout: 300000,
       sessionTimeout: 300000,
@@ -164,6 +170,9 @@ export class NovaSonicBidirectionalStreamClient {
       topP: 0.9,
       temperature: 0.7,
     };
+
+    // Initialize prompt service
+    this.promptService = promptService || new PromptService();
   }
 
   isSessionActive(sessionId: string): boolean {
@@ -187,13 +196,23 @@ export class NovaSonicBidirectionalStreamClient {
     return this.sessionCleanupInProgress.has(sessionId);
   }
 
-  public createStreamSession(
+  public getSessionData(sessionId: string): SessionData | undefined {
+    return this.activeSessions.get(sessionId);
+  }
+
+  public async createStreamSession(
     sessionId: string = randomUUID(),
+    assistantName: string = 'esther',
     config?: NovaSonicBidirectionalStreamClientConfig
-  ): StreamSession {
+  ): Promise<StreamSession> {
     if (this.activeSessions.has(sessionId)) {
       throw new Error(`Stream session with ID ${sessionId} already exists`);
     }
+
+    // Load the system prompt for the specified assistant
+    console.log(`Loading system prompt for assistant '${assistantName}' in session ${sessionId}`);
+    const systemPrompt = await this.promptService.getSystemPrompt(assistantName);
+    console.log(`System prompt loaded successfully for ${assistantName} (${systemPrompt.length} characters)`);
 
     const session: SessionData = {
       queue: [],
@@ -210,6 +229,8 @@ export class NovaSonicBidirectionalStreamClient {
       isPromptStartSent: false,
       isAudioContentStartSent: false,
       audioContentId: randomUUID(),
+      systemPrompt: systemPrompt,
+      assistantName: assistantName,
     };
 
     this.activeSessions.set(sessionId, session);
@@ -612,7 +633,7 @@ export class NovaSonicBidirectionalStreamClient {
   public setupSystemPromptEvent(
     sessionId: string,
     textConfig: typeof DefaultTextConfiguration = DefaultTextConfiguration,
-    systemPromptContent: string = DefaultSystemPrompt
+    systemPromptContent: string
   ): void {
     console.log(`Setting up systemPrompt events for session ${sessionId}...`);
     console.log(`[PROMPT DEBUG] System prompt content length: ${systemPromptContent.length} characters`);

@@ -473,7 +473,14 @@ wss.on('connection', async (ws, req) => {
             logger_1.logger.error('Nova Sonic error', { callId, error: data });
         });
         logger_1.logger.info('✅ STEP 2 COMPLETE: Event handlers set', { callId });
-        logger_1.logger.info('🔗 STEP 3: Initiating Nova Sonic session (with new fast async iterator)', { callId });
+        logger_1.logger.info('🎯 STEP 3: Setting up system prompt', { callId });
+        await session.setupSystemPrompt(undefined, call.prompt);
+        logger_1.logger.info('✅ STEP 3 COMPLETE: System prompt configured', {
+            callId,
+            promptLength: call.prompt.length,
+            promptPreview: call.prompt.substring(0, 100) + '...'
+        });
+        logger_1.logger.info('🔗 STEP 4: Initiating Nova Sonic session (with new fast async iterator)', { callId });
         const startTime = Date.now();
         await novaSonicClient.initiateSession(callId, ws);
         const totalTime = Date.now() - startTime;

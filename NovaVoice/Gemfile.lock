@@ -110,6 +110,19 @@ GEM
       base64
       jmespath (~> 1, >= 1.6.1)
       logger
+    aws-sdk-dynamodb (1.145.0)
+      aws-sdk-core (~> 3, >= 3.225.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-eventbridge (1.83.0)
+      aws-sdk-core (~> 3, >= 3.225.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-kms (1.105.0)
+      aws-sdk-core (~> 3, >= 3.225.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-s3 (1.191.0)
+      aws-sdk-core (~> 3, >= 3.225.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.5)
     aws-sigv4 (1.12.1)
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.3.0)
@@ -451,6 +464,9 @@ DEPENDENCIES
   async-http (~> 0.66)
   async-websocket (~> 0.8)
   aws-sdk-bedrockruntime (~> 1.49)
+  aws-sdk-dynamodb (~> 1.0)
+  aws-sdk-eventbridge (~> 1.0)
+  aws-sdk-s3 (~> 1.0)
   bootsnap
   brakeman
   capybara

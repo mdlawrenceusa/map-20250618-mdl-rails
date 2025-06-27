@@ -114,9 +114,85 @@ class Api::V1::PromptsController < Api::V1::BaseController
 
   # GET /api/v1/prompts/admin
   def admin
+    @prompts = Prompt.includes(:lead).order(created_at: :desc)
+    @pending_count = Prompt.pending_publication.count
+    @last_published = Prompt.published.maximum(:published_at)
+    
     respond_to do |format|
       format.html { render 'api/v1/prompts/admin', layout: 'application' }
       format.json { render json: { error: 'Please access this page in a web browser' }, status: :not_acceptable }
+    end
+  end
+
+  # GET /api/v1/prompts/publish_status
+  def publish_status
+    # Stateless: Always show all active prompts as publishable
+    active_prompts = Prompt.where(is_active: true).includes(:lead)
+    active_count = active_prompts.count
+    last_publish = Prompt.maximum(:published_at)
+    
+    # Get S3 status
+    publish_service = PromptPublishService.new
+    s3_status = publish_service.check_s3_status
+    
+    render json: {
+      has_pending_changes: active_count > 0,
+      pending_count: active_count,
+      pending_prompts: active_prompts.map { |p| prompt_summary(p) },
+      last_published_at: last_publish,
+      can_publish: active_count > 0,
+      s3_status: s3_status
+    }
+  end
+
+  # POST /api/v1/prompts/publish
+  def publish
+    publish_service = PromptPublishService.new
+    result = publish_service.publish_pending_changes
+    
+    if result[:success]
+      render json: {
+        success: true,
+        message: result[:message],
+        published_count: result[:published_count],
+        published_assistants: result[:published_assistants]
+      }
+    else
+      render json: {
+        success: false,
+        message: result[:message],
+        errors: result[:errors]
+      }, status: :unprocessable_entity
+    end
+  end
+
+  # GET /api/v1/prompts/s3_status
+  def s3_status
+    publish_service = PromptPublishService.new
+    status = publish_service.check_s3_status
+    
+    render json: status
+  end
+
+  # GET /api/v1/prompts/:assistant_name/published
+  def show_published
+    assistant_name = params[:assistant_name] || 'esther'
+    publish_service = PromptPublishService.new
+    result = publish_service.get_published_prompt(assistant_name)
+    
+    if result[:success]
+      render json: {
+        success: true,
+        assistant_name: assistant_name,
+        content: result[:content],
+        last_modified: result[:last_modified],
+        metadata: result[:metadata]
+      }
+    else
+      render json: {
+        success: false,
+        error: result[:error]
+      }, status: :not_found
     end
   end
 
@@ -130,7 +206,7 @@ class Api::V1::PromptsController < Api::V1::BaseController
 
   def prompt_params
     params.require(:prompt).permit(
-      :name, :content, :prompt_type, :lead_id, :campaign_id, metadata: {}
+      :name, :content, :prompt_type, :assistant_name, :lead_id, :campaign_id, metadata: {}
     )
   end
 
@@ -144,9 +220,23 @@ class Api::V1::PromptsController < Api::V1::BaseController
       is_active: prompt.is_active,
       lead_id: prompt.lead_id,
       campaign_id: prompt.campaign_id,
+      assistant_name: prompt.assistant_name,
       metadata: prompt.metadata || {},
       created_at: prompt.created_at,
-      updated_at: prompt.updated_at
+      updated_at: prompt.updated_at,
+      published_at: prompt.published_at,
+      publish_status: prompt.publish_status,
+      publish_status_label: prompt.publish_status_label
+    }
+  end
+
+  def prompt_summary(prompt)
+    {
+      id: prompt.id,
+      name: prompt.name,
+      prompt_type: prompt.prompt_type,
+      assistant_name: prompt.assistant_name,
+      publish_status: prompt.publish_status
     }
   end
 end

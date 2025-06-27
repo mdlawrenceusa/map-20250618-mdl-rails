@@ -20,6 +20,9 @@ gem "tailwindcss-rails"
 gem "jbuilder"
 
 gem 'aws-sdk-bedrockruntime', '~> 1.49' # Latest version with Nova Sonic support
+gem 'aws-sdk-s3', '~> 1.0'          # For S3 prompt publishing
+gem 'aws-sdk-dynamodb', '~> 1.0'    # For transcript viewing
+gem 'aws-sdk-eventbridge', '~> 1.0' # For campaign orchestration
 
 gem 'faye-websocket', '~> 0.11'     # For WebSocket client to Nova Sonic
 gem 'async-websocket', '~> 0.8'     # For async WebSocket handling

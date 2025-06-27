@@ -72,71 +72,132 @@ export class MinimalTranscriptLogger {
     console.log(`📝 Started call ${callUuid} - writing to ${mdFilePath} AND DynamoDB`);
   }
 
-  // Add text - write to BOTH file and DynamoDB  
+  // Add text - write to BOTH file and DynamoDB IMMEDIATELY (real-time)
   addText(callUuid: string, speaker: 'Human' | 'Assistant', text: string) {
     const session = this.sessions.get(callUuid);
-    if (!session) return;
+    if (!session) {
+      console.error(`⚠️ No session found for call ${callUuid} - cannot add text: ${text.substring(0, 50)}...`);
+      return;
+    }
 
     const timestamp = new Date().toLocaleTimeString();
     const line = `**${speaker}** (${timestamp}): ${text}`;
     
-    // Add to memory
+    // Add to memory for backup
     session.transcript.push(line);
     
-    // Write to file
-    fs.appendFileSync(session.mdFilePath, line + '\n\n');
+    // REAL-TIME WRITE 1: Immediately append to file
+    try {
+      fs.appendFileSync(session.mdFilePath, line + '\n\n');
+      console.log(`📝 Real-time file write: [${speaker}] ${text.substring(0, 50)}...`);
+    } catch (error) {
+      console.error(`❌ File write failed for ${callUuid}:`, error);
+    }
     
-    // Update DynamoDB with latest transcript
-    const fullTranscript = session.transcript.join('\n');
+    // REAL-TIME WRITE 2: Immediately update DynamoDB with complete transcript
+    const fullTranscript = this.buildCompleteTranscript(session);
     this.dynamoClient.send(new UpdateItemCommand({
       TableName: 'nova-sonic-call-records',
       Key: {
         call_uuid: { S: callUuid }
       },
-      UpdateExpression: 'SET transcript = :transcript',
+      UpdateExpression: 'SET transcript = :transcript, updated_at = :updatedAt',
       ExpressionAttributeValues: {
-        ':transcript': { S: fullTranscript }
+        ':transcript': { S: fullTranscript },
+        ':updatedAt': { S: new Date().toISOString() }
       }
-    })).catch(err => console.error('DynamoDB update failed:', err));
-    
-    console.log(`📝 Added [${speaker}]: ${text.substring(0, 50)}...`);
+    })).then(() => {
+      console.log(`📝 Real-time DynamoDB update: [${speaker}] for call ${callUuid}`);
+    }).catch(err => {
+      console.error(`❌ DynamoDB real-time update failed for ${callUuid}:`, err);
+    });
   }
 
-  // End call - finalize BOTH file and DynamoDB
+  // Build complete transcript from session data
+  private buildCompleteTranscript(session: CallSession): string {
+    const header = `# Call Transcript
+**Call ID**: ${session.callUuid}
+**Phone Number**: ${session.phoneNumber}
+**Date**: ${new Date(session.startTime).toLocaleString()}
+**Status**: In Progress
+
+---
+
+`;
+    
+    const transcript = session.transcript.join('\n\n');
+    return header + transcript;
+  }
+
+  // End call - finalize BOTH file and DynamoDB (with fault tolerance)
   async endCall(callUuid: string) {
     const session = this.sessions.get(callUuid);
-    if (!session) return;
+    if (!session) {
+      console.error(`⚠️ No session found for call ${callUuid} - attempting graceful DynamoDB finalization`);
+      
+      // Even without session, try to finalize DynamoDB record if it exists
+      try {
+        await this.dynamoClient.send(new UpdateItemCommand({
+          TableName: 'nova-sonic-call-records',
+          Key: {
+            call_uuid: { S: callUuid }
+          },
+          UpdateExpression: 'SET end_time = :endTime, #status = :status',
+          ExpressionAttributeNames: {
+            '#status': 'status'
+          },
+          ExpressionAttributeValues: {
+            ':endTime': { S: new Date().toISOString() },
+            ':status': { S: 'completed' }
+          }
+        }));
+        console.log(`✅ Gracefully finalized DynamoDB record for ${callUuid} (no local session)`);
+      } catch (error) {
+        console.error(`❌ Failed to gracefully finalize ${callUuid}:`, error);
+      }
+      return;
+    }
 
     const endTime = new Date().toISOString();
     const duration = Math.round((new Date(endTime).getTime() - new Date(session.startTime).getTime()) / 1000);
     
-    // Write footer to file
+    // Write footer to file (real-time)
     const footer = `\n---\n\n**Call Ended**: ${new Date().toLocaleString()}\n**Duration**: ${duration} seconds\n`;
-    fs.appendFileSync(session.mdFilePath, footer);
+    try {
+      fs.appendFileSync(session.mdFilePath, footer);
+      console.log(`📝 Added completion footer to ${session.mdFilePath}`);
+    } catch (error) {
+      console.error(`❌ Failed to write footer for ${callUuid}:`, error);
+    }
     
-    // Final update to DynamoDB
-    const fullTranscript = fs.readFileSync(session.mdFilePath, 'utf8');
-    await this.dynamoClient.send(new UpdateItemCommand({
-      TableName: 'nova-sonic-call-records',
-      Key: {
-        call_uuid: { S: callUuid }
-      },
-      UpdateExpression: 'SET transcript = :transcript, end_time = :endTime, duration_seconds = :duration, #status = :status',
-      ExpressionAttributeNames: {
-        '#status': 'status'
-      },
-      ExpressionAttributeValues: {
-        ':transcript': { S: fullTranscript },
-        ':endTime': { S: endTime },
-        ':duration': { N: duration.toString() },
-        ':status': { S: 'completed' }
-      }
-    })).catch(err => console.error('DynamoDB final update failed:', err));
+    // Final update to DynamoDB with complete file content
+    try {
+      const fullTranscript = fs.readFileSync(session.mdFilePath, 'utf8');
+      await this.dynamoClient.send(new UpdateItemCommand({
+        TableName: 'nova-sonic-call-records',
+        Key: {
+          call_uuid: { S: callUuid }
+        },
+        UpdateExpression: 'SET transcript = :transcript, end_time = :endTime, duration_seconds = :duration, #status = :status',
+        ExpressionAttributeNames: {
+          '#status': 'status'
+        },
+        ExpressionAttributeValues: {
+          ':transcript': { S: fullTranscript },
+          ':endTime': { S: endTime },
+          ':duration': { N: duration.toString() },
+          ':status': { S: 'completed' }
+        }
+      }));
+      console.log(`📝 Final DynamoDB update completed for ${callUuid}`);
+    } catch (error) {
+      console.error(`❌ DynamoDB final update failed for ${callUuid}:`, error);
+    }
     
-    // Clean up
+    // Clean up memory
     this.sessions.delete(callUuid);
     
-    console.log(`✅ Call ${callUuid} ended - saved to ${session.mdFilePath} AND DynamoDB`);
+    console.log(`✅ Call ${callUuid} completed - duration: ${duration}s - saved to ${session.mdFilePath} AND DynamoDB`);
   }
 }
 

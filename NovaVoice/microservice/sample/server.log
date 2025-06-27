@@ -2,13 +2,2189 @@
 > amazon-nova-sonic-server@1.0.0 dev
 > ts-node src/server.ts
 
+PromptService initialized with bucket: nova-sonic-prompts, cache timeout: 300000ms
 📝 Minimal transcript logger initialized
 Serving static files from: /home/ec2-user/environment/map-20250618-mdl-rails/
 Frontend files from: /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/frontend
+PromptService initialized with bucket: nova-sonic-prompts, cache timeout: 300000ms
 OutboundCallManager created without config - call configure() to set credentials
 Vonage integration initialized with barge-in support.
-Server running on HTTP port 8080
-Server listening on 0.0.0.0:8080
+Server running on HTTP port 3000
+Server listening on 0.0.0.0:3000
+Running session cleanup check
+Using JWT authentication with Application ID
+Generated custom JWT with iss claim
+OutboundCallManager initialized with config
+✅ Vonage credentials configured successfully
+Initiating AI-powered outbound call to 3472005533
+AI call initiated successfully. UUID: 274f2f7e-43c7-4955-8b8c-b614a5710473
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "3472005533",
+  "uuid": "274f2f7e-43c7-4955-8b8c-b614a5710473",
+  "conversation_uuid": "CON-0a3003d5-ab23-4aaf-8e37-a8fce0ea0b19",
+  "status": "ringing",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T18:44:24.111Z"
+}
+🔔 [WEBHOOK] Event details - Status: ringing, UUID: 274f2f7e-43c7-4955-8b8c-b614a5710473, ConversationUUID: CON-0a3003d5-ab23-4aaf-8e37-a8fce0ea0b19
+🔔 [WEBHOOK] Event status 'ringing' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "3472005533",
+  "uuid": "274f2f7e-43c7-4955-8b8c-b614a5710473",
+  "conversation_uuid": "CON-0a3003d5-ab23-4aaf-8e37-a8fce0ea0b19",
+  "status": "started",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T18:44:24.111Z"
+}
+🔔 [WEBHOOK] Event details - Status: started, UUID: 274f2f7e-43c7-4955-8b8c-b614a5710473, ConversationUUID: CON-0a3003d5-ab23-4aaf-8e37-a8fce0ea0b19
+🔔 [WEBHOOK] Event status 'started' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "from": "+12135235735",
+  "to": "3472005533",
+  "detail": "unavailable",
+  "uuid": "274f2f7e-43c7-4955-8b8c-b614a5710473",
+  "conversation_uuid": "CON-0a3003d5-ab23-4aaf-8e37-a8fce0ea0b19",
+  "status": "unanswered",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T18:44:33.516Z"
+}
+🔔 [WEBHOOK] Event details - Status: unanswered, UUID: 274f2f7e-43c7-4955-8b8c-b614a5710473, ConversationUUID: CON-0a3003d5-ab23-4aaf-8e37-a8fce0ea0b19
+🔔 [WEBHOOK] Event status 'unanswered' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "uuid": "274f2f7e-43c7-4955-8b8c-b614a5710473",
+  "network": "ES-UNKNOWN",
+  "duration": "0",
+  "disconnected_by": "user",
+  "start_time": null,
+  "rate": "0.00000000",
+  "price": "0.00000000",
+  "from": "12135235735",
+  "to": "3472005533",
+  "conversation_uuid": "CON-0a3003d5-ab23-4aaf-8e37-a8fce0ea0b19",
+  "status": "completed",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T18:44:33.268Z"
+}
+🔔 [WEBHOOK] Event details - Status: completed, UUID: 274f2f7e-43c7-4955-8b8c-b614a5710473, ConversationUUID: CON-0a3003d5-ab23-4aaf-8e37-a8fce0ea0b19
+🔔 [WEBHOOK] Call 274f2f7e-43c7-4955-8b8c-b614a5710473 ended with status: completed - Finalizing transcript
+🔔 [WEBHOOK] Calling endCall for transcript logger with UUID: 274f2f7e-43c7-4955-8b8c-b614a5710473
+⚠️ No session found for call 274f2f7e-43c7-4955-8b8c-b614a5710473 - attempting graceful DynamoDB finalization
+✅ Gracefully finalized DynamoDB record for 274f2f7e-43c7-4955-8b8c-b614a5710473 (no local session)
+🔔 [WEBHOOK] Successfully finalized transcript for call 274f2f7e-43c7-4955-8b8c-b614a5710473
+Running session cleanup check
+Running session cleanup check
+Initiating AI-powered outbound call to 3472005533
+AI call initiated successfully. UUID: 6e6b333e-e325-4d09-a930-1cede16c69b7
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "3472005533",
+  "uuid": "6e6b333e-e325-4d09-a930-1cede16c69b7",
+  "conversation_uuid": "CON-d2750c0c-d60a-4fc3-a79e-7f5106ffab68",
+  "status": "started",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T18:46:05.747Z"
+}
+🔔 [WEBHOOK] Event details - Status: started, UUID: 6e6b333e-e325-4d09-a930-1cede16c69b7, ConversationUUID: CON-d2750c0c-d60a-4fc3-a79e-7f5106ffab68
+🔔 [WEBHOOK] Event status 'started' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "3472005533",
+  "uuid": "6e6b333e-e325-4d09-a930-1cede16c69b7",
+  "conversation_uuid": "CON-d2750c0c-d60a-4fc3-a79e-7f5106ffab68",
+  "status": "ringing",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T18:46:05.747Z"
+}
+🔔 [WEBHOOK] Event details - Status: ringing, UUID: 6e6b333e-e325-4d09-a930-1cede16c69b7, ConversationUUID: CON-d2750c0c-d60a-4fc3-a79e-7f5106ffab68
+🔔 [WEBHOOK] Event status 'ringing' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "uuid": "6e6b333e-e325-4d09-a930-1cede16c69b7",
+  "network": "ES-UNKNOWN",
+  "duration": "0",
+  "disconnected_by": "user",
+  "start_time": null,
+  "rate": "0.00000000",
+  "price": "0.00000000",
+  "from": "12135235735",
+  "to": "3472005533",
+  "conversation_uuid": "CON-d2750c0c-d60a-4fc3-a79e-7f5106ffab68",
+  "status": "completed",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T18:46:14.894Z"
+}
+🔔 [WEBHOOK] Event details - Status: completed, UUID: 6e6b333e-e325-4d09-a930-1cede16c69b7, ConversationUUID: CON-d2750c0c-d60a-4fc3-a79e-7f5106ffab68
+🔔 [WEBHOOK] Call 6e6b333e-e325-4d09-a930-1cede16c69b7 ended with status: completed - Finalizing transcript
+🔔 [WEBHOOK] Calling endCall for transcript logger with UUID: 6e6b333e-e325-4d09-a930-1cede16c69b7
+⚠️ No session found for call 6e6b333e-e325-4d09-a930-1cede16c69b7 - attempting graceful DynamoDB finalization
+🔔 [WEBHOOK] Vonage event received: {
+  "from": "+12135235735",
+  "to": "3472005533",
+  "detail": "unavailable",
+  "uuid": "6e6b333e-e325-4d09-a930-1cede16c69b7",
+  "conversation_uuid": "CON-d2750c0c-d60a-4fc3-a79e-7f5106ffab68",
+  "status": "unanswered",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T18:46:15.312Z"
+}
+🔔 [WEBHOOK] Event details - Status: unanswered, UUID: 6e6b333e-e325-4d09-a930-1cede16c69b7, ConversationUUID: CON-d2750c0c-d60a-4fc3-a79e-7f5106ffab68
+🔔 [WEBHOOK] Event status 'unanswered' - not a completion event, ignoring
+✅ Gracefully finalized DynamoDB record for 6e6b333e-e325-4d09-a930-1cede16c69b7 (no local session)
+🔔 [WEBHOOK] Successfully finalized transcript for call 6e6b333e-e325-4d09-a930-1cede16c69b7
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Initiating AI-powered outbound call to +13472005533
+AI call initiated successfully. UUID: f334cc35-12f8-4df3-b06c-c33d5d35f938
+Running session cleanup check
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "f334cc35-12f8-4df3-b06c-c33d5d35f938",
+  "conversation_uuid": "CON-8b27769e-2c09-4e2b-b697-1389d71a9a6c",
+  "status": "ringing",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T18:52:51.550Z"
+}
+🔔 [WEBHOOK] Event details - Status: ringing, UUID: f334cc35-12f8-4df3-b06c-c33d5d35f938, ConversationUUID: CON-8b27769e-2c09-4e2b-b697-1389d71a9a6c
+🔔 [WEBHOOK] Event status 'ringing' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "f334cc35-12f8-4df3-b06c-c33d5d35f938",
+  "conversation_uuid": "CON-8b27769e-2c09-4e2b-b697-1389d71a9a6c",
+  "status": "started",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T18:52:51.550Z"
+}
+🔔 [WEBHOOK] Event details - Status: started, UUID: f334cc35-12f8-4df3-b06c-c33d5d35f938, ConversationUUID: CON-8b27769e-2c09-4e2b-b697-1389d71a9a6c
+🔔 [WEBHOOK] Event status 'started' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "start_time": null,
+  "headers": {},
+  "rate": null,
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "f334cc35-12f8-4df3-b06c-c33d5d35f938",
+  "conversation_uuid": "CON-8b27769e-2c09-4e2b-b697-1389d71a9a6c",
+  "status": "answered",
+  "direction": "outbound",
+  "network": null,
+  "timestamp": "2025-06-26T18:52:55.725Z"
+}
+🔔 [WEBHOOK] Event details - Status: answered, UUID: f334cc35-12f8-4df3-b06c-c33d5d35f938, ConversationUUID: CON-8b27769e-2c09-4e2b-b697-1389d71a9a6c
+🔔 [WEBHOOK] Event status 'answered' - not a completion event, ignoring
+[WEBHOOK] Handling outbound call from +12135235735 to +13472005533, UUID: f334cc35-12f8-4df3-b06c-c33d5d35f938
+🔔 [WEBHOOK] Starting transcript logging for outbound call f334cc35-12f8-4df3-b06c-c33d5d35f938
+📝 Started call f334cc35-12f8-4df3-b06c-c33d5d35f938 - writing to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-f334cc35-12f8-4df3-b06c-c33d5d35f938-2025-06-26T18-52-55-795Z.md AND DynamoDB
+[WEBHOOK] Responding with WebSocket URI: wss://gospelshare.io/socket?channel=f334cc35-12f8-4df3-b06c-c33d5d35f938
+Client requesting connection to channel: f334cc35-12f8-4df3-b06c-c33d5d35f938
+Creating new channel: f334cc35-12f8-4df3-b06c-c33d5d35f938
+Loading system prompt for assistant 'esther' in session f334cc35-12f8-4df3-b06c-c33d5d35f938
+Loading prompt from S3 for assistant: esther
+Websocket connection is open
+Successfully loaded and cached prompt for assistant: esther (10126 characters)
+System prompt loaded successfully for esther (10126 characters)
+Setting up initial events for session f334cc35-12f8-4df3-b06c-c33d5d35f938...
+Starting bidirectional stream for session f334cc35-12f8-4df3-b06c-c33d5d35f938...
+Setting up prompt start event for session f334cc35-12f8-4df3-b06c-c33d5d35f938...
+[PROMPT DEBUG] Setting up system prompt for channel f334cc35-12f8-4df3-b06c-c33d5d35f938 (loaded from S3)
+Setting up systemPrompt events for session f334cc35-12f8-4df3-b06c-c33d5d35f938...
+[PROMPT DEBUG] System prompt content length: 10126 characters
+[PROMPT DEBUG] System prompt preview: # SCHEDULING INSTRUCTIONS
+
+## nova_sonic_scheduling
+
+The goal isn’t to actually check the calendar. The goal is to just get them to commit to a specific time and date. Make sure you have a time and a ...
+[PROMPT DEBUG] Adding textInput event with system prompt to queue
+Setting up startAudioContent event for session f334cc35-12f8-4df3-b06c-c33d5d35f938...
+Using audio content ID: 31ee9af2-db62-424c-84aa-c02b17e10364
+Initial events setup complete for session f334cc35-12f8-4df3-b06c-c33d5d35f938
+Channel f334cc35-12f8-4df3-b06c-c33d5d35f938 has 1 connected clients
+AsyncIterable iterator requested for session f334cc35-12f8-4df3-b06c-c33d5d35f938
+[BARGE-IN] 🎯 Created barge-in handler for session f334cc35-12f8-4df3-b06c-c33d5d35f938
+Stream established for session f334cc35-12f8-4df3-b06c-c33d5d35f938, processing responses...
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'completionStart' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Human text: please hold...
+📝 Real-time file write: [Human] please hold...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+📝 Real-time DynamoDB update: [Human] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Human text: hello...
+📝 Real-time file write: [Human] hello...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+📝 Real-time DynamoDB update: [Human] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Assistant text: Hello, thank you for holding. This is Esther from ...
+📝 Real-time file write: [Assistant] Hello, thank you for holding. This is Esther from ...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+📝 Real-time DynamoDB update: [Assistant] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Assistant text:  I'm reaching out to discuss a Christian Evangelic...
+📝 Real-time file write: [Assistant]  I'm reaching out to discuss a Christian Evangelic...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+📝 Real-time DynamoDB update: [Assistant] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Assistant text:  Gospel outreach program. When would be a good tim...
+📝 Real-time file write: [Assistant]  Gospel outreach program. When would be a good tim...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+📝 Real-time DynamoDB update: [Assistant] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Assistant text: Hello, thank you for holding. This is Esther from ...
+📝 Real-time file write: [Assistant] Hello, thank you for holding. This is Esther from ...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+📝 Real-time DynamoDB update: [Assistant] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Assistant text:  I'm reaching out to discuss a Christian Evangelic...
+📝 Real-time file write: [Assistant]  I'm reaching out to discuss a Christian Evangelic...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+📝 Real-time DynamoDB update: [Assistant] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Assistant text:  Gospel outreach program. When would be a good tim...
+📝 Real-time file write: [Assistant]  Gospel outreach program. When would be a good tim...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+📝 Real-time DynamoDB update: [Assistant] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Human text: um...
+📝 Real-time file write: [Human] um...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+📝 Real-time DynamoDB update: [Human] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Human text: could you tell me a little bit more is there a web...
+📝 Real-time file write: [Human] could you tell me a little bit more is there a web...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+📝 Real-time DynamoDB update: [Human] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Human text: or show me...
+📝 Real-time file write: [Human] or show me...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+📝 Real-time DynamoDB update: [Human] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Assistant text: Of course, I'd be happy to provide more informatio...
+📝 Real-time file write: [Assistant] Of course, I'd be happy to provide more informatio...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+📝 Real-time DynamoDB update: [Assistant] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Assistant text:  Our outreach program is designed to help churches...
+📝 Real-time file write: [Assistant]  Our outreach program is designed to help churches...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+📝 Real-time DynamoDB update: [Assistant] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Assistant text:  We focus on reaching entire family networks, ensu...
+📝 Real-time file write: [Assistant]  We focus on reaching entire family networks, ensu...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+📝 Real-time DynamoDB update: [Assistant] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Assistant text:  If you'd like, I can schedule a meeting with Mike...
+📝 Real-time file write: [Assistant]  If you'd like, I can schedule a meeting with Mike...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+📝 Real-time DynamoDB update: [Assistant] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Assistant text: Of course, I'd be happy to provide more informatio...
+📝 Real-time file write: [Assistant] Of course, I'd be happy to provide more informatio...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+📝 Real-time DynamoDB update: [Assistant] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+Running session cleanup check
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Assistant text:  Our outreach program is designed to help churches...
+📝 Real-time file write: [Assistant]  Our outreach program is designed to help churches...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+📝 Real-time DynamoDB update: [Assistant] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Assistant text:  We focus on reaching entire family networks, ensu...
+📝 Real-time file write: [Assistant]  We focus on reaching entire family networks, ensu...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+📝 Real-time DynamoDB update: [Assistant] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: true
+[TRANSCRIPT] Adding Assistant text:  If you'd like, I can schedule a meeting with Mike...
+📝 Real-time file write: [Assistant]  If you'd like, I can schedule a meeting with Mike...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for f334cc35-12f8-4df3-b06c-c33d5d35f938: false
+📝 Real-time DynamoDB update: [Assistant] for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "end_time": "2025-06-26T18:54:12.000Z",
+  "uuid": "f334cc35-12f8-4df3-b06c-c33d5d35f938",
+  "network": "310260",
+  "duration": "77",
+  "disconnected_by": "user",
+  "start_time": "2025-06-26T18:52:55.000Z",
+  "rate": "0.01314000",
+  "price": "0.01686300",
+  "from": "12135235735",
+  "to": "13472005533",
+  "conversation_uuid": "CON-8b27769e-2c09-4e2b-b697-1389d71a9a6c",
+  "status": "completed",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T18:54:12.166Z"
+}
+🔔 [WEBHOOK] Event details - Status: completed, UUID: f334cc35-12f8-4df3-b06c-c33d5d35f938, ConversationUUID: CON-8b27769e-2c09-4e2b-b697-1389d71a9a6c
+🔔 [WEBHOOK] Call f334cc35-12f8-4df3-b06c-c33d5d35f938 ended with status: completed - Finalizing transcript
+🔔 [WEBHOOK] Calling endCall for transcript logger with UUID: f334cc35-12f8-4df3-b06c-c33d5d35f938
+📝 Added completion footer to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-f334cc35-12f8-4df3-b06c-c33d5d35f938-2025-06-26T18-52-55-795Z.md
+📝 Final DynamoDB update completed for f334cc35-12f8-4df3-b06c-c33d5d35f938
+✅ Call f334cc35-12f8-4df3-b06c-c33d5d35f938 completed - duration: 77s - saved to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-f334cc35-12f8-4df3-b06c-c33d5d35f938-2025-06-26T18-52-55-795Z.md AND DynamoDB
+🔔 [WEBHOOK] Successfully finalized transcript for call f334cc35-12f8-4df3-b06c-c33d5d35f938
+Client disconnected from channel f334cc35-12f8-4df3-b06c-c33d5d35f938, 0 clients remaining
+Last client left channel f334cc35-12f8-4df3-b06c-c33d5d35f938, cleaning up resources
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'usageEvent' ]
+Handling other events
+Event keys for session f334cc35-12f8-4df3-b06c-c33d5d35f938:  [ 'completionEnd' ]
+Handling other events
+Response stream processing complete for session f334cc35-12f8-4df3-b06c-c33d5d35f938
+Stream completed for channel: f334cc35-12f8-4df3-b06c-c33d5d35f938
+Closing session f334cc35-12f8-4df3-b06c-c33d5d35f938
+Session f334cc35-12f8-4df3-b06c-c33d5d35f938 closed.
+Queue empty or session inactive: f334cc35-12f8-4df3-b06c-c33d5d35f938 
+Session f334cc35-12f8-4df3-b06c-c33d5d35f938 close completed
+⚠️ No session found for call f334cc35-12f8-4df3-b06c-c33d5d35f938 - attempting graceful DynamoDB finalization
+✅ Gracefully finalized DynamoDB record for f334cc35-12f8-4df3-b06c-c33d5d35f938 (no local session)
+Successfully cleaned up channel: f334cc35-12f8-4df3-b06c-c33d5d35f938
+[BARGE-IN] 🧹 Cleaned up barge-in handler for session f334cc35-12f8-4df3-b06c-c33d5d35f938
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Initiating AI-powered outbound call to +13472005533
+AI call initiated successfully. UUID: d77391b5-347b-4d08-bf9d-9ce437c64c63
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "d77391b5-347b-4d08-bf9d-9ce437c64c63",
+  "conversation_uuid": "CON-c6c9959a-bc7e-462a-a123-c3da48f813c0",
+  "status": "started",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T18:57:37.077Z"
+}
+🔔 [WEBHOOK] Event details - Status: started, UUID: d77391b5-347b-4d08-bf9d-9ce437c64c63, ConversationUUID: CON-c6c9959a-bc7e-462a-a123-c3da48f813c0
+🔔 [WEBHOOK] Event status 'started' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "d77391b5-347b-4d08-bf9d-9ce437c64c63",
+  "conversation_uuid": "CON-c6c9959a-bc7e-462a-a123-c3da48f813c0",
+  "status": "ringing",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T18:57:37.077Z"
+}
+🔔 [WEBHOOK] Event details - Status: ringing, UUID: d77391b5-347b-4d08-bf9d-9ce437c64c63, ConversationUUID: CON-c6c9959a-bc7e-462a-a123-c3da48f813c0
+🔔 [WEBHOOK] Event status 'ringing' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "start_time": null,
+  "headers": {},
+  "rate": null,
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "d77391b5-347b-4d08-bf9d-9ce437c64c63",
+  "conversation_uuid": "CON-c6c9959a-bc7e-462a-a123-c3da48f813c0",
+  "status": "answered",
+  "direction": "outbound",
+  "network": null,
+  "timestamp": "2025-06-26T18:57:40.285Z"
+}
+🔔 [WEBHOOK] Event details - Status: answered, UUID: d77391b5-347b-4d08-bf9d-9ce437c64c63, ConversationUUID: CON-c6c9959a-bc7e-462a-a123-c3da48f813c0
+🔔 [WEBHOOK] Event status 'answered' - not a completion event, ignoring
+[WEBHOOK] Handling outbound call from +12135235735 to +13472005533, UUID: d77391b5-347b-4d08-bf9d-9ce437c64c63
+🔔 [WEBHOOK] Starting transcript logging for outbound call d77391b5-347b-4d08-bf9d-9ce437c64c63
+📝 Started call d77391b5-347b-4d08-bf9d-9ce437c64c63 - writing to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-d77391b5-347b-4d08-bf9d-9ce437c64c63-2025-06-26T18-57-40-378Z.md AND DynamoDB
+[WEBHOOK] Responding with WebSocket URI: wss://gospelshare.io/socket?channel=d77391b5-347b-4d08-bf9d-9ce437c64c63
+Client requesting connection to channel: d77391b5-347b-4d08-bf9d-9ce437c64c63
+Creating new channel: d77391b5-347b-4d08-bf9d-9ce437c64c63
+Loading system prompt for assistant 'esther' in session d77391b5-347b-4d08-bf9d-9ce437c64c63
+Using cached prompt for assistant: esther
+Websocket connection is open
+System prompt loaded successfully for esther (10126 characters)
+Setting up initial events for session d77391b5-347b-4d08-bf9d-9ce437c64c63...
+Starting bidirectional stream for session d77391b5-347b-4d08-bf9d-9ce437c64c63...
+Setting up prompt start event for session d77391b5-347b-4d08-bf9d-9ce437c64c63...
+[PROMPT DEBUG] Setting up system prompt for channel d77391b5-347b-4d08-bf9d-9ce437c64c63 (loaded from S3)
+Setting up systemPrompt events for session d77391b5-347b-4d08-bf9d-9ce437c64c63...
+[PROMPT DEBUG] System prompt content length: 10126 characters
+[PROMPT DEBUG] System prompt preview: # SCHEDULING INSTRUCTIONS
+
+## nova_sonic_scheduling
+
+The goal isn’t to actually check the calendar. The goal is to just get them to commit to a specific time and date. Make sure you have a time and a ...
+[PROMPT DEBUG] Adding textInput event with system prompt to queue
+Setting up startAudioContent event for session d77391b5-347b-4d08-bf9d-9ce437c64c63...
+Using audio content ID: 9bf85d93-ffe4-4ec9-930f-3ff3472e9d8e
+Initial events setup complete for session d77391b5-347b-4d08-bf9d-9ce437c64c63
+Channel d77391b5-347b-4d08-bf9d-9ce437c64c63 has 1 connected clients
+AsyncIterable iterator requested for session d77391b5-347b-4d08-bf9d-9ce437c64c63
+[BARGE-IN] 🎯 Created barge-in handler for session d77391b5-347b-4d08-bf9d-9ce437c64c63
+Stream established for session d77391b5-347b-4d08-bf9d-9ce437c64c63, processing responses...
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Running session cleanup check
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'completionStart' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Human text: yes uh how may i help you...
+📝 Real-time file write: [Human] yes uh how may i help you...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Human] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Assistant text: Hello, this is Esther from Mike Lawrence Productio...
+📝 Real-time file write: [Assistant] Hello, this is Esther from Mike Lawrence Productio...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Assistant] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Assistant text: { "interrupted" : true }...
+📝 Real-time file write: [Assistant] { "interrupted" : true }...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Assistant text: Hello, this is Esther from Mike Lawrence Productio...
+📝 Real-time file write: [Assistant] Hello, this is Esther from Mike Lawrence Productio...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Assistant] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+📝 Real-time DynamoDB update: [Assistant] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Human text: hello...
+📝 Real-time file write: [Human] hello...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Human] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Assistant text: Hello! I'm calling to discuss a Christian Evangeli...
+📝 Real-time file write: [Assistant] Hello! I'm calling to discuss a Christian Evangeli...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Assistant] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Assistant text: { "interrupted" : true }...
+📝 Real-time file write: [Assistant] { "interrupted" : true }...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Assistant text: Hello! I'm calling to discuss a Christian Evangeli...
+📝 Real-time file write: [Assistant] Hello! I'm calling to discuss a Christian Evangeli...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Assistant] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+📝 Real-time DynamoDB update: [Assistant] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Human text: uh...
+📝 Real-time file write: [Human] uh...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Human] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Assistant text: When would be a good time for you to have this mee...
+📝 Real-time file write: [Assistant] When would be a good time for you to have this mee...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Assistant] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Assistant text:   We can find a time that works best for you....
+📝 Real-time file write: [Assistant]   We can find a time that works best for you....
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+📝 Real-time DynamoDB update: [Assistant] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Assistant text: When would be a good time for you to have this mee...
+📝 Real-time file write: [Assistant] When would be a good time for you to have this mee...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Assistant] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Assistant text:   We can find a time that works best for you....
+📝 Real-time file write: [Assistant]   We can find a time that works best for you....
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Assistant] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Human text: uh where are you calling from...
+📝 Real-time file write: [Human] uh where are you calling from...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+📝 Real-time DynamoDB update: [Human] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Assistant text: I'm calling from Mike Lawrence Productions. We're ...
+📝 Real-time file write: [Assistant] I'm calling from Mike Lawrence Productions. We're ...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Assistant] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Assistant text: I'm calling from Mike Lawrence Productions. We're ...
+📝 Real-time file write: [Assistant] I'm calling from Mike Lawrence Productions. We're ...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Assistant] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Human text: thank you what is your website...
+📝 Real-time file write: [Human] thank you what is your website...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Human] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Assistant text: Our website is GlobalOutreachEvent.com. It has mor...
+📝 Real-time file write: [Assistant] Our website is GlobalOutreachEvent.com. It has mor...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Assistant] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: true
+[TRANSCRIPT] Adding Assistant text: Our website is GlobalOutreachEvent.com. It has mor...
+📝 Real-time file write: [Assistant] Our website is GlobalOutreachEvent.com. It has mor...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d77391b5-347b-4d08-bf9d-9ce437c64c63: false
+📝 Real-time DynamoDB update: [Assistant] for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "end_time": "2025-06-26T18:58:32.000Z",
+  "uuid": "d77391b5-347b-4d08-bf9d-9ce437c64c63",
+  "network": "310260",
+  "duration": "52",
+  "disconnected_by": "user",
+  "start_time": "2025-06-26T18:57:40.000Z",
+  "rate": "0.01314000",
+  "price": "0.01138800",
+  "from": "12135235735",
+  "to": "13472005533",
+  "conversation_uuid": "CON-c6c9959a-bc7e-462a-a123-c3da48f813c0",
+  "status": "completed",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T18:58:31.626Z"
+}
+🔔 [WEBHOOK] Event details - Status: completed, UUID: d77391b5-347b-4d08-bf9d-9ce437c64c63, ConversationUUID: CON-c6c9959a-bc7e-462a-a123-c3da48f813c0
+🔔 [WEBHOOK] Call d77391b5-347b-4d08-bf9d-9ce437c64c63 ended with status: completed - Finalizing transcript
+🔔 [WEBHOOK] Calling endCall for transcript logger with UUID: d77391b5-347b-4d08-bf9d-9ce437c64c63
+📝 Added completion footer to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-d77391b5-347b-4d08-bf9d-9ce437c64c63-2025-06-26T18-57-40-378Z.md
+📝 Final DynamoDB update completed for d77391b5-347b-4d08-bf9d-9ce437c64c63
+✅ Call d77391b5-347b-4d08-bf9d-9ce437c64c63 completed - duration: 52s - saved to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-d77391b5-347b-4d08-bf9d-9ce437c64c63-2025-06-26T18-57-40-378Z.md AND DynamoDB
+🔔 [WEBHOOK] Successfully finalized transcript for call d77391b5-347b-4d08-bf9d-9ce437c64c63
+Client disconnected from channel d77391b5-347b-4d08-bf9d-9ce437c64c63, 0 clients remaining
+Last client left channel d77391b5-347b-4d08-bf9d-9ce437c64c63, cleaning up resources
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d77391b5-347b-4d08-bf9d-9ce437c64c63:  [ 'completionEnd' ]
+Handling other events
+Response stream processing complete for session d77391b5-347b-4d08-bf9d-9ce437c64c63
+Stream completed for channel: d77391b5-347b-4d08-bf9d-9ce437c64c63
+Closing session d77391b5-347b-4d08-bf9d-9ce437c64c63
+Session d77391b5-347b-4d08-bf9d-9ce437c64c63 closed.
+Queue empty or session inactive: d77391b5-347b-4d08-bf9d-9ce437c64c63 
+Session d77391b5-347b-4d08-bf9d-9ce437c64c63 close completed
+⚠️ No session found for call d77391b5-347b-4d08-bf9d-9ce437c64c63 - attempting graceful DynamoDB finalization
+✅ Gracefully finalized DynamoDB record for d77391b5-347b-4d08-bf9d-9ce437c64c63 (no local session)
+Successfully cleaned up channel: d77391b5-347b-4d08-bf9d-9ce437c64c63
+[BARGE-IN] 🧹 Cleaned up barge-in handler for session d77391b5-347b-4d08-bf9d-9ce437c64c63
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Initiating AI-powered outbound call to +13472005533
+AI call initiated successfully. UUID: c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "c2db1c4f-7d21-42c1-a426-7ee24a2aff74",
+  "conversation_uuid": "CON-64153c04-cb2d-40d4-a23a-269e56dae088",
+  "status": "started",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T19:01:35.024Z"
+}
+🔔 [WEBHOOK] Event details - Status: started, UUID: c2db1c4f-7d21-42c1-a426-7ee24a2aff74, ConversationUUID: CON-64153c04-cb2d-40d4-a23a-269e56dae088
+🔔 [WEBHOOK] Event status 'started' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "c2db1c4f-7d21-42c1-a426-7ee24a2aff74",
+  "conversation_uuid": "CON-64153c04-cb2d-40d4-a23a-269e56dae088",
+  "status": "ringing",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T19:01:35.024Z"
+}
+🔔 [WEBHOOK] Event details - Status: ringing, UUID: c2db1c4f-7d21-42c1-a426-7ee24a2aff74, ConversationUUID: CON-64153c04-cb2d-40d4-a23a-269e56dae088
+🔔 [WEBHOOK] Event status 'ringing' - not a completion event, ignoring
+[WEBHOOK] Handling outbound call from +12135235735 to +13472005533, UUID: c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+🔔 [WEBHOOK] Starting transcript logging for outbound call c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+📝 Started call c2db1c4f-7d21-42c1-a426-7ee24a2aff74 - writing to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-c2db1c4f-7d21-42c1-a426-7ee24a2aff74-2025-06-26T19-01-38-309Z.md AND DynamoDB
+[WEBHOOK] Responding with WebSocket URI: wss://gospelshare.io/socket?channel=c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+🔔 [WEBHOOK] Vonage event received: {
+  "start_time": null,
+  "headers": {},
+  "rate": null,
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "c2db1c4f-7d21-42c1-a426-7ee24a2aff74",
+  "conversation_uuid": "CON-64153c04-cb2d-40d4-a23a-269e56dae088",
+  "status": "answered",
+  "direction": "outbound",
+  "network": null,
+  "timestamp": "2025-06-26T19:01:38.260Z"
+}
+🔔 [WEBHOOK] Event details - Status: answered, UUID: c2db1c4f-7d21-42c1-a426-7ee24a2aff74, ConversationUUID: CON-64153c04-cb2d-40d4-a23a-269e56dae088
+🔔 [WEBHOOK] Event status 'answered' - not a completion event, ignoring
+Client requesting connection to channel: c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+Creating new channel: c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+Loading system prompt for assistant 'esther' in session c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+Loading prompt from S3 for assistant: esther
+Websocket connection is open
+Successfully loaded and cached prompt for assistant: esther (10124 characters)
+System prompt loaded successfully for esther (10124 characters)
+Setting up initial events for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74...
+Starting bidirectional stream for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74...
+Setting up prompt start event for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74...
+[PROMPT DEBUG] Setting up system prompt for channel c2db1c4f-7d21-42c1-a426-7ee24a2aff74 (loaded from S3)
+Setting up systemPrompt events for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74...
+[PROMPT DEBUG] System prompt content length: 10124 characters
+[PROMPT DEBUG] System prompt preview: # SCHEDULING INSTRUCTIONS
+
+## nova_sonic_scheduling
+
+The goal isn’t to actually check the calendar. The goal is to just get them to commit to a specific time and date. Make sure you have a time and a ...
+[PROMPT DEBUG] Adding textInput event with system prompt to queue
+Setting up startAudioContent event for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74...
+Using audio content ID: a6f3b7dd-785a-49b5-84be-c1124536cc0f
+Initial events setup complete for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+Channel c2db1c4f-7d21-42c1-a426-7ee24a2aff74 has 1 connected clients
+AsyncIterable iterator requested for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+[BARGE-IN] 🎯 Created barge-in handler for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+Stream established for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74, processing responses...
+Event keys for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74:  [ 'usageEvent' ]
+Handling other events
+Event keys for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74:  [ 'usageEvent' ]
+Handling other events
+Event keys for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74:  [ 'usageEvent' ]
+Handling other events
+Event keys for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74:  [ 'usageEvent' ]
+Handling other events
+Running session cleanup check
+Client disconnected from channel c2db1c4f-7d21-42c1-a426-7ee24a2aff74, 0 clients remaining
+Last client left channel c2db1c4f-7d21-42c1-a426-7ee24a2aff74, cleaning up resources
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "end_time": "2025-06-26T19:02:39.000Z",
+  "uuid": "c2db1c4f-7d21-42c1-a426-7ee24a2aff74",
+  "network": "310260",
+  "duration": "61",
+  "disconnected_by": "user",
+  "start_time": "2025-06-26T19:01:38.000Z",
+  "rate": "0.01314000",
+  "price": "0.01335900",
+  "from": "12135235735",
+  "to": "13472005533",
+  "conversation_uuid": "CON-64153c04-cb2d-40d4-a23a-269e56dae088",
+  "status": "completed",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T19:02:38.203Z"
+}
+🔔 [WEBHOOK] Event details - Status: completed, UUID: c2db1c4f-7d21-42c1-a426-7ee24a2aff74, ConversationUUID: CON-64153c04-cb2d-40d4-a23a-269e56dae088
+🔔 [WEBHOOK] Call c2db1c4f-7d21-42c1-a426-7ee24a2aff74 ended with status: completed - Finalizing transcript
+🔔 [WEBHOOK] Calling endCall for transcript logger with UUID: c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+📝 Added completion footer to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-c2db1c4f-7d21-42c1-a426-7ee24a2aff74-2025-06-26T19-01-38-309Z.md
+📝 Final DynamoDB update completed for c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+✅ Call c2db1c4f-7d21-42c1-a426-7ee24a2aff74 completed - duration: 60s - saved to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-c2db1c4f-7d21-42c1-a426-7ee24a2aff74-2025-06-26T19-01-38-309Z.md AND DynamoDB
+🔔 [WEBHOOK] Successfully finalized transcript for call c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+Response stream processing complete for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+Stream completed for channel: c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+Closing session c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+Session c2db1c4f-7d21-42c1-a426-7ee24a2aff74 closed.
+Queue empty or session inactive: c2db1c4f-7d21-42c1-a426-7ee24a2aff74 
+Session c2db1c4f-7d21-42c1-a426-7ee24a2aff74 close completed
+⚠️ No session found for call c2db1c4f-7d21-42c1-a426-7ee24a2aff74 - attempting graceful DynamoDB finalization
+✅ Gracefully finalized DynamoDB record for c2db1c4f-7d21-42c1-a426-7ee24a2aff74 (no local session)
+Successfully cleaned up channel: c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+[BARGE-IN] 🧹 Cleaned up barge-in handler for session c2db1c4f-7d21-42c1-a426-7ee24a2aff74
+Running session cleanup check
+Running session cleanup check
+Initiating AI-powered outbound call to +13472005533
+AI call initiated successfully. UUID: bf33d6c9-46c8-44c4-8e73-6025299435c7
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "bf33d6c9-46c8-44c4-8e73-6025299435c7",
+  "conversation_uuid": "CON-3793f3a7-2149-4493-8247-3bb2dd4ae64d",
+  "status": "ringing",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T19:03:55.556Z"
+}
+🔔 [WEBHOOK] Event details - Status: ringing, UUID: bf33d6c9-46c8-44c4-8e73-6025299435c7, ConversationUUID: CON-3793f3a7-2149-4493-8247-3bb2dd4ae64d
+🔔 [WEBHOOK] Event status 'ringing' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "bf33d6c9-46c8-44c4-8e73-6025299435c7",
+  "conversation_uuid": "CON-3793f3a7-2149-4493-8247-3bb2dd4ae64d",
+  "status": "started",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T19:03:55.556Z"
+}
+🔔 [WEBHOOK] Event details - Status: started, UUID: bf33d6c9-46c8-44c4-8e73-6025299435c7, ConversationUUID: CON-3793f3a7-2149-4493-8247-3bb2dd4ae64d
+🔔 [WEBHOOK] Event status 'started' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "start_time": null,
+  "headers": {},
+  "rate": null,
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "bf33d6c9-46c8-44c4-8e73-6025299435c7",
+  "conversation_uuid": "CON-3793f3a7-2149-4493-8247-3bb2dd4ae64d",
+  "status": "answered",
+  "direction": "outbound",
+  "network": null,
+  "timestamp": "2025-06-26T19:04:00.456Z"
+}
+🔔 [WEBHOOK] Event details - Status: answered, UUID: bf33d6c9-46c8-44c4-8e73-6025299435c7, ConversationUUID: CON-3793f3a7-2149-4493-8247-3bb2dd4ae64d
+🔔 [WEBHOOK] Event status 'answered' - not a completion event, ignoring
+[WEBHOOK] Handling outbound call from +12135235735 to +13472005533, UUID: bf33d6c9-46c8-44c4-8e73-6025299435c7
+🔔 [WEBHOOK] Starting transcript logging for outbound call bf33d6c9-46c8-44c4-8e73-6025299435c7
+📝 Started call bf33d6c9-46c8-44c4-8e73-6025299435c7 - writing to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-bf33d6c9-46c8-44c4-8e73-6025299435c7-2025-06-26T19-04-00-563Z.md AND DynamoDB
+[WEBHOOK] Responding with WebSocket URI: wss://gospelshare.io/socket?channel=bf33d6c9-46c8-44c4-8e73-6025299435c7
+Client requesting connection to channel: bf33d6c9-46c8-44c4-8e73-6025299435c7
+Creating new channel: bf33d6c9-46c8-44c4-8e73-6025299435c7
+Loading system prompt for assistant 'esther' in session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Using cached prompt for assistant: esther
+Websocket connection is open
+System prompt loaded successfully for esther (10124 characters)
+Setting up initial events for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+Starting bidirectional stream for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+Setting up prompt start event for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+[PROMPT DEBUG] Setting up system prompt for channel bf33d6c9-46c8-44c4-8e73-6025299435c7 (loaded from S3)
+Setting up systemPrompt events for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+[PROMPT DEBUG] System prompt content length: 10124 characters
+[PROMPT DEBUG] System prompt preview: # SCHEDULING INSTRUCTIONS
+
+## nova_sonic_scheduling
+
+The goal isn’t to actually check the calendar. The goal is to just get them to commit to a specific time and date. Make sure you have a time and a ...
+[PROMPT DEBUG] Adding textInput event with system prompt to queue
+Setting up startAudioContent event for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+Using audio content ID: 830db9be-41ff-4419-9c43-f7154345fbf0
+Initial events setup complete for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Channel bf33d6c9-46c8-44c4-8e73-6025299435c7 has 1 connected clients
+AsyncIterable iterator requested for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] 🎯 Created barge-in handler for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Stream established for session bf33d6c9-46c8-44c4-8e73-6025299435c7, processing responses...
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'completionStart' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Human text: yes ah what may i say it's in reference to...
+📝 Real-time file write: [Human] yes ah what may i say it's in reference to...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Human] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text: Great! This is in reference to our Christian Evang...
+📝 Real-time file write: [Assistant] Great! This is in reference to our Christian Evang...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text:  May I ask, what day and time would work best for ...
+📝 Real-time file write: [Assistant]  May I ask, what day and time would work best for ...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text:  to discuss this further?...
+📝 Real-time file write: [Assistant]  to discuss this further?...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text: Great! This is in reference to our Christian Evang...
+📝 Real-time file write: [Assistant] Great! This is in reference to our Christian Evang...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text:  May I ask, what day and time would work best for ...
+📝 Real-time file write: [Assistant]  May I ask, what day and time would work best for ...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text:  to discuss this further?...
+📝 Real-time file write: [Assistant]  to discuss this further?...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Human text: ah what is your website...
+📝 Real-time file write: [Human] ah what is your website...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Human] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text: Our website is GlobalOutreachEvent.Com. We special...
+📝 Real-time file write: [Assistant] Our website is GlobalOutreachEvent.Com. We special...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text:  Would you be able to provide a preferred date and...
+📝 Real-time file write: [Assistant]  Would you be able to provide a preferred date and...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text: Our website is GlobalOutreachEvent.Com. We special...
+📝 Real-time file write: [Assistant] Our website is GlobalOutreachEvent.Com. We special...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text:  Would you be able to provide a preferred date and...
+📝 Real-time file write: [Assistant]  Would you be able to provide a preferred date and...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Running session cleanup check
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Human text: ah yeah just one moment one question where are you...
+📝 Real-time file write: [Human] ah yeah just one moment one question where are you...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Human] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text: I'm calling from GlobalOutreachEvent.Com. We're re...
+📝 Real-time file write: [Assistant] I'm calling from GlobalOutreachEvent.Com. We're re...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text:   If you could provide a preferred date and time f...
+📝 Real-time file write: [Assistant]   If you could provide a preferred date and time f...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text: I'm calling from GlobalOutreachEvent.Com. We're re...
+📝 Real-time file write: [Assistant] I'm calling from GlobalOutreachEvent.Com. We're re...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text:   If you could provide a preferred date and time f...
+📝 Real-time file write: [Assistant]   If you could provide a preferred date and time f...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Human text: okay and he'll explain all the details to me durin...
+📝 Real-time file write: [Human] okay and he'll explain all the details to me durin...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Human] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Human text: fifteen minute meeting...
+📝 Real-time file write: [Human] fifteen minute meeting...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+📝 Real-time DynamoDB update: [Human] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text: Absolutely, Mike will be happy to explain all the ...
+📝 Real-time file write: [Assistant] Absolutely, Mike will be happy to explain all the ...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+[TRANSCRIPT] Adding Assistant text:   Could you please share a preferred date and time...
+📝 Real-time file write: [Assistant]   Could you please share a preferred date and time...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for bf33d6c9-46c8-44c4-8e73-6025299435c7: true
+📝 Real-time DynamoDB update: [Assistant] for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+🚫 BARGE-IN DETECTED - User interrupting AI
+[BARGE-IN] 🚫 INTERRUPTION DETECTED in session bf33d6c9-46c8-44c4-8e73-6025299435c7!
+Event keys for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  [ 'usageEvent' ]
+Handling other events
+🚫 BARGE-IN DETECTED - User interrupting AI
+[BARGE-IN] 🚫 INTERRUPTION DETECTED in session bf33d6c9-46c8-44c4-8e73-6025299435c7!
+🚫 BARGE-IN DETECTED - User interrupting AI
+[BARGE-IN] 🚫 INTERRUPTION DETECTED in session bf33d6c9-46c8-44c4-8e73-6025299435c7!
+[BARGE-IN] Transitioned to listening mode
+🚫 BARGE-IN DETECTED - User interrupting AI
+[BARGE-IN] 🚫 INTERRUPTION DETECTED in session bf33d6c9-46c8-44c4-8e73-6025299435c7!
+[BARGE-IN] Transitioned to listening mode
+🚫 BARGE-IN DETECTED - User interrupting AI
+[BARGE-IN] 🚫 INTERRUPTION DETECTED in session bf33d6c9-46c8-44c4-8e73-6025299435c7!
+[BARGE-IN] Transitioned to listening mode
+🚫 BARGE-IN DETECTED - User interrupting AI
+[BARGE-IN] 🚫 INTERRUPTION DETECTED in session bf33d6c9-46c8-44c4-8e73-6025299435c7!
+[BARGE-IN] Transitioned to listening mode
+[BARGE-IN] ✅ Stopped AI audio for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Setting up startAudioContent event for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+Using audio content ID: 830db9be-41ff-4419-9c43-f7154345fbf0
+Initial events setup complete for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Restarted audio input for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Stopped AI audio for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Setting up startAudioContent event for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+Using audio content ID: 830db9be-41ff-4419-9c43-f7154345fbf0
+Initial events setup complete for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Restarted audio input for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+🚫 BARGE-IN DETECTED - User interrupting AI
+[BARGE-IN] 🚫 INTERRUPTION DETECTED in session bf33d6c9-46c8-44c4-8e73-6025299435c7!
+🚫 BARGE-IN DETECTED - User interrupting AI
+[BARGE-IN] 🚫 INTERRUPTION DETECTED in session bf33d6c9-46c8-44c4-8e73-6025299435c7!
+[BARGE-IN] Transitioned to listening mode
+[BARGE-IN] ✅ Stopped AI audio for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Setting up startAudioContent event for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+Using audio content ID: 830db9be-41ff-4419-9c43-f7154345fbf0
+Initial events setup complete for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Restarted audio input for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+🚫 BARGE-IN DETECTED - User interrupting AI
+[BARGE-IN] 🚫 INTERRUPTION DETECTED in session bf33d6c9-46c8-44c4-8e73-6025299435c7!
+[BARGE-IN] ✅ Stopped AI audio for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Setting up startAudioContent event for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+Using audio content ID: 830db9be-41ff-4419-9c43-f7154345fbf0
+Initial events setup complete for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Restarted audio input for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] Transitioned to listening mode
+[BARGE-IN] ✅ Stopped AI audio for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Setting up startAudioContent event for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+Using audio content ID: 830db9be-41ff-4419-9c43-f7154345fbf0
+Initial events setup complete for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Restarted audio input for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+🚫 BARGE-IN DETECTED - User interrupting AI
+[BARGE-IN] 🚫 INTERRUPTION DETECTED in session bf33d6c9-46c8-44c4-8e73-6025299435c7!
+🚫 BARGE-IN DETECTED - User interrupting AI
+[BARGE-IN] 🚫 INTERRUPTION DETECTED in session bf33d6c9-46c8-44c4-8e73-6025299435c7!
+[BARGE-IN] ✅ Stopped AI audio for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Setting up startAudioContent event for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+Using audio content ID: 830db9be-41ff-4419-9c43-f7154345fbf0
+Initial events setup complete for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Restarted audio input for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] Transitioned to listening mode
+[BARGE-IN] ✅ Stopped AI audio for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Setting up startAudioContent event for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+Using audio content ID: 830db9be-41ff-4419-9c43-f7154345fbf0
+Initial events setup complete for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Restarted audio input for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Stopped AI audio for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Setting up startAudioContent event for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+Using audio content ID: 830db9be-41ff-4419-9c43-f7154345fbf0
+Initial events setup complete for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Restarted audio input for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Stopped AI audio for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Setting up startAudioContent event for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+Using audio content ID: 830db9be-41ff-4419-9c43-f7154345fbf0
+Initial events setup complete for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Restarted audio input for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Stopped AI audio for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Setting up startAudioContent event for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+Using audio content ID: 830db9be-41ff-4419-9c43-f7154345fbf0
+Initial events setup complete for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Restarted audio input for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Stopped AI audio for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Setting up startAudioContent event for session bf33d6c9-46c8-44c4-8e73-6025299435c7...
+Using audio content ID: 830db9be-41ff-4419-9c43-f7154345fbf0
+Initial events setup complete for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] ✅ Restarted audio input for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Error processing response stream for session bf33d6c9-46c8-44c4-8e73-6025299435c7:  ValidationException: RequestId=0ce1a278-792e-4cc2-b708-5057d3286b56 : Error(s):
+Error 1 : No open content found for content name: 830db9be-41ff-4419-9c43-f7154345fbf0
+
+    at de_ValidationExceptionRes (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@aws-sdk/client-bedrock-runtime/dist-cjs/index.js:1699:21)
+    at de_ValidationException_event (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@aws-sdk/client-bedrock-runtime/dist-cjs/index.js:1969:10)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@aws-sdk/client-bedrock-runtime/dist-cjs/index.js:1811:30
+    at async Object.deserializer (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@smithy/eventstream-serde-universal/dist-cjs/index.js:127:37)
+    at async SmithyMessageDecoderStream.asyncIterator (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/node_modules/@smithy/eventstream-codec/dist-cjs/index.js:438:28)
+    at async NovaSonicBidirectionalStreamClient.processResponseStream (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/src/client.ts:446:24)
+    at async NovaSonicBidirectionalStreamClient.initiateSession (/home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/sample/src/client.ts:265:7) {
+  '$fault': 'client',
+  '$metadata': {
+    httpStatusCode: undefined,
+    requestId: undefined,
+    extendedRequestId: undefined,
+    cfId: undefined
+  }
+}
+error {
+  source: 'responseStream',
+  message: 'Error processing response stream',
+  details: 'RequestId=0ce1a278-792e-4cc2-b708-5057d3286b56 : Error(s):\n' +
+    'Error 1 : No open content found for content name: 830db9be-41ff-4419-9c43-f7154345fbf0\n'
+}
+Running session cleanup check
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "end_time": "2025-06-26T19:06:02.000Z",
+  "uuid": "bf33d6c9-46c8-44c4-8e73-6025299435c7",
+  "network": "310260",
+  "duration": "122",
+  "disconnected_by": "user",
+  "start_time": "2025-06-26T19:04:00.000Z",
+  "rate": "0.01314000",
+  "price": "0.02671800",
+  "from": "12135235735",
+  "to": "13472005533",
+  "conversation_uuid": "CON-3793f3a7-2149-4493-8247-3bb2dd4ae64d",
+  "status": "completed",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T19:06:01.984Z"
+}
+🔔 [WEBHOOK] Event details - Status: completed, UUID: bf33d6c9-46c8-44c4-8e73-6025299435c7, ConversationUUID: CON-3793f3a7-2149-4493-8247-3bb2dd4ae64d
+🔔 [WEBHOOK] Call bf33d6c9-46c8-44c4-8e73-6025299435c7 ended with status: completed - Finalizing transcript
+🔔 [WEBHOOK] Calling endCall for transcript logger with UUID: bf33d6c9-46c8-44c4-8e73-6025299435c7
+📝 Added completion footer to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-bf33d6c9-46c8-44c4-8e73-6025299435c7-2025-06-26T19-04-00-563Z.md
+📝 Final DynamoDB update completed for bf33d6c9-46c8-44c4-8e73-6025299435c7
+✅ Call bf33d6c9-46c8-44c4-8e73-6025299435c7 completed - duration: 122s - saved to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-bf33d6c9-46c8-44c4-8e73-6025299435c7-2025-06-26T19-04-00-563Z.md AND DynamoDB
+🔔 [WEBHOOK] Successfully finalized transcript for call bf33d6c9-46c8-44c4-8e73-6025299435c7
+Client disconnected from channel bf33d6c9-46c8-44c4-8e73-6025299435c7, 0 clients remaining
+Last client left channel bf33d6c9-46c8-44c4-8e73-6025299435c7, cleaning up resources
+Closing session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Session bf33d6c9-46c8-44c4-8e73-6025299435c7 closed.
+Queue empty or session inactive: bf33d6c9-46c8-44c4-8e73-6025299435c7 
+Session bf33d6c9-46c8-44c4-8e73-6025299435c7 close completed
+⚠️ No session found for call bf33d6c9-46c8-44c4-8e73-6025299435c7 - attempting graceful DynamoDB finalization
+✅ Gracefully finalized DynamoDB record for bf33d6c9-46c8-44c4-8e73-6025299435c7 (no local session)
+Successfully cleaned up channel: bf33d6c9-46c8-44c4-8e73-6025299435c7
+[BARGE-IN] 🧹 Cleaned up barge-in handler for session bf33d6c9-46c8-44c4-8e73-6025299435c7
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Initiating AI-powered outbound call to +13472005533
+AI call initiated successfully. UUID: d271c57f-e137-4942-987a-a68c02041092
+Running session cleanup check
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "d271c57f-e137-4942-987a-a68c02041092",
+  "conversation_uuid": "CON-503a5688-ab5c-46fe-974a-295124baac46",
+  "status": "started",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T19:16:50.759Z"
+}
+🔔 [WEBHOOK] Event details - Status: started, UUID: d271c57f-e137-4942-987a-a68c02041092, ConversationUUID: CON-503a5688-ab5c-46fe-974a-295124baac46
+🔔 [WEBHOOK] Event status 'started' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "d271c57f-e137-4942-987a-a68c02041092",
+  "conversation_uuid": "CON-503a5688-ab5c-46fe-974a-295124baac46",
+  "status": "ringing",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T19:16:50.759Z"
+}
+🔔 [WEBHOOK] Event details - Status: ringing, UUID: d271c57f-e137-4942-987a-a68c02041092, ConversationUUID: CON-503a5688-ab5c-46fe-974a-295124baac46
+🔔 [WEBHOOK] Event status 'ringing' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "start_time": null,
+  "headers": {},
+  "rate": null,
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "d271c57f-e137-4942-987a-a68c02041092",
+  "conversation_uuid": "CON-503a5688-ab5c-46fe-974a-295124baac46",
+  "status": "answered",
+  "direction": "outbound",
+  "network": null,
+  "timestamp": "2025-06-26T19:16:53.583Z"
+}
+🔔 [WEBHOOK] Event details - Status: answered, UUID: d271c57f-e137-4942-987a-a68c02041092, ConversationUUID: CON-503a5688-ab5c-46fe-974a-295124baac46
+🔔 [WEBHOOK] Event status 'answered' - not a completion event, ignoring
+[WEBHOOK] Handling outbound call from +12135235735 to +13472005533, UUID: d271c57f-e137-4942-987a-a68c02041092
+🔔 [WEBHOOK] Starting transcript logging for outbound call d271c57f-e137-4942-987a-a68c02041092
+📝 Started call d271c57f-e137-4942-987a-a68c02041092 - writing to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-d271c57f-e137-4942-987a-a68c02041092-2025-06-26T19-16-53-814Z.md AND DynamoDB
+[WEBHOOK] Responding with WebSocket URI: wss://gospelshare.io/socket?channel=d271c57f-e137-4942-987a-a68c02041092
+Client requesting connection to channel: d271c57f-e137-4942-987a-a68c02041092
+Creating new channel: d271c57f-e137-4942-987a-a68c02041092
+Loading system prompt for assistant 'esther' in session d271c57f-e137-4942-987a-a68c02041092
+Loading prompt from S3 for assistant: esther
+Websocket connection is open
+Successfully loaded and cached prompt for assistant: esther (10124 characters)
+System prompt loaded successfully for esther (10124 characters)
+Setting up initial events for session d271c57f-e137-4942-987a-a68c02041092...
+Starting bidirectional stream for session d271c57f-e137-4942-987a-a68c02041092...
+Setting up prompt start event for session d271c57f-e137-4942-987a-a68c02041092...
+[PROMPT DEBUG] Setting up system prompt for channel d271c57f-e137-4942-987a-a68c02041092 (loaded from S3)
+Setting up systemPrompt events for session d271c57f-e137-4942-987a-a68c02041092...
+[PROMPT DEBUG] System prompt content length: 10124 characters
+[PROMPT DEBUG] System prompt preview: # SCHEDULING INSTRUCTIONS
+
+## nova_sonic_scheduling
+
+The goal isn’t to actually check the calendar. The goal is to just get them to commit to a specific time and date. Make sure you have a time and a ...
+[PROMPT DEBUG] Adding textInput event with system prompt to queue
+Setting up startAudioContent event for session d271c57f-e137-4942-987a-a68c02041092...
+Using audio content ID: 12bd23e9-0858-4ac5-be62-6308a69f28cd
+Initial events setup complete for session d271c57f-e137-4942-987a-a68c02041092
+Channel d271c57f-e137-4942-987a-a68c02041092 has 1 connected clients
+AsyncIterable iterator requested for session d271c57f-e137-4942-987a-a68c02041092
+[BARGE-IN] 🎯 Created barge-in handler for session d271c57f-e137-4942-987a-a68c02041092
+Stream established for session d271c57f-e137-4942-987a-a68c02041092, processing responses...
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'completionStart' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Human text: uh yes uh i'm the uh lead...
+📝 Real-time file write: [Human] uh yes uh i'm the uh lead...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Human] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Human text: pastor how may i help you...
+📝 Real-time file write: [Human] pastor how may i help you...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Human] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text: Hello Pastor, thank you for taking my call. I'm ca...
+📝 Real-time file write: [Assistant] Hello Pastor, thank you for taking my call. I'm ca...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text:  We're a Christian Evangelical Outreach program, a...
+📝 Real-time file write: [Assistant]  We're a Christian Evangelical Outreach program, a...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text:  When would be a good time for you?...
+📝 Real-time file write: [Assistant]  When would be a good time for you?...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text: Hello Pastor, thank you for taking my call. I'm ca...
+📝 Real-time file write: [Assistant] Hello Pastor, thank you for taking my call. I'm ca...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text:  We're a Christian Evangelical Outreach program, a...
+📝 Real-time file write: [Assistant]  We're a Christian Evangelical Outreach program, a...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text:  When would be a good time for you?...
+📝 Real-time file write: [Assistant]  When would be a good time for you?...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Human text: uh now is fine...
+📝 Real-time file write: [Human] uh now is fine...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Human] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text: Great, let's set up a time. What day works best fo...
+📝 Real-time file write: [Assistant] Great, let's set up a time. What day works best fo...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text:   And would you prefer morning or afternoon?...
+📝 Real-time file write: [Assistant]   And would you prefer morning or afternoon?...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text: Great, let's set up a time. What day works best fo...
+📝 Real-time file write: [Assistant] Great, let's set up a time. What day works best fo...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text: { "interrupted" : true }...
+📝 Real-time file write: [Assistant] { "interrupted" : true }...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text:   And would you prefer morning or afternoon?...
+📝 Real-time file write: [Assistant]   And would you prefer morning or afternoon?...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Human text: no i'm saying right now i can i can i can do it ri...
+📝 Real-time file write: [Human] no i'm saying right now i can i can i can do it ri...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Human] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Human text: now...
+📝 Real-time file write: [Human] now...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+📝 Real-time DynamoDB update: [Human] for call d271c57f-e137-4942-987a-a68c02041092
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text: Perfect, let's do it now then. I'll send you a Zoo...
+📝 Real-time file write: [Assistant] Perfect, let's do it now then. I'll send you a Zoo...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text:   Can you please provide me with your email addres...
+📝 Real-time file write: [Assistant]   Can you please provide me with your email addres...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text: Perfect, let's do it now then. I'll send you a Zoo...
+📝 Real-time file write: [Assistant] Perfect, let's do it now then. I'll send you a Zoo...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text:   Can you please provide me with your email addres...
+📝 Real-time file write: [Assistant]   Can you please provide me with your email addres...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+Running session cleanup check
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Human text: yes it's m d lawrence u s...
+📝 Real-time file write: [Human] yes it's m d lawrence u s...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Human] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Human text: a at gmail dot com...
+📝 Real-time file write: [Human] a at gmail dot com...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+📝 Real-time DynamoDB update: [Human] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text: Thank you, Pastor. I've sent the Zoom link to your...
+📝 Real-time file write: [Assistant] Thank you, Pastor. I've sent the Zoom link to your...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text:  See you in a few moments....
+📝 Real-time file write: [Assistant]  See you in a few moments....
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text: Thank you, Pastor. I've sent the Zoom link to your...
+📝 Real-time file write: [Assistant] Thank you, Pastor. I've sent the Zoom link to your...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: true
+[TRANSCRIPT] Adding Assistant text:  See you in a few moments....
+📝 Real-time file write: [Assistant]  See you in a few moments....
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for d271c57f-e137-4942-987a-a68c02041092: false
+📝 Real-time DynamoDB update: [Assistant] for call d271c57f-e137-4942-987a-a68c02041092
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "end_time": "2025-06-26T19:18:01.000Z",
+  "uuid": "d271c57f-e137-4942-987a-a68c02041092",
+  "network": "310260",
+  "duration": "68",
+  "disconnected_by": "user",
+  "start_time": "2025-06-26T19:16:53.000Z",
+  "rate": "0.01314000",
+  "price": "0.01489200",
+  "from": "12135235735",
+  "to": "13472005533",
+  "conversation_uuid": "CON-503a5688-ab5c-46fe-974a-295124baac46",
+  "status": "completed",
+  "direction": "outbound",
+  "timestamp": "2025-06-26T19:18:00.999Z"
+}
+🔔 [WEBHOOK] Event details - Status: completed, UUID: d271c57f-e137-4942-987a-a68c02041092, ConversationUUID: CON-503a5688-ab5c-46fe-974a-295124baac46
+🔔 [WEBHOOK] Call d271c57f-e137-4942-987a-a68c02041092 ended with status: completed - Finalizing transcript
+🔔 [WEBHOOK] Calling endCall for transcript logger with UUID: d271c57f-e137-4942-987a-a68c02041092
+📝 Added completion footer to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-d271c57f-e137-4942-987a-a68c02041092-2025-06-26T19-16-53-814Z.md
+📝 Final DynamoDB update completed for d271c57f-e137-4942-987a-a68c02041092
+✅ Call d271c57f-e137-4942-987a-a68c02041092 completed - duration: 68s - saved to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-d271c57f-e137-4942-987a-a68c02041092-2025-06-26T19-16-53-814Z.md AND DynamoDB
+🔔 [WEBHOOK] Successfully finalized transcript for call d271c57f-e137-4942-987a-a68c02041092
+Client disconnected from channel d271c57f-e137-4942-987a-a68c02041092, 0 clients remaining
+Last client left channel d271c57f-e137-4942-987a-a68c02041092, cleaning up resources
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'usageEvent' ]
+Handling other events
+Event keys for session d271c57f-e137-4942-987a-a68c02041092:  [ 'completionEnd' ]
+Handling other events
+Response stream processing complete for session d271c57f-e137-4942-987a-a68c02041092
+Stream completed for channel: d271c57f-e137-4942-987a-a68c02041092
+Closing session d271c57f-e137-4942-987a-a68c02041092
+Session d271c57f-e137-4942-987a-a68c02041092 closed.
+Queue empty or session inactive: d271c57f-e137-4942-987a-a68c02041092 
+Session d271c57f-e137-4942-987a-a68c02041092 close completed
+⚠️ No session found for call d271c57f-e137-4942-987a-a68c02041092 - attempting graceful DynamoDB finalization
+✅ Gracefully finalized DynamoDB record for d271c57f-e137-4942-987a-a68c02041092 (no local session)
+Successfully cleaned up channel: d271c57f-e137-4942-987a-a68c02041092
+[BARGE-IN] 🧹 Cleaned up barge-in handler for session d271c57f-e137-4942-987a-a68c02041092
 Running session cleanup check
 Running session cleanup check
 Running session cleanup check
@@ -72,8 +2248,1019 @@ Running session cleanup check
 Running session cleanup check
 Running session cleanup check
 Running session cleanup check
-Dashboard request from: 127.0.0.1
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Dashboard request from: 3.138.185.30
 Serving index.html from: /home/ec2-user/environment/map-20250618-mdl-rails/index.html
 Error: ENOENT: no such file or directory, stat '/home/ec2-user/environment/map-20250618-mdl-rails/index.html'
+Running session cleanup check
+Running session cleanup check
+Dashboard request from: 3.138.185.30
+Serving index.html from: /home/ec2-user/environment/map-20250618-mdl-rails/index.html
+Error: ENOENT: no such file or directory, stat '/home/ec2-user/environment/map-20250618-mdl-rails/index.html'
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Dashboard request from: 15.158.30.111
+Serving index.html from: /home/ec2-user/environment/map-20250618-mdl-rails/index.html
+Error: ENOENT: no such file or directory, stat '/home/ec2-user/environment/map-20250618-mdl-rails/index.html'
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Dashboard request from: 95.215.0.144
+Serving index.html from: /home/ec2-user/environment/map-20250618-mdl-rails/index.html
+Error: ENOENT: no such file or directory, stat '/home/ec2-user/environment/map-20250618-mdl-rails/index.html'
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Dashboard request from: 45.79.207.181
+Serving index.html from: /home/ec2-user/environment/map-20250618-mdl-rails/index.html
+Error: ENOENT: no such file or directory, stat '/home/ec2-user/environment/map-20250618-mdl-rails/index.html'
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Initiating AI-powered outbound call to +15169380383
+Initiating AI-powered outbound call to +13472005533
+AI call initiated successfully. UUID: 702298cc-abba-4f5e-bd98-c3d5d81cc311
+AI call initiated successfully. UUID: da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1",
+  "conversation_uuid": "CON-fcc91b87-e518-4dc8-91ea-025bb9e2c127",
+  "status": "ringing",
+  "direction": "outbound",
+  "timestamp": "2025-06-27T01:04:10.178Z"
+}
+🔔 [WEBHOOK] Event details - Status: ringing, UUID: da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1, ConversationUUID: CON-fcc91b87-e518-4dc8-91ea-025bb9e2c127
+🔔 [WEBHOOK] Event status 'ringing' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1",
+  "conversation_uuid": "CON-fcc91b87-e518-4dc8-91ea-025bb9e2c127",
+  "status": "started",
+  "direction": "outbound",
+  "timestamp": "2025-06-27T01:04:10.178Z"
+}
+🔔 [WEBHOOK] Event details - Status: started, UUID: da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1, ConversationUUID: CON-fcc91b87-e518-4dc8-91ea-025bb9e2c127
+🔔 [WEBHOOK] Event status 'started' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "+15169380383",
+  "uuid": "702298cc-abba-4f5e-bd98-c3d5d81cc311",
+  "conversation_uuid": "CON-d9c87b6a-31b9-4638-b127-81dde6bacb07",
+  "status": "ringing",
+  "direction": "outbound",
+  "timestamp": "2025-06-27T01:04:11.009Z"
+}
+🔔 [WEBHOOK] Event details - Status: ringing, UUID: 702298cc-abba-4f5e-bd98-c3d5d81cc311, ConversationUUID: CON-d9c87b6a-31b9-4638-b127-81dde6bacb07
+🔔 [WEBHOOK] Event status 'ringing' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "from": "+12135235735",
+  "to": "+15169380383",
+  "uuid": "702298cc-abba-4f5e-bd98-c3d5d81cc311",
+  "conversation_uuid": "CON-d9c87b6a-31b9-4638-b127-81dde6bacb07",
+  "status": "started",
+  "direction": "outbound",
+  "timestamp": "2025-06-27T01:04:11.009Z"
+}
+🔔 [WEBHOOK] Event details - Status: started, UUID: 702298cc-abba-4f5e-bd98-c3d5d81cc311, ConversationUUID: CON-d9c87b6a-31b9-4638-b127-81dde6bacb07
+🔔 [WEBHOOK] Event status 'started' - not a completion event, ignoring
+🔔 [WEBHOOK] Vonage event received: {
+  "start_time": null,
+  "headers": {},
+  "rate": null,
+  "from": "+12135235735",
+  "to": "+15169380383",
+  "uuid": "702298cc-abba-4f5e-bd98-c3d5d81cc311",
+  "conversation_uuid": "CON-d9c87b6a-31b9-4638-b127-81dde6bacb07",
+  "status": "answered",
+  "direction": "outbound",
+  "network": null,
+  "timestamp": "2025-06-27T01:04:16.264Z"
+}
+🔔 [WEBHOOK] Event details - Status: answered, UUID: 702298cc-abba-4f5e-bd98-c3d5d81cc311, ConversationUUID: CON-d9c87b6a-31b9-4638-b127-81dde6bacb07
+🔔 [WEBHOOK] Event status 'answered' - not a completion event, ignoring
+[WEBHOOK] Handling outbound call from +12135235735 to +15169380383, UUID: 702298cc-abba-4f5e-bd98-c3d5d81cc311
+🔔 [WEBHOOK] Starting transcript logging for outbound call 702298cc-abba-4f5e-bd98-c3d5d81cc311
+📝 Started call 702298cc-abba-4f5e-bd98-c3d5d81cc311 - writing to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-702298cc-abba-4f5e-bd98-c3d5d81cc311-2025-06-27T01-04-16-340Z.md AND DynamoDB
+[WEBHOOK] Responding with WebSocket URI: wss://gospelshare.io/socket?channel=702298cc-abba-4f5e-bd98-c3d5d81cc311
+🔔 [WEBHOOK] Vonage event received: {
+  "start_time": null,
+  "headers": {},
+  "rate": null,
+  "from": "+12135235735",
+  "to": "+13472005533",
+  "uuid": "da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1",
+  "conversation_uuid": "CON-fcc91b87-e518-4dc8-91ea-025bb9e2c127",
+  "status": "answered",
+  "direction": "outbound",
+  "network": null,
+  "timestamp": "2025-06-27T01:04:17.411Z"
+}
+🔔 [WEBHOOK] Event details - Status: answered, UUID: da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1, ConversationUUID: CON-fcc91b87-e518-4dc8-91ea-025bb9e2c127
+🔔 [WEBHOOK] Event status 'answered' - not a completion event, ignoring
+[WEBHOOK] Handling outbound call from +12135235735 to +13472005533, UUID: da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+🔔 [WEBHOOK] Starting transcript logging for outbound call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+📝 Started call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1 - writing to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1-2025-06-27T01-04-17-472Z.md AND DynamoDB
+[WEBHOOK] Responding with WebSocket URI: wss://gospelshare.io/socket?channel=da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Client requesting connection to channel: 702298cc-abba-4f5e-bd98-c3d5d81cc311
+Creating new channel: 702298cc-abba-4f5e-bd98-c3d5d81cc311
+Loading system prompt for assistant 'esther' in session 702298cc-abba-4f5e-bd98-c3d5d81cc311
+Loading prompt from S3 for assistant: esther
+Websocket connection is open
+Successfully loaded and cached prompt for assistant: esther (10124 characters)
+System prompt loaded successfully for esther (10124 characters)
+Setting up initial events for session 702298cc-abba-4f5e-bd98-c3d5d81cc311...
+Starting bidirectional stream for session 702298cc-abba-4f5e-bd98-c3d5d81cc311...
+Setting up prompt start event for session 702298cc-abba-4f5e-bd98-c3d5d81cc311...
+[PROMPT DEBUG] Setting up system prompt for channel 702298cc-abba-4f5e-bd98-c3d5d81cc311 (loaded from S3)
+Setting up systemPrompt events for session 702298cc-abba-4f5e-bd98-c3d5d81cc311...
+[PROMPT DEBUG] System prompt content length: 10124 characters
+[PROMPT DEBUG] System prompt preview: # SCHEDULING INSTRUCTIONS
+
+## nova_sonic_scheduling
+
+The goal isn’t to actually check the calendar. The goal is to just get them to commit to a specific time and date. Make sure you have a time and a ...
+[PROMPT DEBUG] Adding textInput event with system prompt to queue
+Setting up startAudioContent event for session 702298cc-abba-4f5e-bd98-c3d5d81cc311...
+Using audio content ID: 399cc37c-c19c-462a-9774-590dab13af49
+Initial events setup complete for session 702298cc-abba-4f5e-bd98-c3d5d81cc311
+Channel 702298cc-abba-4f5e-bd98-c3d5d81cc311 has 1 connected clients
+AsyncIterable iterator requested for session 702298cc-abba-4f5e-bd98-c3d5d81cc311
+[BARGE-IN] 🎯 Created barge-in handler for session 702298cc-abba-4f5e-bd98-c3d5d81cc311
+Stream established for session 702298cc-abba-4f5e-bd98-c3d5d81cc311, processing responses...
+Event keys for session 702298cc-abba-4f5e-bd98-c3d5d81cc311:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 702298cc-abba-4f5e-bd98-c3d5d81cc311:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 702298cc-abba-4f5e-bd98-c3d5d81cc311:  [ 'usageEvent' ]
+Handling other events
+Event keys for session 702298cc-abba-4f5e-bd98-c3d5d81cc311:  [ 'usageEvent' ]
+Handling other events
+Client requesting connection to channel: da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Creating new channel: da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Loading system prompt for assistant 'esther' in session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Using cached prompt for assistant: esther
+Websocket connection is open
+System prompt loaded successfully for esther (10124 characters)
+Setting up initial events for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1...
+Starting bidirectional stream for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1...
+Setting up prompt start event for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1...
+[PROMPT DEBUG] Setting up system prompt for channel da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1 (loaded from S3)
+Setting up systemPrompt events for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1...
+[PROMPT DEBUG] System prompt content length: 10124 characters
+[PROMPT DEBUG] System prompt preview: # SCHEDULING INSTRUCTIONS
+
+## nova_sonic_scheduling
+
+The goal isn’t to actually check the calendar. The goal is to just get them to commit to a specific time and date. Make sure you have a time and a ...
+[PROMPT DEBUG] Adding textInput event with system prompt to queue
+Setting up startAudioContent event for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1...
+Using audio content ID: ceef2ac7-9c3d-46d1-8f73-cb1ade07798c
+Initial events setup complete for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Channel da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1 has 1 connected clients
+AsyncIterable iterator requested for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+[BARGE-IN] 🎯 Created barge-in handler for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Stream established for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1, processing responses...
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'completionStart' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Human text: yes uh hold one moment...
+📝 Real-time file write: [Human] yes uh hold one moment...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Human] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  Certainly, please hold on for a moment while I co...
+📝 Real-time file write: [Assistant]  Certainly, please hold on for a moment while I co...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text: { "interrupted" : true }...
+📝 Real-time file write: [Assistant] { "interrupted" : true }...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  Certainly, please hold on for a moment while I co...
+📝 Real-time file write: [Assistant]  Certainly, please hold on for a moment while I co...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Human text: hello how may i help you...
+📝 Real-time file write: [Human] hello how may i help you...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Human] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  Hello, this is Esther from GlobalOutreachEvent.Co...
+📝 Real-time file write: [Assistant]  Hello, this is Esther from GlobalOutreachEvent.Co...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  I'm reaching out to discuss a Christian Evangelic...
+📝 Real-time file write: [Assistant]  I'm reaching out to discuss a Christian Evangelic...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  We're interested in scheduling a brief 15-minute ...
+📝 Real-time file write: [Assistant]  We're interested in scheduling a brief 15-minute ...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  When would be a convenient time for you?...
+📝 Real-time file write: [Assistant]  When would be a convenient time for you?...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  Hello, this is Esther from GlobalOutreachEvent.Co...
+📝 Real-time file write: [Assistant]  Hello, this is Esther from GlobalOutreachEvent.Co...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  I'm reaching out to discuss a Christian Evangelic...
+📝 Real-time file write: [Assistant]  I'm reaching out to discuss a Christian Evangelic...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  We're interested in scheduling a brief 15-minute ...
+📝 Real-time file write: [Assistant]  We're interested in scheduling a brief 15-minute ...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Running session cleanup check
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  When would be a convenient time for you?...
+📝 Real-time file write: [Assistant]  When would be a convenient time for you?...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "end_time": "2025-06-27T01:04:51.000Z",
+  "uuid": "702298cc-abba-4f5e-bd98-c3d5d81cc311",
+  "network": "US-VOIP",
+  "duration": "35",
+  "disconnected_by": "user",
+  "start_time": "2025-06-27T01:04:16.000Z",
+  "rate": "0.01314000",
+  "price": "0.00766500",
+  "from": "12135235735",
+  "to": "15169380383",
+  "conversation_uuid": "CON-d9c87b6a-31b9-4638-b127-81dde6bacb07",
+  "status": "completed",
+  "direction": "outbound",
+  "timestamp": "2025-06-27T01:04:50.805Z"
+}
+🔔 [WEBHOOK] Event details - Status: completed, UUID: 702298cc-abba-4f5e-bd98-c3d5d81cc311, ConversationUUID: CON-d9c87b6a-31b9-4638-b127-81dde6bacb07
+🔔 [WEBHOOK] Call 702298cc-abba-4f5e-bd98-c3d5d81cc311 ended with status: completed - Finalizing transcript
+🔔 [WEBHOOK] Calling endCall for transcript logger with UUID: 702298cc-abba-4f5e-bd98-c3d5d81cc311
+📝 Added completion footer to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-702298cc-abba-4f5e-bd98-c3d5d81cc311-2025-06-27T01-04-16-340Z.md
+📝 Final DynamoDB update completed for 702298cc-abba-4f5e-bd98-c3d5d81cc311
+✅ Call 702298cc-abba-4f5e-bd98-c3d5d81cc311 completed - duration: 35s - saved to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-702298cc-abba-4f5e-bd98-c3d5d81cc311-2025-06-27T01-04-16-340Z.md AND DynamoDB
+🔔 [WEBHOOK] Successfully finalized transcript for call 702298cc-abba-4f5e-bd98-c3d5d81cc311
+Client disconnected from channel 702298cc-abba-4f5e-bd98-c3d5d81cc311, 0 clients remaining
+Last client left channel 702298cc-abba-4f5e-bd98-c3d5d81cc311, cleaning up resources
+Response stream processing complete for session 702298cc-abba-4f5e-bd98-c3d5d81cc311
+Stream completed for channel: 702298cc-abba-4f5e-bd98-c3d5d81cc311
+Closing session 702298cc-abba-4f5e-bd98-c3d5d81cc311
+Session 702298cc-abba-4f5e-bd98-c3d5d81cc311 closed.
+Queue empty or session inactive: 702298cc-abba-4f5e-bd98-c3d5d81cc311 
+Session 702298cc-abba-4f5e-bd98-c3d5d81cc311 close completed
+⚠️ No session found for call 702298cc-abba-4f5e-bd98-c3d5d81cc311 - attempting graceful DynamoDB finalization
+✅ Gracefully finalized DynamoDB record for 702298cc-abba-4f5e-bd98-c3d5d81cc311 (no local session)
+Successfully cleaned up channel: 702298cc-abba-4f5e-bd98-c3d5d81cc311
+[BARGE-IN] 🧹 Cleaned up barge-in handler for session 702298cc-abba-4f5e-bd98-c3d5d81cc311
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Human text: it's uh fifteen minutes...
+📝 Real-time file write: [Human] it's uh fifteen minutes...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Human] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  Great, a 15-minute meeting works perfectly.  Coul...
+📝 Real-time file write: [Assistant]  Great, a 15-minute meeting works perfectly.  Coul...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  Great, a 15-minute meeting works perfectly.  Coul...
+📝 Real-time file write: [Assistant]  Great, a 15-minute meeting works perfectly.  Coul...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Human text: yeah uh why don't we do it tuesday at 1 pm...
+📝 Real-time file write: [Human] yeah uh why don't we do it tuesday at 1 pm...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Human] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  Tuesday at 1 PM sounds good. Could you please pro...
+📝 Real-time file write: [Assistant]  Tuesday at 1 PM sounds good. Could you please pro...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  Tuesday at 1 PM sounds good. Could you please pro...
+📝 Real-time file write: [Assistant]  Tuesday at 1 PM sounds good. Could you please pro...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Human text: yeah uh mike lawrence...
+📝 Real-time file write: [Human] yeah uh mike lawrence...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Human] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Human text: and crenshaw christian center east...
+📝 Real-time file write: [Human] and crenshaw christian center east...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Human] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  Thank you, Mike Lawrence from Crenshaw Christian ...
+📝 Real-time file write: [Assistant]  Thank you, Mike Lawrence from Crenshaw Christian ...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  I'll send you a confirmation shortly....
+📝 Real-time file write: [Assistant]  I'll send you a confirmation shortly....
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  Thank you, Mike Lawrence from Crenshaw Christian ...
+📝 Real-time file write: [Assistant]  Thank you, Mike Lawrence from Crenshaw Christian ...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  I'll send you a confirmation shortly....
+📝 Real-time file write: [Assistant]  I'll send you a confirmation shortly....
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Human text: okay uh send it to mdlawrence at...
+📝 Real-time file write: [Human] okay uh send it to mdlawrence at...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Human] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Human text: me dot com...
+📝 Real-time file write: [Human] me dot com...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+📝 Real-time DynamoDB update: [Human] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  I'll send the confirmation to mdlawrence@me.com....
+📝 Real-time file write: [Assistant]  I'll send the confirmation to mdlawrence@me.com....
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  Thank you for your time, Mike. Have a great day!...
+📝 Real-time file write: [Assistant]  Thank you for your time, Mike. Have a great day!...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+Running session cleanup check
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  I'll send the confirmation to mdlawrence@me.com....
+📝 Real-time file write: [Assistant]  I'll send the confirmation to mdlawrence@me.com....
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+[CONVERSATION] AI speaking: true, mode: speaking
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: true
+[TRANSCRIPT] Adding Assistant text:  Thank you for your time, Mike. Have a great day!...
+📝 Real-time file write: [Assistant]  Thank you for your time, Mike. Have a great day!...
+[CONVERSATION] AI speaking: false, mode: listening
+[BARGE-IN] 🎤 AI speaking state for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1: false
+📝 Real-time DynamoDB update: [Assistant] for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+🔔 [WEBHOOK] Vonage event received: {
+  "headers": {},
+  "end_time": "2025-06-27T01:05:56.000Z",
+  "uuid": "da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1",
+  "network": "310260",
+  "duration": "99",
+  "disconnected_by": "user",
+  "start_time": "2025-06-27T01:04:17.000Z",
+  "rate": "0.01314000",
+  "price": "0.02168100",
+  "from": "12135235735",
+  "to": "13472005533",
+  "conversation_uuid": "CON-fcc91b87-e518-4dc8-91ea-025bb9e2c127",
+  "status": "completed",
+  "direction": "outbound",
+  "timestamp": "2025-06-27T01:05:56.290Z"
+}
+🔔 [WEBHOOK] Event details - Status: completed, UUID: da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1, ConversationUUID: CON-fcc91b87-e518-4dc8-91ea-025bb9e2c127
+🔔 [WEBHOOK] Call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1 ended with status: completed - Finalizing transcript
+🔔 [WEBHOOK] Calling endCall for transcript logger with UUID: da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+📝 Added completion footer to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1-2025-06-27T01-04-17-472Z.md
+📝 Final DynamoDB update completed for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+✅ Call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1 completed - duration: 99s - saved to /home/ec2-user/environment/map-20250618-mdl-rails/NovaVoice/microservice/transcripts/call-da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1-2025-06-27T01-04-17-472Z.md AND DynamoDB
+🔔 [WEBHOOK] Successfully finalized transcript for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Client disconnected from channel da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1, 0 clients remaining
+Last client left channel da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1, cleaning up resources
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'usageEvent' ]
+Handling other events
+Event keys for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1:  [ 'completionEnd' ]
+Handling other events
+Response stream processing complete for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Stream completed for channel: da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Closing session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1 closed.
+Queue empty or session inactive: da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1 
+Session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1 close completed
+⚠️ No session found for call da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1 - attempting graceful DynamoDB finalization
+✅ Gracefully finalized DynamoDB record for da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1 (no local session)
+Successfully cleaned up channel: da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+[BARGE-IN] 🧹 Cleaned up barge-in handler for session da4cef0c-f9ad-4d9f-a2bc-8f57f26b3be1
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
+Running session cleanup check
 Running session cleanup check
 Running session cleanup check

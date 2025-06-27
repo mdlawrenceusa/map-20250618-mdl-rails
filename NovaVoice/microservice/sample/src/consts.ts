@@ -19,10 +19,7 @@ export const DefaultTextConfiguration = {
   mediaType: "text/plain" as TextMediaType,
 };
 
-export const DefaultSystemPrompt =
-  "You are a friend. The user and you will engage in a spoken " +
-  "dialog exchanging the transcripts of a natural real-time conversation. Keep your responses short, " +
-  "generally two or three sentences for chatty scenarios.";
+// DefaultSystemPrompt removed - now loaded dynamically from S3 via PromptService
 
 export const DefaultAudioOutputConfiguration = {
   ...DefaultAudioInputConfiguration,

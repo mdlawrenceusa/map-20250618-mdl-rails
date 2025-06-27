@@ -24,6 +24,13 @@ class Prompt < ApplicationRecord
   scope :for_campaign, ->(campaign_id) { where(campaign_id: campaign_id) }
   scope :for_lead, ->(lead_id) { where(lead_id: lead_id) }
   scope :global, -> { where(lead_id: nil, campaign_id: nil) }
+  scope :published, -> { where.not(published_at: nil) }
+  scope :pending_publication, -> { 
+    where(is_active: true).where(
+      'updated_at > published_at OR published_at IS NULL'
+    )
+  }
+  scope :by_assistant, ->(assistant_name) { where(assistant_name: assistant_name) }
 
   # Callbacks
   before_create :set_version_number
@@ -40,15 +47,15 @@ class Prompt < ApplicationRecord
     prompt = nil
     
     if lead_id
-      prompt = active.by_type(type).for_lead(lead_id).order(version: :desc).first
+      prompt = active.by_type(type).for_lead(lead_id).order(created_at: :desc).first
     end
     
     if prompt.nil? && campaign_id
-      prompt = active.by_type(type).for_campaign(campaign_id).where(lead_id: nil).order(version: :desc).first
+      prompt = active.by_type(type).for_campaign(campaign_id).where(lead_id: nil).order(created_at: :desc).first
     end
     
     if prompt.nil?
-      prompt = active.by_type(type).global.order(version: :desc).first
+      prompt = active.by_type(type).global.order(created_at: :desc).first
     end
     
     prompt
@@ -85,6 +92,44 @@ class Prompt < ApplicationRecord
     content.gsub(/\{\{(\w+)\}\}/) do |match|
       key = $1.to_sym
       variables[key] || match
+    end
+  end
+
+  # Publish status methods
+  def published?
+    published_at.present? && published_at >= updated_at
+  end
+
+  def pending_changes?
+    !published? && is_active?
+  end
+
+  def content_changed_since_publish?
+    published_content != content
+  end
+
+  def never_published?
+    published_at.nil?
+  end
+
+  def publish_status
+    if never_published?
+      'never_published'
+    elsif pending_changes?
+      'pending_changes'
+    else
+      'published'
+    end
+  end
+
+  def publish_status_label
+    case publish_status
+    when 'never_published'
+      '📝 Never Published'
+    when 'pending_changes'
+      '⏳ Pending Changes'
+    when 'published'
+      '🚀 Published'
     end
   end
 

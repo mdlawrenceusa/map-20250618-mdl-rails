@@ -81,7 +81,8 @@ class NovaSonicClient extends events_1.EventEmitter {
                 isAudioContentStartSent: false,
                 audioContentId: (0, node_crypto_1.randomUUID)(),
                 startTime: Date.now(),
-                transcript: []
+                transcript: [],
+                systemPrompt: systemPrompt
             };
             this.activeSessions.set(sessionId, session);
             this.sessionLastActivity.set(sessionId, Date.now());
@@ -408,6 +409,8 @@ class NovaSonicClient extends events_1.EventEmitter {
         const session = this.activeSessions.get(sessionId);
         if (!session)
             return;
+        // Store the system prompt in the session
+        session.systemPrompt = systemPromptContent;
         const textPromptID = (0, node_crypto_1.randomUUID)();
         this.addEventToSessionQueue(sessionId, {
             event: {

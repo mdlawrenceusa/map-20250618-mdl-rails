@@ -1,0 +1,15 @@
+{
+  "name": "nova-voice-call-processor",
+  "version": "1.0.0",
+  "description": "Lambda function to process EventBridge call events for NovaVoice",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1400.0",
+    "axios": "^1.4.0"
+  },
+  "author": "NovaVoice Team",
+  "license": "ISC"
+}

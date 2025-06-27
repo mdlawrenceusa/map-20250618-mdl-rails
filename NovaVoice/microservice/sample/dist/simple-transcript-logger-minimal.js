@@ -51,7 +51,7 @@ class MinimalTranscriptLogger {
         console.log("📝 Minimal transcript logger initialized");
     }
     // Start a new call - write initial data to BOTH file and DynamoDB
-    startCall(callUuid, phoneNumber, leadContext) {
+    startCall(callUuid, phoneNumber) {
         const startTime = new Date().toISOString();
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         const mdFilePath = path.join(this.transcriptsDir, `call-${callUuid}-${timestamp}.md`);
@@ -69,28 +69,23 @@ class MinimalTranscriptLogger {
 **Phone Number**: ${phoneNumber}
 **Date**: ${new Date().toLocaleString()}
 **Status**: In Progress
-${leadContext ? `**Lead Info**: ${leadContext}\n` : ''}
+
 ---
 
 `;
         fs.writeFileSync(mdFilePath, header);
-        // Write same info to DynamoDB (including lead context if available)
-        const dynamoItem = {
-            call_uuid: { S: callUuid },
-            phone_number: { S: phoneNumber },
-            start_time: { S: startTime },
-            transcript: { S: 'Call in progress...' },
-            status: { S: 'in_progress' }
-        };
-        if (leadContext) {
-            dynamoItem.lead_context = { S: leadContext };
-        }
+        // Write same info to DynamoDB
         this.dynamoClient.send(new client_dynamodb_1.PutItemCommand({
             TableName: 'nova-sonic-call-records',
-            Item: dynamoItem
+            Item: {
+                call_uuid: { S: callUuid },
+                phone_number: { S: phoneNumber },
+                start_time: { S: startTime },
+                transcript: { S: 'Call in progress...' },
+                status: { S: 'in_progress' }
+            }
         })).catch(err => console.error('DynamoDB write failed:', err));
-        const leadMsg = leadContext ? ` with lead context: ${leadContext}` : '';
-        console.log(`📝 Started call ${callUuid}${leadMsg} - writing to ${mdFilePath} AND DynamoDB`);
+        console.log(`📝 Started call ${callUuid} - writing to ${mdFilePath} AND DynamoDB`);
     }
     // Add text - write to BOTH file and DynamoDB  
     addText(callUuid, speaker, text) {

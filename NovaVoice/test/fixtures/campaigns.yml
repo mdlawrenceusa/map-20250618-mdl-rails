@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+  status: MyString
+  batch_size: 1
+  call_spacing_seconds: 1
+  prompt_override: MyText
+  created_by: MyString
+
+two:
+  name: MyString
+  description: MyText
+  status: MyString
+  batch_size: 1
+  call_spacing_seconds: 1
+  prompt_override: MyText
+  created_by: MyString

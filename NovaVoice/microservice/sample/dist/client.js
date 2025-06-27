@@ -9,6 +9,7 @@ const operators_1 = require("rxjs/operators");
 const rxjs_2 = require("rxjs");
 const consts_1 = require("./consts");
 const ToolRegistry_1 = require("./tools/ToolRegistry");
+const PromptService_1 = require("./services/PromptService");
 class StreamSession {
     constructor(sessionId, client) {
         this.sessionId = sessionId;
@@ -25,8 +26,13 @@ class StreamSession {
     async setupPromptStart() {
         this.client.setupPromptStartEvent(this.sessionId);
     }
-    async setupSystemPrompt(textConfig = consts_1.DefaultTextConfiguration, systemPromptContent = consts_1.DefaultSystemPrompt) {
-        this.client.setupSystemPromptEvent(this.sessionId, textConfig, systemPromptContent);
+    async setupSystemPrompt(textConfig = consts_1.DefaultTextConfiguration) {
+        // Use the pre-loaded system prompt from the session
+        const sessionData = this.client.getSessionData(this.sessionId);
+        if (!sessionData || !sessionData.systemPrompt) {
+            throw new Error(`No system prompt loaded for session ${this.sessionId}`);
+        }
+        this.client.setupSystemPromptEvent(this.sessionId, textConfig, sessionData.systemPrompt);
     }
     async setupStartAudio(audioConfig = consts_1.DefaultAudioInputConfiguration) {
         this.client.setupStartAudioEvent(this.sessionId, audioConfig);
@@ -89,7 +95,7 @@ class StreamSession {
 }
 exports.StreamSession = StreamSession;
 class NovaSonicBidirectionalStreamClient {
-    constructor(config) {
+    constructor(config, promptService) {
         this.activeSessions = new Map();
         this.sessionLastActivity = new Map();
         this.sessionCleanupInProgress = new Set();
@@ -115,6 +121,8 @@ class NovaSonicBidirectionalStreamClient {
             topP: 0.9,
             temperature: 0.7,
         };
+        // Initialize prompt service
+        this.promptService = promptService || new PromptService_1.PromptService();
     }
     isSessionActive(sessionId) {
         const session = this.activeSessions.get(sessionId);
@@ -132,10 +140,17 @@ class NovaSonicBidirectionalStreamClient {
     isCleanupInProgress(sessionId) {
         return this.sessionCleanupInProgress.has(sessionId);
     }
-    createStreamSession(sessionId = (0, node_crypto_1.randomUUID)(), config) {
+    getSessionData(sessionId) {
+        return this.activeSessions.get(sessionId);
+    }
+    async createStreamSession(sessionId = (0, node_crypto_1.randomUUID)(), assistantName = 'esther', config) {
         if (this.activeSessions.has(sessionId)) {
             throw new Error(`Stream session with ID ${sessionId} already exists`);
         }
+        // Load the system prompt for the specified assistant
+        console.log(`Loading system prompt for assistant '${assistantName}' in session ${sessionId}`);
+        const systemPrompt = await this.promptService.getSystemPrompt(assistantName);
+        console.log(`System prompt loaded successfully for ${assistantName} (${systemPrompt.length} characters)`);
         const session = {
             queue: [],
             queueSignal: new rxjs_1.Subject(),
@@ -151,6 +166,8 @@ class NovaSonicBidirectionalStreamClient {
             isPromptStartSent: false,
             isAudioContentStartSent: false,
             audioContentId: (0, node_crypto_1.randomUUID)(),
+            systemPrompt: systemPrompt,
+            assistantName: assistantName,
         };
         this.activeSessions.set(sessionId, session);
         return new StreamSession(sessionId, this);
@@ -441,7 +458,7 @@ class NovaSonicBidirectionalStreamClient {
         });
         session.isPromptStartSent = true;
     }
-    setupSystemPromptEvent(sessionId, textConfig = consts_1.DefaultTextConfiguration, systemPromptContent = consts_1.DefaultSystemPrompt) {
+    setupSystemPromptEvent(sessionId, textConfig = consts_1.DefaultTextConfiguration, systemPromptContent) {
         console.log(`Setting up systemPrompt events for session ${sessionId}...`);
         console.log(`[PROMPT DEBUG] System prompt content length: ${systemPromptContent.length} characters`);
         console.log(`[PROMPT DEBUG] System prompt preview: ${systemPromptContent.substring(0, 200)}...`);

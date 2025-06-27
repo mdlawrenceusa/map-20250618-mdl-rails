@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  campaign: one
+  lead: one
+  call_uuid: MyString
+  phone_number: MyString
+  status: MyString
+  attempt_number: 1
+  scheduled_for: 2025-06-26 22:12:41
+  called_at: 2025-06-26 22:12:41
+  error_message: MyText
+
+two:
+  campaign: two
+  lead: two
+  call_uuid: MyString
+  phone_number: MyString
+  status: MyString
+  attempt_number: 1
+  scheduled_for: 2025-06-26 22:12:41
+  called_at: 2025-06-26 22:12:41
+  error_message: MyText

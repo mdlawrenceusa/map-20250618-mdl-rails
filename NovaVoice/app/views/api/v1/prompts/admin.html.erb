@@ -7,6 +7,129 @@
     body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
     .container { max-width: 1200px; margin: 0 auto; }
     h1 { color: #333; }
+    
+    /* Publish Control Styles */
+    .publish-control { 
+      background: white; 
+      padding: 20px; 
+      border-radius: 8px; 
+      margin-bottom: 20px; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .publish-status {
+      font-size: 14px;
+      color: #666;
+    }
+    .publish-status strong {
+      color: #333;
+      font-size: 16px;
+    }
+    .last-published {
+      display: block;
+      font-size: 12px;
+      color: #999;
+      margin-top: 5px;
+    }
+    
+    #publish-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      min-width: 160px;
+      position: relative;
+    }
+    #publish-btn:enabled {
+      background: #4CAF50;
+      color: white;
+      box-shadow: 0 2px 4px rgba(76, 175, 80, 0.3);
+    }
+    #publish-btn:disabled {
+      background: #e0e0e0;
+      color: #999;
+      cursor: not-allowed;
+    }
+    #publish-btn:enabled:hover {
+      background: #45a049;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(76, 175, 80, 0.4);
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid transparent;
+      border-top: 2px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Notification Styles */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      z-index: 1000;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.3s ease;
+    }
+    .notification.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .notification.success { background: #4CAF50; }
+    .notification.error { background: #f44336; }
+    
+    /* Enhanced Prompt Card Styles */
+    .prompt-card {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-left: 4px solid #e0e0e0;
+    }
+    .prompt-card.pending-changes {
+      border-left-color: #ff9800;
+      background-color: #fff8e1;
+    }
+    .prompt-card.published {
+      border-left-color: #4CAF50;
+    }
+    .prompt-card.never-published {
+      border-left-color: #f44336;
+    }
+    
+    .publish-status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    .badge-published { background: #e8f5e8; color: #2e7d32; }
+    .badge-pending { background: #fff3e0; color: #ef6c00; }
+    .badge-never { background: #ffebee; color: #c62828; }
+    
+    /* Existing styles maintained */
     .filters { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     .filters label { margin-right: 15px; font-weight: bold; }
     .filters select, .filters input { margin-right: 20px; padding: 5px; }
@@ -36,6 +159,29 @@
   <div class="container">
     <h1>NovaVoice Prompt Management</h1>
     
+    <!-- Publish Control Section -->
+    <div class="publish-control">
+      <div class="publish-status">
+        <div>
+          <strong id="pending-changes-count">0</strong> active prompts ready to publish
+          <span class="last-published" id="last-published">Last published: Never</span>
+        </div>
+        <div id="s3-status" style="font-size: 12px; margin-top: 5px;"></div>
+      </div>
+      
+      <div style="display: flex; gap: 10px;">
+        <button id="publish-btn" onclick="publishChanges()" disabled>
+          <span id="publish-spinner" class="spinner" style="display: none;"></span>
+          <span id="publish-text">Publish to S3</span>
+        </button>
+        
+        <button id="inspect-s3-btn" onclick="inspectS3Prompt()" 
+                style="padding: 12px 24px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; min-width: 160px; background: #2196F3; color: white; box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3);">
+          <span id="inspect-text">Inspect S3</span>
+        </button>
+      </div>
+    </div>
+    
     <button class="btn-new" onclick="showNewPromptModal()">Create New Prompt</button>
     
     <div class="filters">
@@ -56,6 +202,21 @@
         <option value="inactive">Inactive Only</option>
       </select>
       
+      <label>Publish Status:</label>
+      <select id="publishFilter" onchange="loadPrompts()">
+        <option value="">All</option>
+        <option value="published">Published</option>
+        <option value="pending">Pending Changes</option>
+        <option value="never">Never Published</option>
+      </select>
+      
+      <label>Assistant:</label>
+      <select id="assistantFilter" onchange="loadPrompts()">
+        <option value="">All Assistants</option>
+        <option value="esther">Esther</option>
+        <option value="support-agent">Support Agent</option>
+      </select>
+      
       <label>Campaign:</label>
       <input type="text" id="campaignFilter" placeholder="Campaign ID" onkeyup="loadPrompts()">
       
@@ -69,8 +230,10 @@
           <th>ID</th>
           <th>Name</th>
           <th>Type</th>
+          <th>Assistant</th>
           <th>Version</th>
           <th>Status</th>
+          <th>Publish Status</th>
           <th>Campaign</th>
           <th>Lead</th>
           <th>Created</th>
@@ -108,6 +271,14 @@
         </div>
         
         <div class="form-group">
+          <label>Assistant:</label>
+          <select id="promptAssistant" required>
+            <option value="esther">Esther</option>
+            <option value="support-agent">Support Agent</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
           <label>Content:</label>
           <textarea id="promptContent" required placeholder="Use {{variable_name}} for template variables"></textarea>
         </div>
@@ -127,28 +298,174 @@
     </div>
   </div>
 
+  <!-- S3 Inspect Modal -->
+  <div id="s3InspectModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeS3InspectModal()">&times;</span>
+      <h2>S3 Published Prompt Inspector</h2>
+      
+      <div class="form-group">
+        <label>Assistant:</label>
+        <select id="inspectAssistant" onchange="loadS3Prompt()">
+          <option value="esther">Esther</option>
+          <option value="support-agent">Support Agent</option>
+        </select>
+      </div>
+      
+      <div id="s3-inspect-content">
+        <div id="s3-loading" style="display: none; text-align: center; padding: 20px;">
+          <div class="spinner" style="margin: 0 auto;"></div>
+          <p>Loading S3 content...</p>
+        </div>
+        
+        <div id="s3-error" style="display: none; color: #f44336; padding: 15px; background: #ffebee; border-radius: 4px; margin: 15px 0;">
+          <strong>Error:</strong> <span id="s3-error-message"></span>
+        </div>
+        
+        <div id="s3-success" style="display: none;">
+          <div style="background: #e8f5e8; padding: 15px; border-radius: 4px; margin: 15px 0; border-left: 4px solid #4CAF50;">
+            <strong>✅ S3 Content Retrieved</strong><br>
+            <small>Last Modified: <span id="s3-last-modified"></span></small><br>
+            <small>Content Length: <span id="s3-content-length"></span> characters</small>
+          </div>
+          
+          <div class="form-group">
+            <label>Published Content in S3:</label>
+            <textarea id="s3-content-display" readonly style="font-family: monospace; background: #f8f8f8; height: 300px;"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <button onclick="closeS3InspectModal()" class="btn-activate" style="margin-top: 20px;">Close</button>
+    </div>
+  </div>
+
   <script>
     const API_BASE = '/api/v1/prompts';
     
-    // Load prompts on page load
-    document.addEventListener('DOMContentLoaded', loadPrompts);
+    // Load prompts and publish status on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      loadPrompts();
+      checkPublishStatus();
+      // Check status every 30 seconds
+      setInterval(checkPublishStatus, 30000);
+    });
+    
+    async function checkPublishStatus() {
+      try {
+        const response = await fetch(`${API_BASE}/publish_status`);
+        const status = await response.json();
+        
+        const publishBtn = document.getElementById('publish-btn');
+        const pendingCount = document.getElementById('pending-changes-count');
+        const lastPublished = document.getElementById('last-published');
+        const s3Status = document.getElementById('s3-status');
+        
+        pendingCount.textContent = status.pending_count;
+        publishBtn.disabled = !status.can_publish;
+        
+        if (status.last_published_at) {
+          lastPublished.textContent = `Last published: ${new Date(status.last_published_at).toLocaleString()}`;
+        } else {
+          lastPublished.textContent = 'Last published: Never';
+        }
+        
+        // Update S3 status
+        if (status.s3_status.success) {
+          s3Status.textContent = `✅ S3 Connected (${status.s3_status.assistants_in_s3?.length || 0} assistants)`;
+          s3Status.style.color = '#4CAF50';
+        } else {
+          s3Status.textContent = `❌ S3 Error: ${status.s3_status.error}`;
+          s3Status.style.color = '#f44336';
+        }
+        
+        // Update button appearance
+        if (status.can_publish) {
+          publishBtn.style.background = '#4CAF50';
+          publishBtn.style.color = 'white';
+        } else {
+          publishBtn.style.background = '#e0e0e0';
+          publishBtn.style.color = '#999';
+        }
+        
+      } catch (error) {
+        console.error('Error checking publish status:', error);
+      }
+    }
+    
+    async function publishChanges() {
+      const publishBtn = document.getElementById('publish-btn');
+      const publishText = document.getElementById('publish-text');
+      const publishSpinner = document.getElementById('publish-spinner');
+      
+      // Show loading state
+      publishBtn.disabled = true;
+      publishText.textContent = 'Publishing...';
+      publishSpinner.style.display = 'inline-block';
+      
+      try {
+        const response = await fetch(`${API_BASE}/publish`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          showNotification(`✅ ${result.message}`, 'success');
+          checkPublishStatus();
+          loadPrompts(); // Refresh to show updated publish states
+        } else {
+          showNotification(`❌ ${result.message}`, 'error');
+          console.error('Publish errors:', result.errors);
+        }
+      } catch (error) {
+        showNotification('❌ Publish failed: Network error', 'error');
+        console.error('Publish error:', error);
+      } finally {
+        // Reset button state
+        publishText.textContent = 'Publish to S3';
+        publishSpinner.style.display = 'none';
+        setTimeout(checkPublishStatus, 1000); // Re-check status after a delay
+      }
+    }
+    
+    function showNotification(message, type) {
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      // Trigger animation
+      setTimeout(() => notification.classList.add('show'), 100);
+      
+      // Remove after 5 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => document.body.removeChild(notification), 300);
+      }, 5000);
+    }
     
     async function loadPrompts() {
       const type = document.getElementById('typeFilter').value;
       const status = document.getElementById('statusFilter').value;
+      const publishStatus = document.getElementById('publishFilter').value;
+      const assistant = document.getElementById('assistantFilter').value;
       const campaign = document.getElementById('campaignFilter').value;
       const lead = document.getElementById('leadFilter').value;
       
       try {
         const response = await fetch(API_BASE);
         const data = await response.json();
-        const prompts = data.prompts || data; // Handle both formats
+        const prompts = data.prompts || data;
         
         // Filter prompts
         const filtered = prompts.filter(prompt => {
           if (type && prompt.prompt_type !== type) return false;
           if (status === 'active' && !prompt.is_active) return false;
           if (status === 'inactive' && prompt.is_active) return false;
+          if (publishStatus && prompt.publish_status !== publishStatus) return false;
+          if (assistant && prompt.assistant_name !== assistant) return false;
           if (campaign && prompt.campaign_id !== campaign) return false;
           if (lead && prompt.lead_id != lead) return false;
           return true;
@@ -157,7 +474,7 @@
         displayPrompts(filtered);
       } catch (error) {
         console.error('Error loading prompts:', error);
-        alert('Failed to load prompts');
+        showNotification('Failed to load prompts', 'error');
       }
     }
     
@@ -167,12 +484,33 @@
       
       prompts.forEach(prompt => {
         const row = tbody.insertRow();
+        
+        // Add CSS class based on publish status
+        let publishBadgeClass = '';
+        let publishLabel = '';
+        switch(prompt.publish_status) {
+          case 'published':
+            publishBadgeClass = 'badge-published';
+            publishLabel = '🚀 Published';
+            break;
+          case 'pending_changes':
+            publishBadgeClass = 'badge-pending';
+            publishLabel = '⏳ Pending';
+            break;
+          case 'never_published':
+            publishBadgeClass = 'badge-never';
+            publishLabel = '📝 Never';
+            break;
+        }
+        
         row.innerHTML = `
           <td>${prompt.id}</td>
           <td>${prompt.name}</td>
           <td>${prompt.prompt_type}</td>
+          <td>${prompt.assistant_name || 'esther'}</td>
           <td>${prompt.version}</td>
           <td class="${prompt.is_active ? 'active' : 'inactive'}">${prompt.is_active ? 'Active' : 'Inactive'}</td>
+          <td><span class="publish-status-badge ${publishBadgeClass}">${publishLabel}</span></td>
           <td>${prompt.campaign_id || '-'}</td>
           <td>${prompt.lead_id || '-'}</td>
           <td>${new Date(prompt.created_at).toLocaleDateString()}</td>
@@ -192,8 +530,10 @@
       try {
         await fetch(`${API_BASE}/${id}/activate`, { method: 'PATCH' });
         loadPrompts();
+        checkPublishStatus(); // Update publish status
+        showNotification('Prompt activated', 'success');
       } catch (error) {
-        alert('Failed to activate prompt');
+        showNotification('Failed to activate prompt', 'error');
       }
     }
     
@@ -201,8 +541,10 @@
       try {
         await fetch(`${API_BASE}/${id}/deactivate`, { method: 'PATCH' });
         loadPrompts();
+        checkPublishStatus(); // Update publish status
+        showNotification('Prompt deactivated', 'success');
       } catch (error) {
-        alert('Failed to deactivate prompt');
+        showNotification('Failed to deactivate prompt', 'error');
       }
     }
     
@@ -210,8 +552,9 @@
       try {
         await fetch(`${API_BASE}/${id}/duplicate`, { method: 'POST' });
         loadPrompts();
+        showNotification('Prompt duplicated', 'success');
       } catch (error) {
-        alert('Failed to duplicate prompt');
+        showNotification('Failed to duplicate prompt', 'error');
       }
     }
     
@@ -219,6 +562,7 @@
       document.getElementById('modalTitle').textContent = 'New Prompt';
       document.getElementById('promptForm').reset();
       document.getElementById('promptId').value = '';
+      document.getElementById('promptAssistant').value = 'esther'; // Default to esther
       document.getElementById('promptModal').style.display = 'block';
     }
     
@@ -231,13 +575,14 @@
         document.getElementById('promptId').value = prompt.id;
         document.getElementById('promptName').value = prompt.name;
         document.getElementById('promptType').value = prompt.prompt_type;
+        document.getElementById('promptAssistant').value = prompt.assistant_name || 'esther';
         document.getElementById('promptContent').value = prompt.content;
         document.getElementById('promptCampaign').value = prompt.campaign_id || '';
         document.getElementById('promptLead').value = prompt.lead_id || '';
         
         document.getElementById('promptModal').style.display = 'block';
       } catch (error) {
-        alert('Failed to load prompt details');
+        showNotification('Failed to load prompt details', 'error');
       }
     }
     
@@ -253,6 +598,7 @@
         prompt: {
           name: document.getElementById('promptName').value,
           prompt_type: document.getElementById('promptType').value,
+          assistant_name: document.getElementById('promptAssistant').value,
           content: document.getElementById('promptContent').value,
           campaign_id: document.getElementById('promptCampaign').value || null,
           lead_id: document.getElementById('promptLead').value || null
@@ -263,24 +609,82 @@
         const method = id ? 'PUT' : 'POST';
         const url = id ? `${API_BASE}/${id}` : API_BASE;
         
-        await fetch(url, {
+        const response = await fetch(url, {
           method: method,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
         
-        closeModal();
-        loadPrompts();
+        if (response.ok) {
+          closeModal();
+          loadPrompts();
+          checkPublishStatus(); // Update publish status
+          showNotification(id ? 'Prompt updated' : 'Prompt created', 'success');
+        } else {
+          showNotification('Failed to save prompt', 'error');
+        }
       } catch (error) {
-        alert('Failed to save prompt');
+        showNotification('Failed to save prompt', 'error');
+      }
+    }
+    
+    // S3 Inspect Functions
+    async function inspectS3Prompt() {
+      document.getElementById('s3InspectModal').style.display = 'block';
+      document.getElementById('inspectAssistant').value = 'esther'; // Default to esther
+      await loadS3Prompt();
+    }
+    
+    function closeS3InspectModal() {
+      document.getElementById('s3InspectModal').style.display = 'none';
+      hideAllS3States();
+    }
+    
+    function hideAllS3States() {
+      document.getElementById('s3-loading').style.display = 'none';
+      document.getElementById('s3-error').style.display = 'none';
+      document.getElementById('s3-success').style.display = 'none';
+    }
+    
+    async function loadS3Prompt() {
+      const assistantName = document.getElementById('inspectAssistant').value;
+      
+      hideAllS3States();
+      document.getElementById('s3-loading').style.display = 'block';
+      
+      try {
+        const response = await fetch(`${API_BASE}/${assistantName}/published`);
+        const result = await response.json();
+        
+        document.getElementById('s3-loading').style.display = 'none';
+        
+        if (result.success) {
+          // Show success state
+          document.getElementById('s3-success').style.display = 'block';
+          document.getElementById('s3-content-display').value = result.content;
+          document.getElementById('s3-last-modified').textContent = new Date(result.last_modified).toLocaleString();
+          document.getElementById('s3-content-length').textContent = result.content.length;
+        } else {
+          // Show error state
+          document.getElementById('s3-error').style.display = 'block';
+          document.getElementById('s3-error-message').textContent = result.error;
+        }
+      } catch (error) {
+        document.getElementById('s3-loading').style.display = 'none';
+        document.getElementById('s3-error').style.display = 'block';
+        document.getElementById('s3-error-message').textContent = `Network error: ${error.message}`;
       }
     }
     
     // Close modal when clicking outside
     window.onclick = function(event) {
-      const modal = document.getElementById('promptModal');
-      if (event.target == modal) {
+      const promptModal = document.getElementById('promptModal');
+      const s3Modal = document.getElementById('s3InspectModal');
+      
+      if (event.target == promptModal) {
         closeModal();
+      } else if (event.target == s3Modal) {
+        closeS3InspectModal();
       }
     }
   </script>

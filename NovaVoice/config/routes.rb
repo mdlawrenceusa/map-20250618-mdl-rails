@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  resources :campaigns do
+    member do
+      patch :launch
+      patch :pause
+      patch :resume
+    end
+  end
+  
   resources :leads
   get "home/index"
   root "home#index"
@@ -26,11 +34,25 @@ Rails.application.routes.draw do
           post :render, action: :render_prompt
           post :clear_cache
           get :admin
+          get :publish_status
+          post :publish
+          get :s3_status
         end
         member do
           patch :activate
           patch :deactivate
           post :duplicate
+        end
+      end
+      
+      # Published prompt viewing by assistant name
+      get 'prompts/:assistant_name/published', to: 'prompts#show_published'
+      
+      # DynamoDB transcript viewing
+      resources :transcripts, only: [:index, :show] do
+        collection do
+          get :search
+          get :stats
         end
       end
     end

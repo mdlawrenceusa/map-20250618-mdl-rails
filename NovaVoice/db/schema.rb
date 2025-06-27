@@ -10,7 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_24_123202) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_26_221241) do
+  create_table "campaign_calls", force: :cascade do |t|
+    t.integer "campaign_id", null: false
+    t.integer "lead_id", null: false
+    t.string "call_uuid"
+    t.string "phone_number"
+    t.string "status"
+    t.integer "attempt_number"
+    t.datetime "scheduled_for"
+    t.datetime "called_at"
+    t.text "error_message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_campaign_calls_on_campaign_id"
+    t.index ["lead_id"], name: "index_campaign_calls_on_lead_id"
+  end
+
+  create_table "campaigns", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "status"
+    t.integer "batch_size"
+    t.integer "call_spacing_seconds"
+    t.text "prompt_override"
+    t.string "created_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "leads", force: :cascade do |t|
     t.string "name"
     t.string "company"
@@ -38,12 +66,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_24_123202) do
     t.string "campaign_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "published_at"
+    t.text "published_content"
+    t.string "assistant_name", default: "esther"
+    t.index ["assistant_name"], name: "index_prompts_on_assistant_name"
     t.index ["campaign_id", "is_active"], name: "index_prompts_on_campaign_id_and_is_active"
     t.index ["lead_id", "is_active"], name: "index_prompts_on_lead_id_and_is_active"
     t.index ["lead_id"], name: "index_prompts_on_lead_id"
     t.index ["name", "version"], name: "index_prompts_on_name_and_version", unique: true
     t.index ["prompt_type", "is_active"], name: "index_prompts_on_prompt_type_and_is_active"
+    t.index ["published_at", "is_active"], name: "index_prompts_on_published_at_and_is_active"
   end
 
+  add_foreign_key "campaign_calls", "campaigns"
+  add_foreign_key "campaign_calls", "leads"
   add_foreign_key "prompts", "leads"
 end

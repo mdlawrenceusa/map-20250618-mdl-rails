@@ -189,6 +189,7 @@ class NovaSonicBidirectionalStreamClient {
             isPromptStartSent: false,
             isAudioContentStartSent: false,
             audioContentId: (0, node_crypto_1.randomUUID)(),
+            systemPrompt: DefaultSystemPrompt,
         };
         this.activeSessions.set(sessionId, session);
         return new StreamSession(sessionId, this);
@@ -307,7 +308,7 @@ class NovaSonicBidirectionalStreamClient {
                             textInput: {
                                 promptName: session.promptName,
                                 contentName: systemContentId,
-                                content: DefaultSystemPrompt,
+                                content: session.systemPrompt,
                             },
                         },
                     },
@@ -521,6 +522,8 @@ class NovaSonicBidirectionalStreamClient {
         const session = this.activeSessions.get(sessionId);
         if (!session)
             return;
+        // Store the system prompt in the session for use in async iterable
+        session.systemPrompt = systemPromptContent;
         const textPromptID = (0, node_crypto_1.randomUUID)();
         this.addEventToSessionQueue(sessionId, {
             event: {

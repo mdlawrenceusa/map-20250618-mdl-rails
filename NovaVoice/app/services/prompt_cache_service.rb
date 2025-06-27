@@ -1,6 +1,6 @@
 class PromptCacheService
   CACHE_PREFIX = 'prompt:'
-  CACHE_EXPIRY = 1.hour
+  CACHE_EXPIRY = 0.seconds
 
   class << self
     def fetch_prompt(type:, lead_id: nil, campaign_id: nil)

@@ -136,7 +136,7 @@ app.post('/calls', async (req: Request, res: Response) => {
       } catch (error) {
         logger.error('Failed to fetch prompts, using fallback', { error });
         systemPrompt = process.env.DEFAULT_OUTBOUND_PROMPT || 
-          'You are Esther from Mike Lawrence Productions, a scheduling assistant.';
+          'The goal isn\'t to actually check the calendar. The goal is to just get them to commit to a specific time and date. Make sure you have a time and a date when you ask them for their email address. Do not repeat it back to them unless they ask you to repeat it back to them. Ask them what day works best for them. Then ask morning or afternoon. Then ask is there a specific time. If no specific time suggest one.';
       }
     }
 
@@ -500,9 +500,10 @@ wss.on('connection', async (ws: WebSocket, req) => {
   
   try {
     logger.info('🚀 STEP 1: Creating stream session', { callId });
-    const session = novaSonicClient.createStreamSession(callId);
+    const assistantName = call.campaignId || 'default'; // Use campaignId to determine assistant or default
+    const session = await novaSonicClient.createStreamSession(callId, undefined, assistantName);
     activeSessions.set(callId, session);
-    logger.info('✅ STEP 1 COMPLETE: Stream session created', { callId });
+    logger.info('✅ STEP 1 COMPLETE: Stream session created', { callId, assistantName });
     
     logger.info('🎧 STEP 2: Setting up event handlers', { callId });
     // Set up event handlers matching AWS sample
@@ -533,11 +534,10 @@ wss.on('connection', async (ws: WebSocket, req) => {
     logger.info('✅ STEP 2 COMPLETE: Event handlers set', { callId });
 
     logger.info('🎯 STEP 3: Setting up system prompt', { callId });
-    await session.setupSystemPrompt(undefined, call.prompt);
+    await session.setupSystemPrompt(); // Prompt is now loaded from S3 during session creation
     logger.info('✅ STEP 3 COMPLETE: System prompt configured', { 
       callId, 
-      promptLength: call.prompt.length,
-      promptPreview: call.prompt.substring(0, 100) + '...'
+      assistantName
     });
 
     logger.info('🔗 STEP 4: Initiating Nova Sonic session (with new fast async iterator)', { callId });
