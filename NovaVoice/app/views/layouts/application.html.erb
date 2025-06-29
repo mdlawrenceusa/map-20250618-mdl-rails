@@ -14,87 +14,100 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
     
-    <%# Fixed: Changed from :app to "application" for Tailwind CSS %>
+    <!-- W3.CSS Framework -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    
+    <!-- jQuery (required for DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <!-- DataTables JavaScript -->
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    
+    <!-- Export dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    
     <%= javascript_importmap_tags %>
   </head>
-  <body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+  <body class="w3-light-grey">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg border-b border-slate-200/50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <div class="flex items-center">
-            <%= link_to root_path, class: "flex items-center space-x-2 text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all duration-200" do %>
-              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
-              </svg>
-              <span>NovaVoice</span>
+    <div class="w3-bar w3-white w3-card w3-large">
+      <div class="w3-content">
+        <%= link_to request.path.start_with?('/app') ? '/app/' : root_path, class: "w3-bar-item w3-button w3-hover-blue w3-text-blue" do %>
+          <i class="fas fa-microphone"></i> <b>NovaVoice</b>
+        <% end %>
+        
+        <%= link_to request.path.start_with?('/app') ? '/app/' : root_path, class: "w3-bar-item w3-button w3-hover-light-grey #{'w3-blue' if current_page?(root_path)}" do %>
+          <i class="fas fa-dashboard"></i> Dashboard
+        <% end %>
+        
+        <%= link_to campaigns_path, class: "w3-bar-item w3-button w3-hover-light-grey #{'w3-blue' if controller_name == 'campaigns'}" do %>
+          <i class="fas fa-phone"></i> Campaigns
+        <% end %>
+        
+        <%= link_to leads_path, class: "w3-bar-item w3-button w3-hover-light-grey #{'w3-blue' if controller_name == 'leads'}" do %>
+          <i class="fas fa-users"></i> Leads
+        <% end %>
+        
+        <%= link_to admin_api_v1_prompts_path, class: "w3-bar-item w3-button w3-hover-light-grey" do %>
+          <i class="fas fa-comment-dots"></i> Prompts
+        <% end %>
+        
+        <%= link_to api_v1_transcripts_path, class: "w3-bar-item w3-button w3-hover-light-grey" do %>
+          <i class="fas fa-file-alt"></i> Transcripts
+        <% end %>
+        
+        <%= link_to admin_calling_schedule_index_path, class: "w3-bar-item w3-button w3-hover-light-grey" do %>
+          <i class="fas fa-clock"></i> Schedule
+        <% end %>
+        
+        <%= link_to admin_sync_index_path, class: "w3-bar-item w3-button w3-hover-light-grey" do %>
+          <i class="fas fa-sync"></i> Sync
+        <% end %>
+        
+        <div class="w3-right w3-bar-item">
+          <% if authenticated? %>
+            <%= link_to session_path, data: { method: :delete }, class: "w3-button w3-hover-red w3-text-red w3-margin-right", style: "text-decoration: none;" do %>
+              <i class="fas fa-sign-out-alt"></i> Sign Out
             <% end %>
-            <div class="ml-8 flex space-x-1">
-              <%= link_to "Dashboard", root_path, 
-                  class: "flex items-center space-x-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 #{'bg-blue-100 text-blue-700 shadow-sm' if current_page?(root_path)}" %>
-              <%= link_to campaigns_path, 
-                  class: "flex items-center space-x-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 #{'bg-blue-100 text-blue-700 shadow-sm' if controller_name == 'campaigns'}" do %>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
-                </svg>
-                <span>Campaigns</span>
-              <% end %>
-              <%= link_to leads_path, 
-                  class: "flex items-center space-x-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 #{'bg-blue-100 text-blue-700 shadow-sm' if controller_name == 'leads'}" do %>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                </svg>
-                <span>Leads</span>
-              <% end %>
-              <%= link_to "/api/v1/prompts/admin", 
-                  class: "flex items-center space-x-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" do %>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                </svg>
-                <span>Prompts</span>
-              <% end %>
-              <%= link_to "/api/v1/transcripts", 
-                  class: "flex items-center space-x-2 text-slate-700 hover:text-blue-700 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" do %>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                <span>Transcripts</span>
-              <% end %>
-            </div>
-          </div>
-          <div class="flex items-center space-x-3">
-            <div class="text-sm text-slate-500">
-              <%= Time.current.strftime("%B %d, %Y") %>
-            </div>
-            <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse" title="System Online"></div>
-          </div>
+            <span class="w3-text-blue w3-margin-right">
+              <i class="fas fa-user"></i> <%= current_user[:email] %>
+            </span>
+          <% end %>
+          <i class="fas fa-calendar"></i> <%= Time.current.strftime("%B %d, %Y") %>
+          <span class="w3-text-green w3-margin-left"><i class="fas fa-circle"></i></span>
         </div>
       </div>
-    </nav>
+    </div>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <main class="w3-content w3-padding-16">
       <!-- Flash Messages -->
       <% if notice %>
-        <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200/50 rounded-xl p-4 mb-6 shadow-sm">
-          <div class="flex items-center space-x-3">
-            <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <div class="text-green-800 font-medium"><%= notice %></div>
-          </div>
+        <div class="w3-panel w3-pale-green w3-border w3-border-green w3-round">
+          <p><i class="fas fa-check-circle w3-text-green"></i> <%= notice %></p>
         </div>
       <% end %>
       
       <% if alert %>
-        <div class="bg-gradient-to-r from-red-50 to-rose-50 border border-red-200/50 rounded-xl p-4 mb-6 shadow-sm">
-          <div class="flex items-center space-x-3">
-            <svg class="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <div class="text-red-800 font-medium"><%= alert %></div>
-          </div>
+        <div class="w3-panel w3-pale-red w3-border w3-border-red w3-round">
+          <p><i class="fas fa-exclamation-circle w3-text-red"></i> <%= alert %></p>
         </div>
       <% end %>
       

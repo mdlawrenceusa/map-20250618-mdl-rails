@@ -1,5 +1,8 @@
 class Prompt < ApplicationRecord
   belongs_to :lead, optional: true
+  
+  # Aurora DSQL compatibility - alias for column name differences
+  alias_attribute :active, :is_active
 
   # Enums for prompt types
   PROMPT_TYPES = {
@@ -19,7 +22,7 @@ class Prompt < ApplicationRecord
   validates :name, uniqueness: { scope: :version }
 
   # Scopes
-  scope :active, -> { where(is_active: true) }
+  scope :active, -> { where(active: true) }
   scope :by_type, ->(type) { where(prompt_type: type) }
   scope :for_campaign, ->(campaign_id) { where(campaign_id: campaign_id) }
   scope :for_lead, ->(lead_id) { where(lead_id: lead_id) }

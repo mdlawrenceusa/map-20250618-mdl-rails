@@ -1,0 +1,434 @@
+<!-- Header Section -->
+<div class="w3-container">
+  <h1 class="w3-xlarge"><i class="fas fa-chart-bar"></i> Calling Analytics Dashboard</h1>
+  <p class="w3-text-grey">Performance metrics and insights for calling schedule optimization</p>
+  
+  <!-- Navigation Tabs -->
+  <div class="w3-bar w3-light-grey w3-margin-top">
+    <%= link_to admin_calling_schedule_index_path, class: "w3-bar-item w3-button w3-hover-light-grey" do %>
+      <i class="fas fa-tachometer-alt"></i> Dashboard
+    <% end %>
+    <%= link_to admin_calling_schedule_queue_path, class: "w3-bar-item w3-button w3-hover-light-grey" do %>
+      <i class="fas fa-list"></i> Queue
+    <% end %>
+    <%= link_to admin_calling_schedule_analytics_path, class: "w3-bar-item w3-button w3-blue" do %>
+      <i class="fas fa-chart-bar"></i> Analytics
+    <% end %>
+  </div>
+</div>
+
+<!-- Period Selection -->
+<div class="w3-card-4 w3-white w3-margin-bottom">
+  <header class="w3-container w3-light-grey">
+    <h3><i class="fas fa-calendar"></i> Analytics Period</h3>
+  </header>
+  
+  <div class="w3-container w3-padding">
+    <div class="w3-bar w3-border">
+      <%= link_to admin_calling_schedule_analytics_path(period: 'day'), 
+                  class: "w3-bar-item w3-button #{'w3-blue' if @period == 'day'}" do %>
+        Today
+      <% end %>
+      <%= link_to admin_calling_schedule_analytics_path(period: 'week'), 
+                  class: "w3-bar-item w3-button #{'w3-blue' if @period == 'week'}" do %>
+        This Week
+      <% end %>
+      <%= link_to admin_calling_schedule_analytics_path(period: 'month'), 
+                  class: "w3-bar-item w3-button #{'w3-blue' if @period == 'month'}" do %>
+        This Month
+      <% end %>
+      <%= link_to admin_calling_schedule_analytics_path(period: 'quarter'), 
+                  class: "w3-bar-item w3-button #{'w3-blue' if @period == 'quarter'}" do %>
+        This Quarter
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Current Status -->
+<div class="w3-card-4 w3-white w3-margin-bottom">
+  <header class="w3-container <%= @current_status[:calling_allowed] ? 'w3-green' : 'w3-red' %>">
+    <h3><i class="fas fa-info-circle"></i> Current Status</h3>
+  </header>
+  
+  <div class="w3-container w3-padding">
+    <div class="w3-row-padding">
+      <div class="w3-col m4 s12">
+        <p><strong>Current Time:</strong> <%= @current_status[:current_time] %></p>
+        <p><strong>Calling Status:</strong> 
+          <span class="w3-tag <%= @current_status[:calling_allowed] ? 'w3-green' : 'w3-red' %> w3-round">
+            <%= @current_status[:calling_allowed] ? 'ACTIVE' : 'RESTRICTED' %>
+          </span>
+        </p>
+      </div>
+      <div class="w3-col m4 s12">
+        <% if @current_status[:next_window] %>
+          <p><strong>Next Window:</strong> <%= @current_status[:next_window][:formatted] %></p>
+          <p><strong>Hours Until:</strong> <%= @current_status[:next_window][:hours_away] %> hours</p>
+        <% end %>
+      </div>
+      <div class="w3-col m4 s12">
+        <p><strong>Queue Size:</strong> <%= @current_status[:queue_size] %> calls</p>
+        <p><strong>Ready Now:</strong> <%= @current_status[:calls_ready] %> calls</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Analytics Summary Cards -->
+<div class="w3-row-padding w3-margin-bottom">
+  <div class="w3-quarter">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-blue">
+          <i class="fas fa-phone-alt"></i>
+        </div>
+        <div class="w3-right">
+          <h3 class="w3-text-blue"><%= @analytics[:total_calls] || 0 %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Total Calls</h4>
+        <small class="w3-text-grey">Past <%= @period %></small>
+      </div>
+    </div>
+  </div>
+  
+  <div class="w3-quarter">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-green">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="w3-right">
+          <h3 class="w3-text-green"><%= @analytics[:successful_calls] || 0 %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Successful</h4>
+        <small class="w3-text-grey">
+          <%= @analytics[:total_calls] > 0 ? "#{((@analytics[:successful_calls] || 0).to_f / @analytics[:total_calls] * 100).round(1)}%" : "0%" %> success rate
+        </small>
+      </div>
+    </div>
+  </div>
+  
+  <div class="w3-quarter">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-red">
+          <i class="fas fa-times-circle"></i>
+        </div>
+        <div class="w3-right">
+          <h3 class="w3-text-red"><%= @analytics[:failed_calls] || 0 %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Failed</h4>
+        <small class="w3-text-grey">
+          <%= @analytics[:total_calls] > 0 ? "#{((@analytics[:failed_calls] || 0).to_f / @analytics[:total_calls] * 100).round(1)}%" : "0%" %> failure rate
+        </small>
+      </div>
+    </div>
+  </div>
+  
+  <div class="w3-quarter">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-orange">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="w3-right">
+          <h3 class="w3-text-orange"><%= @analytics[:avg_call_duration] || "0m" %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Avg Duration</h4>
+        <small class="w3-text-grey">Minutes per call</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lead Statistics -->
+<div class="w3-card-4 w3-white w3-margin-bottom">
+  <header class="w3-container w3-light-grey">
+    <h3><i class="fas fa-users"></i> Lead Statistics</h3>
+  </header>
+  
+  <div class="w3-container w3-padding">
+    <div class="w3-row-padding">
+      <div class="w3-quarter">
+        <div class="w3-center">
+          <i class="fas fa-address-book w3-text-blue" style="font-size: 48px;"></i>
+          <h3><%= @lead_stats[:total_leads] %></h3>
+          <p>Total Leads</p>
+        </div>
+      </div>
+      <div class="w3-quarter">
+        <div class="w3-center">
+          <i class="fas fa-phone w3-text-green" style="font-size: 48px;"></i>
+          <h3><%= @lead_stats[:callable_leads] %></h3>
+          <p>Callable Leads</p>
+        </div>
+      </div>
+      <div class="w3-quarter">
+        <div class="w3-center">
+          <i class="fas fa-list w3-text-orange" style="font-size: 48px;"></i>
+          <h3><%= @lead_stats[:leads_in_queue] %></h3>
+          <p>In Queue</p>
+        </div>
+      </div>
+      <div class="w3-quarter">
+        <div class="w3-center">
+          <i class="fas fa-user-plus w3-text-red" style="font-size: 48px;"></i>
+          <h3><%= @lead_stats[:leads_never_called] %></h3>
+          <p>Never Called</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Calling Windows Analysis -->
+<div class="w3-row-padding w3-margin-bottom">
+  <div class="w3-half">
+    <div class="w3-card-4 w3-white">
+      <header class="w3-container w3-light-grey">
+        <h3><i class="fas fa-calendar-week"></i> Optimal vs Non-Optimal Calls</h3>
+      </header>
+      
+      <div class="w3-container w3-padding">
+        <% optimal_calls = @analytics[:optimal_time_calls] || 0 %>
+        <% non_optimal_calls = @analytics[:non_optimal_time_calls] || 0 %>
+        <% total_calls = optimal_calls + non_optimal_calls %>
+        
+        <div class="w3-margin-bottom">
+          <p><strong>Optimal Time Calls:</strong> <%= optimal_calls %> 
+            (<%= total_calls > 0 ? "#{(optimal_calls.to_f / total_calls * 100).round(1)}%" : "0%" %>)
+          </p>
+          <div class="w3-light-grey w3-round-xlarge">
+            <div class="w3-container w3-green w3-round-xlarge" style="width: <%= total_calls > 0 ? (optimal_calls.to_f / total_calls * 100).round(1) : 0 %>%">
+              <%= optimal_calls %>
+            </div>
+          </div>
+        </div>
+        
+        <div class="w3-margin-bottom">
+          <p><strong>Non-Optimal Time Calls:</strong> <%= non_optimal_calls %> 
+            (<%= total_calls > 0 ? "#{(non_optimal_calls.to_f / total_calls * 100).round(1)}%" : "0%" %>)
+          </p>
+          <div class="w3-light-grey w3-round-xlarge">
+            <div class="w3-container w3-red w3-round-xlarge" style="width: <%= total_calls > 0 ? (non_optimal_calls.to_f / total_calls * 100).round(1) : 0 %>%">
+              <%= non_optimal_calls %>
+            </div>
+          </div>
+        </div>
+        
+        <% if @analytics[:optimal_success_rate] && @analytics[:non_optimal_success_rate] %>
+          <div class="w3-margin-top">
+            <h4>Success Rate Comparison</h4>
+            <p class="w3-text-green"><strong>Optimal Time Success:</strong> <%= @analytics[:optimal_success_rate] %>%</p>
+            <p class="w3-text-red"><strong>Non-Optimal Time Success:</strong> <%= @analytics[:non_optimal_success_rate] %>%</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="w3-half">
+    <div class="w3-card-4 w3-white">
+      <header class="w3-container w3-light-grey">
+        <h3><i class="fas fa-clock"></i> Daily Call Distribution</h3>
+      </header>
+      
+      <div class="w3-container w3-padding">
+        <% if @analytics[:calls_by_day] %>
+          <% @analytics[:calls_by_day].each do |day, count| %>
+            <div class="w3-margin-bottom">
+              <p><strong><%= day.to_s.capitalize %>:</strong> <%= count %> calls</p>
+              <div class="w3-light-grey w3-round-xlarge">
+                <% max_calls = @analytics[:calls_by_day].values.max || 1 %>
+                <div class="w3-container w3-blue w3-round-xlarge" style="width: <%= (count.to_f / max_calls * 100).round(1) %>%">
+                  <%= count %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="w3-text-grey">No call distribution data available</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Call Activity -->
+<div class="w3-card-4 w3-white">
+  <header class="w3-container w3-light-grey">
+    <h3><i class="fas fa-history"></i> Recent Call Activity (Last 24 Hours)</h3>
+  </header>
+  
+  <div class="w3-container w3-padding">
+    <% if @recent_calls.any? %>
+      <div class="w3-responsive">
+        <table id="recent-calls-table" class="table table-striped table-bordered" style="width:100%">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Lead Name</th>
+              <th>Company</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Duration</th>
+              <th>Optimal?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @recent_calls.each do |call| %>
+              <tr>
+                <td data-order="<%= call.created_at.to_i %>">
+                  <%= call.created_at.strftime('%m/%d/%Y') %>
+                </td>
+                <td data-order="<%= call.created_at.to_i %>">
+                  <%= call.created_at.strftime('%I:%M %p') %>
+                </td>
+                <td><%= call.lead.name %></td>
+                <td><%= call.lead.company %></td>
+                <td>
+                  <a href="tel:<%= call.lead.phone %>" class="text-primary">
+                    <%= call.lead.phone %>
+                  </a>
+                </td>
+                <td data-order="<%= call.status %>">
+                  <span class="badge <%= 
+                    case call.status
+                    when 'completed' then 'bg-success'
+                    when 'failed' then 'bg-danger'
+                    when 'processing' then 'bg-warning'
+                    else 'bg-primary'
+                    end
+                  %>">
+                    <%= call.status.upcase %>
+                  </span>
+                </td>
+                <td>
+                  <% if call.last_attempt_at && call.created_at %>
+                    <% duration = call.last_attempt_at - call.created_at %>
+                    <%= distance_of_time_in_words(duration) %>
+                  <% elsif call.status == 'completed' && call.updated_at %>
+                    <% duration = call.updated_at - call.created_at %>
+                    <%= distance_of_time_in_words(duration) %>
+                  <% else %>
+                    <span class="text-muted">--</span>
+                  <% end %>
+                </td>
+                <td data-order="<%= CallingSchedule.is_valid_calling_time?(call.created_at) ? 1 : 0 %>">
+                  <% optimal = CallingSchedule.is_valid_calling_time?(call.created_at) %>
+                  <span class="badge <%= optimal ? 'bg-success' : 'bg-danger' %>">
+                    <%= optimal ? 'YES' : 'NO' %>
+                  </span>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="w3-center w3-padding-large">
+        <i class="fas fa-history w3-jumbo w3-text-grey"></i>
+        <h3 class="w3-text-grey">No Recent Activity</h3>
+        <p class="w3-text-grey">No calls have been made in the last 24 hours.</p>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- DataTables Initialization for Analytics -->
+<script>
+$(document).ready(function() {
+    // Initialize DataTables for Recent Calls table
+    $('#recent-calls-table').DataTable({
+        // Basic configuration
+        "pageLength": 15,
+        "lengthMenu": [[10, 15, 25, 50, -1], [10, 15, 25, 50, "All"]],
+        "responsive": true,
+        "processing": true,
+        
+        // Column configuration
+        "columnDefs": [
+            {
+                "targets": [0, 1], // Date and Time columns
+                "width": "10%"
+            },
+            {
+                "targets": [2, 3], // Lead Name and Company
+                "width": "20%"
+            },
+            {
+                "targets": [4], // Phone
+                "width": "15%"
+            },
+            {
+                "targets": [5], // Status
+                "width": "10%"
+            },
+            {
+                "targets": [6], // Duration
+                "width": "15%"
+            },
+            {
+                "targets": [7], // Optimal
+                "width": "10%"
+            }
+        ],
+        
+        // Default sorting: Date (desc), then Time (desc) - most recent first
+        "order": [[0, "desc"], [1, "desc"]],
+        
+        // Buttons for export functionality
+        "dom": 'Bfrtip',
+        "buttons": [
+            {
+                extend: 'copy',
+                text: '<i class="fas fa-copy"></i> Copy',
+                className: 'btn btn-outline-primary btn-sm'
+            },
+            {
+                extend: 'csv',
+                text: '<i class="fas fa-file-csv"></i> CSV',
+                className: 'btn btn-outline-success btn-sm',
+                filename: 'recent_calls_' + new Date().toISOString().slice(0,10)
+            },
+            {
+                extend: 'excel',
+                text: '<i class="fas fa-file-excel"></i> Excel',
+                className: 'btn btn-outline-success btn-sm',
+                filename: 'recent_calls_' + new Date().toISOString().slice(0,10)
+            },
+            {
+                extend: 'pdf',
+                text: '<i class="fas fa-file-pdf"></i> PDF',
+                className: 'btn btn-outline-danger btn-sm',
+                filename: 'recent_calls_' + new Date().toISOString().slice(0,10),
+                orientation: 'landscape',
+                pageSize: 'A4'
+            }
+        ],
+        
+        // Search configuration
+        "search": {
+            "regex": true,
+            "smart": true
+        },
+        
+        // Language customization
+        "language": {
+            "search": "Search recent calls:",
+            "lengthMenu": "Show _MENU_ calls per page",
+            "info": "Showing _START_ to _END_ of _TOTAL_ recent calls",
+            "infoEmpty": "No recent calls found",
+            "infoFiltered": "(filtered from _MAX_ total calls)",
+            "emptyTable": "No recent call activity",
+            "zeroRecords": "No matching calls found"
+        }
+    });
+});
+</script>

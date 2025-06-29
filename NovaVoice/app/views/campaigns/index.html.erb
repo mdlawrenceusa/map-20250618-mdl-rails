@@ -1,140 +1,292 @@
-<div class="bg-white shadow-sm rounded-lg">
-  <div class="px-6 py-4 border-b border-gray-200">
-    <div class="flex justify-between items-center">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900">Campaigns</h1>
-        <p class="text-sm text-gray-600 mt-1">
-          Manage your outbound calling campaigns
-        </p>
-      </div>
-      <%= link_to "New Campaign", new_campaign_path, 
-          class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg" %>
+<!-- Header Section -->
+<div class="w3-container">
+  <div class="w3-row-padding w3-margin-bottom">
+    <div class="w3-col l8 m8 s12">
+      <h1 class="w3-xlarge"><i class="fas fa-phone"></i> Voice Campaigns</h1>
+      <p class="w3-text-grey">Orchestrate AI-powered outbound calling campaigns</p>
+    </div>
+    <div class="w3-col l4 m4 s12 w3-right-align">
+      <%= link_to new_campaign_path, class: "w3-button w3-blue w3-round-large" do %>
+        <i class="fas fa-plus"></i> New Campaign
+      <% end %>
     </div>
   </div>
+</div>
 
-  <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="bg-white p-4 rounded-lg border">
-        <div class="text-sm font-medium text-gray-500">Total Leads</div>
-        <div class="text-2xl font-bold text-gray-900"><%= @total_leads %></div>
-      </div>
-      <div class="bg-white p-4 rounded-lg border">
-        <div class="text-sm font-medium text-gray-500">Callable Leads</div>
-        <div class="text-2xl font-bold text-green-600"><%= @callable_leads %></div>
-      </div>
-      <div class="bg-white p-4 rounded-lg border">
-        <div class="text-sm font-medium text-gray-500">Active Campaigns</div>
-        <div class="text-2xl font-bold text-blue-600"><%= @campaigns.active.count %></div>
+<!-- Stats Cards -->
+<div class="w3-row-padding w3-margin-bottom">
+  <div class="w3-third">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-grey">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="w3-right">
+          <h3><%= @total_leads %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Total Leads</h4>
       </div>
     </div>
   </div>
+  
+  <div class="w3-third">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-green">
+          <i class="fas fa-phone"></i>
+        </div>
+        <div class="w3-right">
+          <h3 class="w3-text-green"><%= @callable_leads %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Callable Leads</h4>
+      </div>
+    </div>
+  </div>
+  
+  <div class="w3-third">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-blue">
+          <i class="fas fa-rocket"></i>
+        </div>
+        <div class="w3-right">
+          <h3 class="w3-text-blue"><%= @campaigns.active.count %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Active Campaigns</h4>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
-        <tr>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Campaign
-          </th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Status
-          </th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Progress
-          </th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Batch Size
-          </th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Created
-          </th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Actions
-          </th>
-        </tr>
-      </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
-        <% @campaigns.each do |campaign| %>
-          <% progress = campaign.progress_summary %>
-          <tr class="hover:bg-gray-50">
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div>
-                <div class="text-sm font-medium text-gray-900">
-                  <%= link_to campaign.name, campaign, class: "text-blue-600 hover:text-blue-800" %>
+<!-- Campaign Overview Card -->
+<div class="w3-card-4 w3-white">
+  <header class="w3-container w3-light-grey">
+    <h3><i class="fas fa-clipboard-list"></i> Campaign Overview</h3>
+  </header>
+  
+  <div class="w3-container w3-padding">
+    <% if @campaigns.any? %>
+      
+      <%= enhanced_table(@campaigns, "campaigns-table", 
+                        export: true,
+                        filename: "voice_campaigns",
+                        entity_name: "campaigns",
+                        page_length: 15,
+                        default_sort: [[4, "desc"]],  # Sort by created date (newest first)
+                        column_defs: [
+                          { targets: [0], width: "25%" },    # Campaign
+                          { targets: [1], width: "12%" },    # Status  
+                          { targets: [2], width: "15%" },    # Progress
+                          { targets: [3], width: "10%" },    # Batch Size
+                          { targets: [4], width: "12%" },    # Created
+                          { targets: [5], orderable: false, searchable: false, width: "16%" }, # Actions
+                          { targets: [6], width: "10%" }     # Owner
+                        ],
+                        custom_filters: [
+                          { id: "status-filter", column: 1 }
+                        ]) do %>
+        <thead>
+          <tr>
+            <th>Campaign</th>
+            <th>Status</th>
+            <th>Progress</th>
+            <th>Batch Size</th>
+            <th>Created</th>
+            <th>Actions</th>
+            <th>Owner</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @campaigns.each do |campaign| %>
+            <% progress = campaign.progress_summary rescue { total_calls: 0, completed: 0 } %>
+            <tr>
+              <td>
+                <div>
+                  <strong><%= link_to campaign.name, campaign, class: "text-primary" %></strong>
                 </div>
                 <% if campaign.description.present? %>
-                  <div class="text-sm text-gray-500">
+                  <div class="text-muted" style="font-size: 0.8em;">
                     <%= truncate(campaign.description, length: 60) %>
                   </div>
                 <% end %>
-              </div>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                <%= case campaign.status
-                    when 'draft' then 'bg-gray-100 text-gray-800'
-                    when 'scheduled' then 'bg-yellow-100 text-yellow-800'
-                    when 'running' then 'bg-blue-100 text-blue-800'
-                    when 'paused' then 'bg-orange-100 text-orange-800'
-                    when 'completed' then 'bg-green-100 text-green-800'
-                    else 'bg-gray-100 text-gray-800'
-                    end %>">
-                <%= campaign.status.humanize %>
-              </span>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <% if progress[:total_calls] > 0 %>
-                <div class="flex items-center">
-                  <div class="flex-1 bg-gray-200 rounded-full h-2 mr-2">
-                    <% completed_pct = (progress[:completed].to_f / progress[:total_calls] * 100).round %>
-                    <div class="bg-green-600 h-2 rounded-full" style="width: <%= completed_pct %>%"></div>
+              </td>
+              <td data-order="<%= campaign.status %>">
+                <span class="badge <%= 
+                  case campaign.status
+                  when 'draft' then 'bg-secondary'
+                  when 'scheduled' then 'bg-warning'
+                  when 'running' then 'bg-primary'
+                  when 'paused' then 'bg-dark'
+                  when 'completed' then 'bg-success'
+                  else 'bg-light text-dark'
+                  end
+                %>">
+                  <%= campaign.status.humanize %>
+                </span>
+              </td>
+              <td data-order="<%= progress[:total_calls] > 0 ? (progress[:completed].to_f / progress[:total_calls] * 100).round : 0 %>">
+                <% if progress[:total_calls] > 0 %>
+                  <% completed_pct = (progress[:completed].to_f / progress[:total_calls] * 100).round %>
+                  <div class="progress" style="height: 20px;">
+                    <div class="progress-bar bg-success" 
+                         role="progressbar" 
+                         style="width: <%= completed_pct %>%"
+                         aria-valuenow="<%= completed_pct %>" 
+                         aria-valuemin="0" 
+                         aria-valuemax="100">
+                      <%= completed_pct %>%
+                    </div>
                   </div>
-                  <span class="text-xs">
-                    <%= progress[:completed] %>/<%= progress[:total_calls] %>
-                  </span>
+                  <small class="text-muted">
+                    <%= progress[:completed] %>/<%= progress[:total_calls] %> calls
+                  </small>
+                <% else %>
+                  <span class="text-muted">No calls</span>
+                <% end %>
+              </td>
+              <td data-order="<%= campaign.batch_size %>">
+                <strong><%= campaign.batch_size %></strong>
+                <br><small class="text-muted">planned calls</small>
+              </td>
+              <td data-order="<%= campaign.created_at.to_i %>">
+                <%= campaign.created_at.strftime("%m/%d/%Y") %>
+                <br><small class="text-muted">
+                  <%= time_ago_in_words(campaign.created_at) %> ago
+                </small>
+              </td>
+              <td>
+                <div class="btn-group btn-group-sm" role="group">
+                  <%= link_to campaign, 
+                              class: "btn btn-outline-primary btn-sm",
+                              title: "View Campaign",
+                              data: { toggle: "tooltip" } do %>
+                    <i class="fas fa-eye"></i>
+                  <% end %>
+                  
+                  <% if campaign.status == 'draft' %>
+                    <%= link_to edit_campaign_path(campaign), 
+                                class: "btn btn-outline-secondary btn-sm",
+                                title: "Edit Campaign",
+                                data: { toggle: "tooltip" } do %>
+                      <i class="fas fa-edit"></i>
+                    <% end %>
+                  <% end %>
+                  
+                  <% if campaign.status == 'paused' %>
+                    <%= link_to resume_campaign_path(campaign), 
+                                method: :patch, 
+                                class: "btn btn-outline-success btn-sm",
+                                title: "Resume Campaign",
+                                data: { toggle: "tooltip" } do %>
+                      <i class="fas fa-play"></i>
+                    <% end %>
+                  <% elsif campaign.status == 'running' %>
+                    <%= link_to pause_campaign_path(campaign), 
+                                method: :patch, 
+                                class: "btn btn-outline-warning btn-sm",
+                                title: "Pause Campaign",
+                                data: { toggle: "tooltip" } do %>
+                      <i class="fas fa-pause"></i>
+                    <% end %>
+                  <% elsif campaign.status == 'draft' %>
+                    <%= link_to launch_campaign_path(campaign), 
+                                method: :patch, 
+                                class: "btn btn-outline-success btn-sm",
+                                title: "Launch Campaign",
+                                data: { 
+                                  toggle: "tooltip",
+                                  turbo_confirm: "Launch campaign '#{campaign.name}'?" 
+                                } do %>
+                      <i class="fas fa-rocket"></i>
+                    <% end %>
+                  <% end %>
                 </div>
-              <% else %>
-                <span class="text-gray-500">No calls</span>
-              <% end %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <%= campaign.batch_size %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              <%= campaign.created_at.strftime("%m/%d/%Y") %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-              <%= link_to "View", campaign, class: "text-blue-600 hover:text-blue-800" %>
-              
-              <% if campaign.status == 'draft' %>
-                <%= link_to "Edit", edit_campaign_path(campaign), class: "text-indigo-600 hover:text-indigo-800" %>
-              <% end %>
-              
-              <% if campaign.status == 'paused' %>
-                <%= link_to "Resume", resume_campaign_path(campaign), method: :patch, 
-                    class: "text-green-600 hover:text-green-800" %>
-              <% elsif campaign.status == 'running' %>
-                <%= link_to "Pause", pause_campaign_path(campaign), method: :patch,
-                    class: "text-orange-600 hover:text-orange-800" %>
-              <% end %>
-              
-              <% if campaign.status == 'draft' %>
-                <%= link_to "Delete", campaign, method: :delete,
-                    confirm: "Are you sure?",
-                    class: "text-red-600 hover:text-red-800" %>
-              <% end %>
-            </td>
-          </tr>
+              </td>
+              <td>
+                <span class="badge bg-light text-dark">
+                  <%= campaign.respond_to?(:user) && campaign.user ? campaign.user.name : 'System' %>
+                </span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      <% end %>
+      
+      <!-- Custom Filters -->
+      <div class="w3-margin-top w3-row-padding">
+        <div class="w3-col m4 s12">
+          <label class="w3-text-grey"><i class="fas fa-flag"></i> Filter by Status:</label>
+          <select id="status-filter" class="w3-select w3-border">
+            <option value="">All Statuses</option>
+            <% %w[draft scheduled running paused completed].each do |status| %>
+              <option value="<%= status.humanize %>"><%= status.humanize %></option>
+            <% end %>
+          </select>
+        </div>
+        
+        <div class="w3-col m4 s12">
+          <label class="w3-text-grey"><i class="fas fa-info-circle"></i> Quick Actions:</label>
+          <div class="w3-bar w3-margin-top">
+            <%= link_to new_campaign_path, class: "w3-button w3-blue w3-small" do %>
+              <i class="fas fa-plus"></i> New Campaign
+            <% end %>
+            <% if @campaigns.where(status: 'running').any? %>
+              <button class="w3-button w3-orange w3-small" onclick="pauseAllRunning()">
+                <i class="fas fa-pause"></i> Pause All Running
+              </button>
+            <% end %>
+          </div>
+        </div>
+        
+        <div class="w3-col m4 s12">
+          <label class="w3-text-grey"><i class="fas fa-chart-bar"></i> Campaign Summary:</label>
+          <div class="w3-margin-top">
+            <small class="w3-text-grey">
+              Total: <%= @campaigns.count %> campaigns<br>
+              Active: <%= @campaigns.where(status: ['running', 'scheduled']).count %> campaigns<br>
+              Completed: <%= @campaigns.where(status: 'completed').count %> campaigns
+            </small>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <div class="w3-center w3-padding-32">
+        <i class="fas fa-microphone-slash w3-jumbo w3-text-grey"></i>
+        <h3 class="w3-text-grey">No campaigns created yet</h3>
+        <p class="w3-text-grey">Get started by creating your first voice campaign</p>
+        <%= link_to new_campaign_path, class: "w3-button w3-blue w3-round-large w3-margin-top" do %>
+          <i class="fas fa-plus"></i> Create your first campaign
         <% end %>
-      </tbody>
-    </table>
-    
-    <% if @campaigns.empty? %>
-      <div class="text-center py-12">
-        <div class="text-gray-500 mb-4">No campaigns created yet</div>
-        <%= link_to "Create your first campaign", new_campaign_path,
-            class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg" %>
       </div>
     <% end %>
   </div>
 </div>
+
+<!-- Additional JavaScript for campaign management -->
+<script>
+function pauseAllRunning() {
+  if (confirm('Pause all running campaigns?')) {
+    // This would make multiple API calls to pause campaigns
+    const runningCampaigns = document.querySelectorAll('tr:has(.badge.bg-primary)');
+    let pauseCount = 0;
+    
+    runningCampaigns.forEach(row => {
+      const pauseButton = row.querySelector('a[href*="pause"]');
+      if (pauseButton) {
+        // In a real implementation, you'd make AJAX calls here
+        pauseCount++;
+      }
+    });
+    
+    if (pauseCount > 0) {
+      alert(`Would pause ${pauseCount} running campaigns`);
+      // location.reload(); // Reload after bulk action
+    } else {
+      alert('No running campaigns found');
+    }
+  }
+}
+</script>

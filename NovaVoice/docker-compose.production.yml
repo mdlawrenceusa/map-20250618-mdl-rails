@@ -1,0 +1,244 @@
+# NovaVoice Production Docker Compose Configuration
+# Deploys Rails app with Aurora DSQL and Cognito authentication
+
+version: '3.8'
+
+services:
+  # Rails Application (Production)
+  rails:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+      target: production
+    environment:
+      # Rails Configuration
+      - RAILS_ENV=production
+      - RAILS_LOG_TO_STDOUT=true
+      - RAILS_SERVE_STATIC_FILES=true
+      - RAILS_LOG_LEVEL=info
+      
+      # Database Configuration (Aurora DSQL)
+      - DATABASE_URL=postgresql://${AURORA_DSQL_PROD_USER}:${AURORA_DSQL_PROD_PASSWORD}@${AURORA_DSQL_ENDPOINT}/novavoice_shared?schema_search_path=prod,shared,public
+      - DB_POOL=${DB_POOL_SIZE:-10}
+      
+      # Security
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+      
+      # Cognito Authentication
+      - COGNITO_ENABLED=true
+      - COGNITO_USER_POOL_ID=${COGNITO_USER_POOL_ID}
+      - COGNITO_CLIENT_ID=${COGNITO_CLIENT_ID}
+      - COGNITO_CLIENT_SECRET=${COGNITO_CLIENT_SECRET}
+      - COGNITO_DOMAIN=${COGNITO_DOMAIN}
+      - COGNITO_REGION=${AWS_REGION:-us-east-1}
+      
+      # AWS Configuration
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      
+      # Application URLs
+      - APP_HOST=${APP_HOST:-localhost}
+      - APP_PORT=3000
+      - MICROSERVICE_URL=http://microservice:3000
+      
+      # Feature Flags
+      - SYNC_LEADS_ENABLED=${SYNC_LEADS_ENABLED:-false}
+      - SYNC_APPROVAL_REQUIRED=true
+      - ENABLE_METRICS=true
+      
+    ports:
+      - "${RAILS_PORT:-3000}:3000"
+    
+    volumes:
+      - rails_storage:/app/storage
+      - rails_logs:/app/log
+      - rails_tmp:/app/tmp
+    
+    depends_on:
+      - microservice
+    
+    networks:
+      - novavoice_network
+    
+    restart: unless-stopped
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/up"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+        reservations:
+          memory: 512M
+          cpus: '0.25'
+
+  # Node.js Microservice (Voice AI)
+  microservice:
+    build:
+      context: ./microservice/sample
+      dockerfile: Dockerfile.production
+    environment:
+      # Node.js Configuration
+      - NODE_ENV=production
+      - PORT=3000
+      
+      # AWS Configuration
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      
+      # Vonage Configuration
+      - VONAGE_API_KEY=${VONAGE_API_KEY}
+      - VONAGE_API_SECRET=${VONAGE_API_SECRET}
+      - VONAGE_APPLICATION_ID=${VONAGE_APPLICATION_ID}
+      - VONAGE_PRIVATE_KEY=${VONAGE_PRIVATE_KEY}
+      - VONAGE_FROM_NUMBER=${VONAGE_FROM_NUMBER}
+      
+      # Nova Sonic Configuration
+      - NOVA_SONIC_ROLE_ARN=${NOVA_SONIC_ROLE_ARN}
+      - BEDROCK_ENDPOINT=${BEDROCK_ENDPOINT}
+      
+      # Calling Schedule Configuration
+      - ENABLE_CALLING_SCHEDULE=true
+      - CALLING_SCHEDULE_API_URL=http://rails:3000/api/v1/calling_schedule
+      - OPTIMAL_CALLING_DAYS=2,3,4  # Tue, Wed, Thu
+      - OPTIMAL_CALLING_HOURS=9-11:30,13:30-16  # EST times
+      
+      # Monitoring
+      - ENABLE_METRICS=true
+      - LOG_LEVEL=info
+      
+    expose:
+      - "3000"
+    
+    volumes:
+      - microservice_transcripts:/app/transcripts
+      - microservice_logs:/app/logs
+    
+    networks:
+      - novavoice_network
+    
+    restart: unless-stopped
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+
+  # Nginx Reverse Proxy (SSL Termination)
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - rails_logs:/var/log/rails
+      - microservice_logs:/var/log/microservice
+    
+    depends_on:
+      - rails
+      - microservice
+    
+    networks:
+      - novavoice_network
+    
+    restart: unless-stopped
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis (Caching and Sessions)
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    
+    volumes:
+      - redis_data:/data
+    
+    networks:
+      - novavoice_network
+    
+    restart: unless-stopped
+    
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
+
+  # Monitoring and Logging
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+    
+    networks:
+      - novavoice_network
+    
+    restart: unless-stopped
+
+volumes:
+  rails_storage:
+    driver: local
+  rails_logs:
+    driver: local
+  rails_tmp:
+    driver: local
+  microservice_transcripts:
+    driver: local
+  microservice_logs:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+
+networks:
+  novavoice_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

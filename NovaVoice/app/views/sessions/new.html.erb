@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign In - NovaVoice</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .login-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      margin: 20px;
+    }
+    
+    .logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .logo h1 {
+      color: #4CAF50;
+      margin: 0;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    
+    .logo p {
+      color: #666;
+      margin: 0.5rem 0 0 0;
+      font-size: 0.9rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #333;
+      font-weight: 500;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+      box-sizing: border-box;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: #4CAF50;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .btn:hover {
+      background: #45a049;
+    }
+    
+    .alert {
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .alert-error {
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #ffcdd2;
+    }
+    
+    .alert-notice {
+      background: #e8f5e8;
+      color: #2e7d32;
+      border: 1px solid #c8e6c9;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: #999;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">
+      <h1>🎤 NovaVoice</h1>
+      <p>Voice-Enabled Scheduling Assistant</p>
+    </div>
+    
+    <% if flash[:alert] %>
+      <div class="alert alert-error">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+    
+    <% if flash[:notice] %>
+      <div class="alert alert-notice">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+    
+    <%= form_with url: session_path, local: true, class: "login-form" do |form| %>
+      <div class="form-group">
+        <%= form.label :email, "Email Address" %>
+        <%= form.email_field :email, placeholder: "Enter your email", required: true, autofocus: true %>
+      </div>
+      
+      <div class="form-group">
+        <%= form.label :password, "Password" %>
+        <%= form.password_field :password, placeholder: "Enter your password", required: true %>
+      </div>
+      
+      <%= form.submit "Sign In", class: "btn" %>
+    <% end %>
+    
+    <div class="footer">
+      <p>© 2025 Mike Lawrence Productions</p>
+      <p>Powered by AWS Cognito & Nova Sonic AI</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  resource_type: MyString
+  resource_id: 1
+  synced_by: MyString
+  synced_at: 2025-06-29 01:16:46
+  environment: MyString
+  sync_details: MyText
+
+two:
+  resource_type: MyString
+  resource_id: 1
+  synced_by: MyString
+  synced_at: 2025-06-29 01:16:46
+  environment: MyString
+  sync_details: MyText

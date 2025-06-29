@@ -1,0 +1,365 @@
+<!-- Aurora DSQL Sync Management -->
+<div class="w3-container">
+  <div class="w3-row-padding w3-margin-bottom">
+    <div class="w3-col l8 m8 s12">
+      <h1 class="w3-xlarge"><i class="fas fa-sync"></i> Aurora DSQL Sync Management</h1>
+      <p class="w3-text-grey">Manage data synchronization between development and production environments</p>
+    </div>
+    <div class="w3-col l4 m4 s12 w3-right-align">
+      <button class="w3-button w3-green w3-round-large" onclick="checkSyncStatus()">
+        <i class="fas fa-check-circle"></i> Check Status
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Environment Status Cards -->
+<div class="w3-row-padding w3-margin-bottom">
+  <div class="w3-half">
+    <div class="w3-card-4 w3-white">
+      <header class="w3-container w3-blue">
+        <h3><i class="fas fa-code"></i> Development Environment</h3>
+      </header>
+      <div class="w3-container w3-padding">
+        <div class="w3-row">
+          <div class="w3-col m6">
+            <p><strong>Database:</strong> <%= Rails.env %></p>
+            <p><strong>Schema:</strong> dev, shared, public</p>
+          </div>
+          <div class="w3-col m6">
+            <p><strong>Records:</strong></p>
+            <ul class="w3-ul">
+              <li>Leads: <%= Lead.count %></li>
+              <li>Prompts: <%= Prompt.count %></li>
+              <li>Campaigns: <%= Campaign.count %></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="w3-half">
+    <div class="w3-card-4 w3-white">
+      <header class="w3-container w3-green">
+        <h3><i class="fas fa-server"></i> Production Environment</h3>
+      </header>
+      <div class="w3-container w3-padding">
+        <div class="w3-row">
+          <div class="w3-col m6">
+            <p><strong>Database:</strong> Aurora DSQL</p>
+            <p><strong>Schema:</strong> prod, shared, public</p>
+          </div>
+          <div class="w3-col m6">
+            <p><strong>Status:</strong></p>
+            <p id="prod-status" class="w3-text-grey">
+              <i class="fas fa-spinner fa-spin"></i> Checking...
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sync Options -->
+<div class="w3-card-4 w3-white">
+  <header class="w3-container w3-light-grey">
+    <h3><i class="fas fa-exchange-alt"></i> Sync Operations</h3>
+  </header>
+  
+  <div class="w3-container w3-padding">
+    <!-- Dev to Prod Sync -->
+    <div class="w3-section">
+      <h4 class="w3-text-blue"><i class="fas fa-arrow-right"></i> Development → Production</h4>
+      <p class="w3-text-grey">Push tested changes from development to production</p>
+      
+      <div class="w3-row-padding">
+        <div class="w3-col m4">
+          <div class="w3-card w3-hover-shadow w3-center w3-padding" style="cursor: pointer;" onclick="openSyncModal('prompts')">
+            <i class="fas fa-file-alt w3-xxlarge w3-text-blue"></i>
+            <h5>Sync Prompts</h5>
+            <p class="w3-small">Push prompt changes to production</p>
+          </div>
+        </div>
+        
+        <div class="w3-col m4">
+          <div class="w3-card w3-hover-shadow w3-center w3-padding" style="cursor: pointer;" onclick="openSyncModal('campaigns')">
+            <i class="fas fa-bullhorn w3-xxlarge w3-text-green"></i>
+            <h5>Sync Campaigns</h5>
+            <p class="w3-small">Deploy campaign configurations</p>
+          </div>
+        </div>
+        
+        <div class="w3-col m4">
+          <div class="w3-card w3-hover-shadow w3-center w3-padding <%= 'w3-opacity' unless ENV['SYNC_LEADS_ENABLED'] == 'true' %>" 
+               style="cursor: <%= ENV['SYNC_LEADS_ENABLED'] == 'true' ? 'pointer' : 'not-allowed' %>;" 
+               onclick="<%= ENV['SYNC_LEADS_ENABLED'] == 'true' ? "openSyncModal('leads')" : "alert('Lead sync is disabled. Set SYNC_LEADS_ENABLED=true to enable.')" %>">
+            <i class="fas fa-users w3-xxlarge w3-text-orange"></i>
+            <h5>Sync Leads</h5>
+            <p class="w3-small">Transfer lead data (requires approval)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <hr>
+    
+    <!-- Prod to Dev Copy -->
+    <div class="w3-section">
+      <h4 class="w3-text-green"><i class="fas fa-arrow-left"></i> Production → Development</h4>
+      <p class="w3-text-grey">Copy production data for testing and analysis</p>
+      
+      <div class="w3-row-padding">
+        <div class="w3-col m6">
+          <div class="w3-card w3-hover-shadow w3-center w3-padding" style="cursor: pointer;" onclick="openCopyModal('call_transcripts')">
+            <i class="fas fa-phone-volume w3-xxlarge w3-text-purple"></i>
+            <h5>Copy Call Transcripts</h5>
+            <p class="w3-small">Import production calls for analysis</p>
+          </div>
+        </div>
+        
+        <div class="w3-col m6">
+          <div class="w3-card w3-hover-shadow w3-center w3-padding" style="cursor: pointer;" onclick="openCopyModal('analytics')">
+            <i class="fas fa-chart-line w3-xxlarge w3-text-indigo"></i>
+            <h5>Copy Analytics</h5>
+            <p class="w3-small">Import production metrics</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Sync History -->
+<div class="w3-card-4 w3-white w3-margin-top">
+  <header class="w3-container w3-light-grey">
+    <h3><i class="fas fa-history"></i> Recent Sync History</h3>
+  </header>
+  
+  <div class="w3-container w3-padding">
+    <% if @sync_history && @sync_history.any? %>
+      <table class="w3-table w3-striped w3-bordered">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Type</th>
+            <th>Resource</th>
+            <th>Direction</th>
+            <th>User</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sync_history.each do |sync| %>
+            <tr>
+              <td><%= sync.synced_at.strftime("%m/%d %I:%M %p") %></td>
+              <td>
+                <span class="w3-tag w3-small <%= sync_type_color(sync.resource_type) %>">
+                  <%= sync.resource_type.upcase %>
+                </span>
+              </td>
+              <td>#<%= sync.resource_id %></td>
+              <td>
+                <% if sync.environment == 'dev_to_prod' %>
+                  <span class="w3-text-blue">DEV → PROD</span>
+                <% else %>
+                  <span class="w3-text-green">PROD → DEV</span>
+                <% end %>
+              </td>
+              <td><%= sync.synced_by %></td>
+              <td>
+                <button class="w3-button w3-tiny w3-light-grey" onclick="showSyncDetails(<%= sync.id %>)">
+                  <i class="fas fa-info-circle"></i> Details
+                </button>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="w3-text-grey w3-center w3-padding">No sync history available</p>
+    <% end %>
+  </div>
+</div>
+
+<!-- Sync Modal -->
+<div id="syncModal" class="w3-modal">
+  <div class="w3-modal-content w3-animate-top w3-card-4" style="max-width: 800px;">
+    <header class="w3-container w3-blue">
+      <span onclick="closeSyncModal()" class="w3-button w3-display-topright">&times;</span>
+      <h2 id="syncModalTitle">Sync to Production</h2>
+    </header>
+    
+    <div class="w3-container w3-padding">
+      <div id="syncModalContent">
+        <!-- Dynamic content loaded here -->
+      </div>
+    </div>
+    
+    <footer class="w3-container w3-light-grey w3-padding">
+      <button id="confirmSyncBtn" class="w3-button w3-green w3-round" onclick="confirmSync()">
+        <i class="fas fa-check"></i> Confirm Sync
+      </button>
+      <button class="w3-button w3-red w3-round" onclick="closeSyncModal()">
+        <i class="fas fa-times"></i> Cancel
+      </button>
+    </footer>
+  </div>
+</div>
+
+<script>
+let currentSyncType = '';
+let selectedResources = [];
+
+function checkSyncStatus() {
+  fetch('/admin/sync/status')
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('prod-status').innerHTML = data.connected ? 
+        '<i class="fas fa-check-circle w3-text-green"></i> Connected' : 
+        '<i class="fas fa-times-circle w3-text-red"></i> Disconnected';
+    })
+    .catch(error => {
+      console.error('Error checking status:', error);
+      document.getElementById('prod-status').innerHTML = 
+        '<i class="fas fa-exclamation-triangle w3-text-orange"></i> Error';
+    });
+}
+
+function openSyncModal(resourceType) {
+  currentSyncType = resourceType;
+  document.getElementById('syncModalTitle').textContent = `Sync ${resourceType.charAt(0).toUpperCase() + resourceType.slice(1)} to Production`;
+  document.getElementById('syncModal').style.display = 'block';
+  
+  // Load preview data
+  loadSyncPreview(resourceType);
+}
+
+function loadSyncPreview(resourceType) {
+  const content = document.getElementById('syncModalContent');
+  content.innerHTML = '<div class="w3-center w3-padding"><i class="fas fa-spinner fa-spin w3-xxlarge"></i></div>';
+  
+  fetch(`/admin/sync/preview?resource_type=${resourceType}`)
+    .then(response => response.json())
+    .then(data => {
+      let html = '<h4>Select items to sync:</h4>';
+      html += '<div class="w3-responsive"><table class="w3-table w3-striped w3-bordered">';
+      html += '<thead><tr><th><input type="checkbox" onchange="toggleAll(this)"></th><th>ID</th><th>Name</th><th>Details</th><th>Status</th></tr></thead>';
+      html += '<tbody>';
+      
+      data.forEach(item => {
+        html += `<tr>
+          <td><input type="checkbox" value="${item.id}" onchange="updateSelection()"></td>
+          <td>#${item.id}</td>
+          <td>${item.name || item.phone || 'N/A'}</td>
+          <td>${item.content_preview || item.description || ''}</td>
+          <td>${item.would_override ? '<span class="w3-tag w3-orange">Will Override</span>' : '<span class="w3-tag w3-green">New</span>'}</td>
+        </tr>`;
+      });
+      
+      html += '</tbody></table></div>';
+      
+      if (data.length === 0) {
+        html = '<p class="w3-text-grey w3-center">No items available to sync</p>';
+      }
+      
+      content.innerHTML = html;
+    })
+    .catch(error => {
+      content.innerHTML = '<p class="w3-text-red">Error loading preview: ' + error.message + '</p>';
+    });
+}
+
+function toggleAll(checkbox) {
+  const checkboxes = document.querySelectorAll('#syncModalContent input[type="checkbox"]');
+  checkboxes.forEach(cb => {
+    if (cb !== checkbox) cb.checked = checkbox.checked;
+  });
+  updateSelection();
+}
+
+function updateSelection() {
+  selectedResources = [];
+  const checkboxes = document.querySelectorAll('#syncModalContent input[type="checkbox"]:checked');
+  checkboxes.forEach(cb => {
+    if (cb.value) selectedResources.push(cb.value);
+  });
+  
+  document.getElementById('confirmSyncBtn').disabled = selectedResources.length === 0;
+}
+
+function confirmSync() {
+  if (selectedResources.length === 0) {
+    alert('Please select at least one item to sync');
+    return;
+  }
+  
+  const confirmation = prompt('Type "SYNC_TO_PRODUCTION" to confirm:');
+  if (confirmation !== 'SYNC_TO_PRODUCTION') {
+    alert('Sync cancelled');
+    return;
+  }
+  
+  // Perform sync
+  fetch('/admin/sync/sync_to_production', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+    },
+    body: JSON.stringify({
+      resource_type: currentSyncType,
+      resource_ids: selectedResources,
+      confirm: 'SYNC_TO_PRODUCTION'
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert(`Successfully synced ${data.synced_count} items to production!`);
+      closeSyncModal();
+      location.reload();
+    } else {
+      alert('Sync failed: ' + data.error);
+    }
+  })
+  .catch(error => {
+    alert('Error during sync: ' + error.message);
+  });
+}
+
+function closeSyncModal() {
+  document.getElementById('syncModal').style.display = 'none';
+  currentSyncType = '';
+  selectedResources = [];
+}
+
+function showSyncDetails(syncId) {
+  // Implementation for showing sync details
+  alert('Sync details for record #' + syncId);
+}
+
+function sync_type_color(type) {
+  const colors = {
+    'prompt': 'w3-blue',
+    'campaign': 'w3-green',
+    'lead': 'w3-orange',
+    'call_transcript': 'w3-purple',
+    'analytics': 'w3-indigo'
+  };
+  return colors[type] || 'w3-grey';
+}
+
+// Check status on page load
+document.addEventListener('DOMContentLoaded', function() {
+  checkSyncStatus();
+});
+</script>
+
+<style>
+.w3-card:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s;
+}
+</style>

@@ -1,0 +1,43 @@
+# Aurora DSQL Type Map Fix
+# Fixes the "wrong argument type nil (expected PG::TypeMap)" error
+
+if Rails.env.production?
+  require 'active_record/connection_adapters/postgresql_adapter'
+  require 'pg'
+  
+  module PG
+    class Result
+      # Override map_types! to handle nil type_map
+      alias_method :original_map_types!, :map_types!
+      
+      def map_types!(type_map=nil)
+        if type_map.nil?
+          # Create a basic type map if none provided
+          type_map = PG::TypeMapAllStrings.new
+        end
+        original_map_types!(type_map)
+      end
+    end
+  end
+  
+  # Also patch ActiveRecord's PostgreSQL adapter after it's loaded
+  Rails.application.config.after_initialize do
+    if defined?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
+      ActiveRecord::ConnectionAdapters::PostgreSQLAdapter.class_eval do
+        # Override configure_connection to avoid setting unsupported parameters
+        alias_method :original_configure_connection, :configure_connection
+        
+        def configure_connection
+          if @config[:host]&.include?('dsql')
+            # Minimal configuration for Aurora DSQL
+            @connection.type_map_for_results = PG::TypeMapAllStrings.new if @connection.respond_to?(:type_map_for_results=)
+            @connection.type_map_for_queries = PG::TypeMapAllStrings.new if @connection.respond_to?(:type_map_for_queries=)
+            execute("SET client_encoding TO 'UTF8'") rescue nil
+          else
+            original_configure_connection
+          end
+        end
+      end
+    end
+  end
+end

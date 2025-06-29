@@ -35,17 +35,51 @@ class Api::V1::PromptsController < Api::V1::BaseController
   # GET /api/v1/prompts
   # Lists prompts with optional filtering
   def index
-    prompts = Prompt.all
-    prompts = prompts.active if params[:active] == 'true'
-    prompts = prompts.by_type(params[:type]) if params[:type].present?
-    prompts = prompts.for_campaign(params[:campaign_id]) if params[:campaign_id].present?
-    prompts = prompts.for_lead(params[:lead_id]) if params[:lead_id].present?
-    prompts = prompts.order(created_at: :desc)
+    # Aurora DSQL workaround - use raw SQL
+    if Rails.env.production? && ActiveRecord::Base.connection.adapter_name == "PostgreSQL" && false # Disabled for now
+      sql = "SELECT * FROM prompts"
+      conditions = []
+      
+      conditions << "active = true" if params[:active] == 'true'
+      conditions << "prompt_type = '#{params[:type]}'" if params[:type].present?
+      conditions << "campaign_id = #{params[:campaign_id]}" if params[:campaign_id].present?
+      conditions << "lead_id = #{params[:lead_id]}" if params[:lead_id].present?
+      
+      sql += " WHERE #{conditions.join(' AND ')}" if conditions.any?
+      sql += " ORDER BY created_at DESC"
+      
+      results = ActiveRecord::Base.connection.execute(sql)
+      prompts_data = results.map do |row|
+        {
+          id: row['id'],
+          name: row['name'],
+          content: row['content'],
+          prompt_type: row['prompt_type'],
+          active: row['active'] == 't',
+          version: row['version'],
+          created_at: row['created_at'],
+          updated_at: row['updated_at']
+        }
+      end
+      
+      render json: {
+        prompts: prompts_data,
+        total: prompts_data.length
+      }
+    else
+      # Original ActiveRecord implementation
+      prompts = Prompt.all
+      prompts = prompts.active if params[:active] == 'true'
+      prompts = prompts.by_type(params[:type]) if params[:type].present?
+      prompts = prompts.for_campaign(params[:campaign_id]) if params[:campaign_id].present?
+      prompts = prompts.for_lead(params[:lead_id]) if params[:lead_id].present?
+      prompts = prompts.order(created_at: :desc)
 
-    render json: {
-      prompts: prompts.map { |p| prompt_response(p) },
-      total: prompts.count
-    }
+      render json: {
+        prompts: prompts.map { |p| prompt_response(p) },
+        total: prompts.count
+      }
+    end
   end
 
   # POST /api/v1/prompts
@@ -115,8 +149,8 @@ class Api::V1::PromptsController < Api::V1::BaseController
   # GET /api/v1/prompts/admin
   def admin
     @prompts = Prompt.includes(:lead).order(created_at: :desc)
-    @pending_count = Prompt.pending_publication.count
-    @last_published = Prompt.published.maximum(:published_at)
+    @pending_count = Prompt.pending_publication.count rescue 0
+    @last_published = Prompt.published.maximum(:published_at) rescue nil
     
     respond_to do |format|
       format.html { render 'api/v1/prompts/admin', layout: 'application' }
@@ -127,7 +161,7 @@ class Api::V1::PromptsController < Api::V1::BaseController
   # GET /api/v1/prompts/publish_status
   def publish_status
     # Stateless: Always show all active prompts as publishable
-    active_prompts = Prompt.where(is_active: true).includes(:lead)
+    active_prompts = Prompt.where(active: true).includes(:lead)
     active_count = active_prompts.count
     last_publish = Prompt.maximum(:published_at)
     

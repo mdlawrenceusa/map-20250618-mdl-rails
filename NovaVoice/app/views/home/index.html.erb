@@ -1,49 +1,80 @@
-<div class="max-w-4xl mx-auto p-6">
-  <h1 class="text-3xl font-bold text-center mb-8">Esther - Scheduling Assistant</h1>
-  <p class="text-center text-gray-600 mb-2">Mike Lawrence Productions Gospel Outreach Program</p>
-  <p class="text-center text-sm text-blue-600 mb-6">Website: globaloutreachevent.com | Phone: 347-300-5533</p>
-  
-  <!-- Connection Status -->
-  <div id="connection-status" class="text-center mb-4 p-2 rounded">
-    <span class="status disconnected">Connecting...</span>
-  </div>
-  
-  <!-- Recording Controls -->
-  <div class="text-center mb-8">
-    <button id="record-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
-      Start Recording
-    </button>
-  </div>
-  
-  <!-- Error Messages -->
-  <div id="error-message" class="text-center mb-4 p-2 bg-red-100 text-red-700 rounded hidden"></div>
-  
-  <!-- Esther's Response -->
-  <div class="bg-gray-100 p-4 rounded-lg mb-4">
-    <h3 class="font-bold mb-2">Esther says:</h3>
-    <div id="esther-response" class="text-gray-700 min-h-16">
-      Ready to help you schedule a meeting with Mike Lawrence...
+<div class="w3-row">
+  <div class="w3-col l8 m10 s12 w3-center-align" style="margin: 0 auto; float: none;">
+    <!-- Header Card -->
+    <div class="w3-card-4 w3-blue w3-margin-bottom">
+      <div class="w3-container w3-center w3-padding-32">
+        <h1 class="w3-xxxlarge"><i class="fas fa-microphone"></i> Esther - Scheduling Assistant</h1>
+        <p class="w3-large">Mike Lawrence Productions Gospel Outreach Program</p>
+        <p class="w3-opacity">Website: globaloutreachevent.com | Phone: 347-300-5533</p>
+      </div>
+    </div>
+
+    <!-- Main Control Card -->
+    <div class="w3-card-4 w3-white w3-margin-bottom">
+      <div class="w3-container w3-padding-16">
+        <!-- Connection Status -->
+        <div id="connection-status" class="w3-center w3-margin-bottom">
+          <span class="status disconnected w3-tag w3-red w3-round">
+            <i class="fas fa-circle"></i> Connecting...
+          </span>
+        </div>
+        
+        <!-- Recording Controls -->
+        <div class="w3-center w3-margin-bottom">
+          <button id="record-button" class="w3-button w3-blue w3-large w3-round-large w3-hover-indigo">
+            <i class="fas fa-microphone"></i> Start Recording
+          </button>
+        </div>
+        
+        <!-- Error Messages -->
+        <div id="error-message" class="w3-panel w3-pale-red w3-leftbar w3-border-red w3-hide"></div>
+      </div>
+    </div>
+    
+    <!-- Esther's Response Card -->
+    <div class="w3-card-4 w3-white w3-margin-bottom">
+      <header class="w3-container w3-light-grey">
+        <h3><i class="fas fa-comment-dots"></i> Esther says:</h3>
+      </header>
+      <div class="w3-container w3-padding-16">
+        <div id="esther-response" class="w3-text-grey" style="min-height: 60px;">
+          Ready to help you schedule a meeting with Mike Lawrence...
+        </div>
+      </div>
+    </div>
+    
+    <!-- Status -->
+    <div id="status" class="w3-center w3-margin-bottom w3-text-grey"></div>
+    
+    <!-- Transcript Card -->
+    <div class="w3-card-4 w3-white">
+      <header class="w3-container w3-light-grey">
+        <h3><i class="fas fa-file-alt"></i> Conversation Transcript</h3>
+      </header>
+      <div class="w3-container w3-padding-16">
+        <div id="transcript" class="w3-code w3-small" style="min-height: 120px; white-space: pre-wrap;"></div>
+      </div>
     </div>
   </div>
-  
-  <!-- Legacy Support -->
-  <div id="status" class="text-center mb-4 text-gray-600"></div>
-  <div id="transcript" class="bg-gray-100 p-4 rounded-lg min-h-32 whitespace-pre-wrap"></div>
 </div>
 
 <style>
+  /* Custom styles for W3.CSS integration */
   .status.connected {
-    color: #059669;
-    font-weight: bold;
+    background-color: #4CAF50 !important;
   }
   
   .status.disconnected {
-    color: #dc2626;
+    background-color: #f44336 !important;
   }
   
   #record-button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+  
+  .w3-center-align {
+    display: block;
   }
 </style>
 

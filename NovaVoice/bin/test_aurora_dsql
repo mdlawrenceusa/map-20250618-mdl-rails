@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+
+require 'pg'
+require 'aws-sdk-core'
+
+puts "Testing Aurora DSQL connection with IAM auth..."
+
+# Generate auth token
+hostname = 'lyabugbxayepatoxdewlxwdo7q.dsql.us-east-1.on.aws'
+region = 'us-east-1'
+
+# Get auth token from AWS CLI
+auth_token = `aws dsql generate-db-connect-admin-auth-token --hostname #{hostname} --region #{region}`.strip
+
+puts "Generated auth token: #{auth_token[0..50]}..."
+
+begin
+  # Test direct connection with pg gem
+  conn = PG.connect(
+    host: hostname,
+    port: 5432,
+    dbname: 'postgres',
+    user: 'admin',
+    password: auth_token,
+    sslmode: 'require'
+  )
+  
+  # Test query
+  result = conn.exec("SELECT version();")
+  puts "✓ Successfully connected to Aurora DSQL!"
+  puts "Version: #{result.getvalue(0, 0)}"
+  
+  # Test database creation
+  begin
+    conn.exec("CREATE DATABASE novavoice_production;")
+    puts "✓ Created novavoice_production database"
+  rescue PG::DuplicateDatabase
+    puts "✓ Database novavoice_production already exists"
+  end
+  
+  conn.close
+  
+rescue => e
+  puts "✗ Connection failed: #{e.message}"
+  puts "Full error: #{e.class}: #{e.message}"
+end

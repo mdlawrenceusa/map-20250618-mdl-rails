@@ -1,0 +1,69 @@
+# Aurora DSQL Configuration with IAM Authentication
+# This will replace database.yml for production
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 30000
+  connect_timeout: 30
+  checkout_timeout: 30
+  
+development:
+  <<: *default
+  database: storage/development.sqlite3
+  adapter: sqlite3
+
+test:
+  <<: *default
+  database: storage/test.sqlite3
+  adapter: sqlite3
+
+production:
+  # Primary database using Aurora DSQL
+  primary:
+    <<: *default
+    host: lyabugbxayepatoxdewlxwdo7q.dsql.us-east-1.on.aws
+    port: 5432
+    database: postgres
+    username: admin
+    # Aurora DSQL uses IAM authentication - no password needed
+    # Rails will generate auth tokens automatically
+    sslmode: require
+    prepared_statements: false
+    
+  # Cache database - same Aurora DSQL cluster, different schema
+  cache:
+    <<: *default
+    host: lyabugbxayepatoxdewlxwdo7q.dsql.us-east-1.on.aws
+    port: 5432
+    database: postgres
+    username: admin
+    schema_search_path: "solid_cache,public"
+    sslmode: require
+    prepared_statements: false
+    migrations_paths: db/cache_migrate
+    
+  # Queue database - same Aurora DSQL cluster, different schema  
+  queue:
+    <<: *default
+    host: lyabugbxayepatoxdewlxwdo7q.dsql.us-east-1.on.aws
+    port: 5432
+    database: postgres
+    username: admin
+    schema_search_path: "solid_queue,public"
+    sslmode: require
+    prepared_statements: false
+    migrations_paths: db/queue_migrate
+    
+  # Cable database - same Aurora DSQL cluster, different schema
+  cable:
+    <<: *default
+    host: lyabugbxayepatoxdewlxwdo7q.dsql.us-east-1.on.aws
+    port: 5432
+    database: postgres
+    username: admin
+    schema_search_path: "solid_cable,public"
+    sslmode: require
+    prepared_statements: false
+    migrations_paths: db/cable_migrate

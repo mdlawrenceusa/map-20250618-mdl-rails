@@ -1,0 +1,191 @@
+<!-- Header Section -->
+<div class="w3-container">
+  <h1 class="w3-xlarge"><i class="fas fa-clock"></i> Calling Schedule Management</h1>
+  <p class="w3-text-grey">Monitor and manage church calling schedules and time windows</p>
+  
+  <!-- Navigation Tabs -->
+  <div class="w3-bar w3-light-grey w3-margin-top">
+    <%= link_to admin_calling_schedule_index_path, class: "w3-bar-item w3-button w3-blue" do %>
+      <i class="fas fa-tachometer-alt"></i> Dashboard
+    <% end %>
+    <%= link_to admin_calling_schedule_queue_path, class: "w3-bar-item w3-button w3-hover-light-grey" do %>
+      <i class="fas fa-list"></i> Queue
+    <% end %>
+    <%= link_to admin_calling_schedule_analytics_path, class: "w3-bar-item w3-button w3-hover-light-grey" do %>
+      <i class="fas fa-chart-bar"></i> Analytics
+    <% end %>
+  </div>
+</div>
+
+<!-- Current Status Card -->
+<div class="w3-card-4 w3-white w3-margin-bottom">
+  <header class="w3-container <%= @current_status[:calling_allowed] ? 'w3-green' : 'w3-red' %>">
+    <h3><i class="fas fa-info-circle"></i> Current Status</h3>
+  </header>
+  
+  <div class="w3-container w3-padding">
+    <div class="w3-row-padding">
+      <div class="w3-col m6 s12">
+        <p><strong>Current Time:</strong> <%= @current_status[:current_time] %></p>
+        <p><strong>Day:</strong> <%= @current_status[:current_day] %></p>
+        <p><strong>Calling Allowed:</strong> 
+          <span class="w3-tag <%= @current_status[:calling_allowed] ? 'w3-green' : 'w3-red' %> w3-round">
+            <%= @current_status[:calling_allowed] ? '✅ YES' : '❌ NO' %>
+          </span>
+        </p>
+      </div>
+      <div class="w3-col m6 s12">
+        <% if @current_status[:next_window] %>
+          <p><strong>Next Window:</strong> <%= @current_status[:next_window][:formatted] %></p>
+          <p><strong>Hours Away:</strong> <%= @current_status[:next_window][:hours_away] %></p>
+        <% end %>
+        <p><strong>Queue Size:</strong> <%= @current_status[:queue_size] %> pending calls</p>
+        <p><strong>Ready to Call:</strong> <%= @current_status[:calls_ready] %> calls</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Queue Summary Cards -->
+<div class="w3-row-padding w3-margin-bottom">
+  <div class="w3-fifth">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-blue">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="w3-right">
+          <h3 class="w3-text-blue"><%= @queue_summary[:pending] %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Pending</h4>
+      </div>
+    </div>
+  </div>
+  
+  <div class="w3-fifth">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-orange">
+          <i class="fas fa-phone"></i>
+        </div>
+        <div class="w3-right">
+          <h3 class="w3-text-orange"><%= @queue_summary[:processing] %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Processing</h4>
+      </div>
+    </div>
+  </div>
+  
+  <div class="w3-fifth">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-green">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="w3-right">
+          <h3 class="w3-text-green"><%= @queue_summary[:completed] %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Completed</h4>
+      </div>
+    </div>
+  </div>
+  
+  <div class="w3-fifth">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-red">
+          <i class="fas fa-times-circle"></i>
+        </div>
+        <div class="w3-right">
+          <h3 class="w3-text-red"><%= @queue_summary[:failed] %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Failed</h4>
+      </div>
+    </div>
+  </div>
+  
+  <div class="w3-fifth">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-teal">
+          <i class="fas fa-play"></i>
+        </div>
+        <div class="w3-right">
+          <h3 class="w3-text-teal"><%= @queue_summary[:ready_to_call] %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Ready Now</h4>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Weekly Schedule Overview -->
+<div class="w3-card-4 w3-white">
+  <header class="w3-container w3-light-grey">
+    <h3><i class="fas fa-calendar-week"></i> Weekly Calling Schedule</h3>
+  </header>
+  
+  <div class="w3-container w3-padding">
+    <div class="w3-responsive">
+      <table class="w3-table w3-striped w3-bordered">
+        <thead>
+          <tr class="w3-light-grey">
+            <th>Day</th>
+            <th>Status</th>
+            <th>Windows</th>
+            <th>Total Hours</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @weekly_schedule.each do |day_key, day_data| %>
+            <tr>
+              <td>
+                <strong><%= day_key.to_s.capitalize %></strong>
+                <% if day_data[:optimal_day] %>
+                  <span class="w3-tag w3-green w3-tiny w3-round">OPTIMAL</span>
+                <% end %>
+              </td>
+              <td>
+                <% if day_data[:optimal_day] %>
+                  <span class="w3-text-green"><i class="fas fa-check"></i> Calling Day</span>
+                <% else %>
+                  <span class="w3-text-red"><i class="fas fa-times"></i> Restricted</span>
+                <% end %>
+              </td>
+              <td>
+                <% if day_data[:windows].any? %>
+                  <% day_data[:windows].each do |window| %>
+                    <div class="w3-tiny">
+                      <strong><%= window[:name] %>:</strong> <%= window[:time_range] %>
+                    </div>
+                  <% end %>
+                <% else %>
+                  <span class="w3-text-grey">No windows</span>
+                <% end %>
+              </td>
+              <td>
+                <% if day_data[:total_hours] > 0 %>
+                  <span class="w3-text-blue"><%= day_data[:total_hours] %> hours</span>
+                <% else %>
+                  <span class="w3-text-grey">0 hours</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="w3-margin-top">
+      <p><strong>Total Weekly Calling Hours:</strong> 
+        <%= @weekly_schedule.values.sum { |day| day[:total_hours] } %> hours across 
+        <%= @weekly_schedule.values.count { |day| day[:optimal_day] } %> optimal days
+      </p>
+    </div>
+  </div>
+</div>

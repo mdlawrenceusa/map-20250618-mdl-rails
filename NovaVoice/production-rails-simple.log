@@ -1,0 +1,18 @@
+=> Booting Puma
+=> Rails 8.0.2 application starting in production 
+=> Run `bin/rails server --help` for more startup options
+Puma starting in single mode...
+* Puma version: 6.6.0 ("Return to Forever")
+* Ruby version: ruby 3.2.8 (2025-03-26 revision 13f495dc2c) [aarch64-linux]
+*  Min threads: 3
+*  Max threads: 3
+*  Environment: production
+*          PID: 3746111
+* Listening on http://0.0.0.0:8081
+Use Ctrl-C to stop
+[3a2a231d-413d-41b4-99e1-265641b823f6] Started HEAD "/app/up" for 127.0.0.1 at 2025-06-29 04:15:58 +0000
+[3a2a231d-413d-41b4-99e1-265641b823f6]   
+[3a2a231d-413d-41b4-99e1-265641b823f6] ActionController::RoutingError (No route matches [HEAD] "/app/up"):
+[3a2a231d-413d-41b4-99e1-265641b823f6]   
+- Gracefully stopping, waiting for requests to finish
+Exiting

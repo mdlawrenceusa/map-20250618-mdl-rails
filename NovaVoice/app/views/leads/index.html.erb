@@ -1,29 +1,310 @@
 <% content_for :title, "Leads" %>
 
-<div class="w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
-  <% end %>
-
-  <div class="flex justify-between items-center">
-    <h1 class="font-bold text-4xl">Leads</h1>
-    <%= link_to "New lead", new_lead_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
-  </div>
-
-  <div id="leads" class="min-w-full divide-y divide-gray-200 space-y-5">
-    <% if @leads.any? %>
-      <% @leads.each do |lead| %>
-        <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
-          <%= render lead %>
-          <div class="w-full sm:w-auto flex flex-col sm:flex-row space-x-2 space-y-2">
-            <%= link_to "Show", lead, class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= link_to "Edit", edit_lead_path(lead), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= button_to "Destroy", lead, method: :delete, class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
-          </div>
-        </div>
+<!-- Header Section -->
+<div class="w3-container">
+  <div class="w3-row-padding w3-margin-bottom">
+    <div class="w3-col l8 m8 s12">
+      <h1 class="w3-xlarge"><i class="fas fa-users"></i> Church Leads</h1>
+      <p class="w3-text-grey">Manage pastoral contacts and outreach prospects</p>
+    </div>
+    <div class="w3-col l4 m4 s12 w3-right-align">
+      <%= link_to new_lead_path, class: "w3-button w3-blue w3-round-large" do %>
+        <i class="fas fa-plus"></i> New Lead
       <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="w3-row-padding w3-margin-bottom">
+  <div class="w3-third">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-grey">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="w3-right">
+          <h3><%= @leads.count %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Total Leads</h4>
+      </div>
+    </div>
+  </div>
+  
+  <div class="w3-third">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-green">
+          <i class="fas fa-phone"></i>
+        </div>
+        <div class="w3-right">
+          <h3 class="w3-text-green"><%= @leads.where.not(phone: [nil, '']).count %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Callable Leads</h4>
+      </div>
+    </div>
+  </div>
+  
+  <div class="w3-third">
+    <div class="w3-card-4 w3-white">
+      <div class="w3-container w3-padding-16">
+        <div class="w3-left w3-xxlarge w3-text-blue">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="w3-right">
+          <h3 class="w3-text-blue"><%= @leads.where(created_at: 1.week.ago..Time.current).count %></h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Recent Leads</h4>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lead Directory Card -->
+<div class="w3-card-4 w3-white">
+  <header class="w3-container w3-light-grey">
+    <h3><i class="fas fa-clipboard-list"></i> Lead Directory</h3>
+  </header>
+  
+  <div class="w3-container w3-padding">
+    <% if @leads.any? %>
+      
+      <%= enhanced_table(@leads, "leads-table", 
+                        export: true,
+                        filename: "church_leads",
+                        entity_name: "leads",
+                        page_length: 25,
+                        default_sort: [[0, "asc"]],
+                        column_defs: [
+                          { targets: [0, 1], width: "15%" },    # Name, Company
+                          { targets: [2], width: "12%" },       # Phone  
+                          { targets: [3], width: "12%" },       # Email
+                          { targets: [4], width: "8%" },        # State
+                          { targets: [5], width: "10%" },       # Source
+                          { targets: [6], width: "10%" },       # Status
+                          { targets: [7], width: "8%" },        # Owner
+                          { targets: [8], width: "10%" },       # Created
+                          { targets: [9], orderable: false, searchable: false, width: "10%" } # Actions
+                        ],
+                        custom_filters: [
+                          { id: "state-filter", column: 4 },
+                          { id: "source-filter", column: 5 },
+                          { id: "status-filter", column: 6 }
+                        ]) do %>
+        <thead>
+          <tr>
+            <th>Pastor Name</th>
+            <th>Church</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>State</th>
+            <th>Source</th>
+            <th>Status</th>
+            <th>Owner</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @leads.each do |lead| %>
+            <tr>
+              <td>
+                <strong><%= lead.name %></strong>
+                <% if lead.unread_by_owner? %>
+                  <br><small class="badge bg-warning">UNREAD</small>
+                <% end %>
+              </td>
+              <td>
+                <%= lead.company %>
+                <% if lead.website.present? %>
+                  <br><small>
+                    <a href="<%= lead.website %>" target="_blank" class="text-primary">
+                      <i class="fas fa-external-link-alt"></i> Website
+                    </a>
+                  </small>
+                <% end %>
+              </td>
+              <td>
+                <% if lead.phone.present? %>
+                  <a href="tel:<%= lead.phone %>" class="text-primary">
+                    <%= lead.phone %>
+                  </a>
+                  <% if lead.respond_to?(:calling_schedule_enabled?) && lead.calling_schedule_enabled? %>
+                    <br><small class="badge bg-success">CALLABLE</small>
+                  <% end %>
+                <% else %>
+                  <span class="text-muted">No phone</span>
+                <% end %>
+              </td>
+              <td>
+                <% if lead.email.present? %>
+                  <a href="mailto:<%= lead.email %>" class="text-primary">
+                    <%= truncate(lead.email, length: 25) %>
+                  </a>
+                <% else %>
+                  <span class="text-muted">No email</span>
+                <% end %>
+              </td>
+              <td>
+                <span class="badge bg-light text-dark">
+                  <%= lead.state_province %>
+                </span>
+              </td>
+              <td data-order="<%= lead.lead_source %>">
+                <span class="badge <%= 
+                  case lead.lead_source&.downcase
+                  when 'web' then 'bg-primary'
+                  when 'referral' then 'bg-success'
+                  when 'cold' then 'bg-warning'
+                  else 'bg-secondary'
+                  end
+                %>">
+                  <%= lead.lead_source %>
+                </span>
+              </td>
+              <td data-order="<%= lead.lead_status %>">
+                <span class="badge <%= 
+                  case lead.lead_status&.downcase
+                  when /open/ then 'bg-primary'
+                  when /contacted/ then 'bg-info'
+                  when /qualified/ then 'bg-success'
+                  when /closed/ then 'bg-danger'
+                  else 'bg-secondary'
+                  end
+                %>">
+                  <%= truncate(lead.lead_status, length: 15) %>
+                </span>
+              </td>
+              <td>
+                <span class="badge bg-light text-dark">
+                  <%= lead.owner_alias %>
+                </span>
+              </td>
+              <td data-order="<%= lead.created_date&.to_i || lead.created_at.to_i %>">
+                <%= (lead.created_date || lead.created_at).strftime('%m/%d/%Y') %>
+                <br><small class="text-muted">
+                  <%= time_ago_in_words(lead.created_date || lead.created_at) %> ago
+                </small>
+              </td>
+              <td>
+                <div class="btn-group btn-group-sm" role="group">
+                  <%= link_to lead, 
+                              class: "btn btn-outline-primary btn-sm",
+                              title: "View Details",
+                              data: { toggle: "tooltip" } do %>
+                    <i class="fas fa-eye"></i>
+                  <% end %>
+                  
+                  <%= link_to edit_lead_path(lead), 
+                              class: "btn btn-outline-secondary btn-sm",
+                              title: "Edit Lead",
+                              data: { toggle: "tooltip" } do %>
+                    <i class="fas fa-edit"></i>
+                  <% end %>
+                  
+                  <% if lead.phone.present? && lead.respond_to?(:schedule_call) %>
+                    <%= button_to "#", 
+                                  class: "btn btn-outline-success btn-sm",
+                                  title: "Schedule Call",
+                                  data: { toggle: "tooltip" },
+                                  onclick: "scheduleCall(#{lead.id}); return false;" do %>
+                      <i class="fas fa-phone"></i>
+                    <% end %>
+                  <% end %>
+                  
+                  <%= button_to lead, method: :delete, 
+                                class: "btn btn-outline-danger btn-sm",
+                                title: "Delete Lead",
+                                data: { 
+                                  toggle: "tooltip",
+                                  turbo_confirm: "Are you sure you want to delete #{lead.name}?" 
+                                } do %>
+                    <i class="fas fa-trash"></i>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      <% end %>
+      
+      <!-- Custom Filters -->
+      <div class="w3-margin-top w3-row-padding">
+        <div class="w3-col m4 s12">
+          <label class="w3-text-grey"><i class="fas fa-map-marker-alt"></i> Filter by State:</label>
+          <select id="state-filter" class="w3-select w3-border">
+            <option value="">All States</option>
+            <% @leads.distinct.pluck(:state_province).compact.sort.each do |state| %>
+              <option value="<%= state %>"><%= state %></option>
+            <% end %>
+          </select>
+        </div>
+        
+        <div class="w3-col m4 s12">
+          <label class="w3-text-grey"><i class="fas fa-tag"></i> Filter by Source:</label>
+          <select id="source-filter" class="w3-select w3-border">
+            <option value="">All Sources</option>
+            <% @leads.distinct.pluck(:lead_source).compact.sort.each do |source| %>
+              <option value="<%= source %>"><%= source %></option>
+            <% end %>
+          </select>
+        </div>
+        
+        <div class="w3-col m4 s12">
+          <label class="w3-text-grey"><i class="fas fa-flag"></i> Filter by Status:</label>
+          <select id="status-filter" class="w3-select w3-border">
+            <option value="">All Statuses</option>
+            <% @leads.distinct.pluck(:lead_status).compact.sort.each do |status| %>
+              <option value="<%= status %>"><%= status %></option>
+            <% end %>
+          </select>
+        </div>
+      </div>
+      
     <% else %>
-      <p class="text-center my-10">No leads found.</p>
+      <div class="w3-center w3-padding-32">
+        <i class="fas fa-user-slash w3-jumbo w3-text-grey"></i>
+        <h3 class="w3-text-grey">No leads found</h3>
+        <p class="w3-text-grey">Get started by adding your first church lead</p>
+        <%= link_to new_lead_path, class: "w3-button w3-blue w3-round-large w3-margin-top" do %>
+          <i class="fas fa-plus"></i> Add your first lead
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>
+
+<!-- Additional JavaScript for lead management -->
+<script>
+function scheduleCall(leadId) {
+  if (confirm('Schedule a call for this lead?')) {
+    // This would integrate with your calling schedule system
+    fetch('/admin/calling_schedule/schedule_calls', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+      },
+      body: JSON.stringify({
+        lead_ids: [leadId],
+        priority: 2
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.scheduled > 0) {
+        alert('Call scheduled successfully!');
+      } else {
+        alert('Could not schedule call. Please try again.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error scheduling call.');
+    });
+  }
+}
+</script>

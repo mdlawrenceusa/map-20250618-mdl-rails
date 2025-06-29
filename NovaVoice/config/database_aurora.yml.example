@@ -1,0 +1,48 @@
+# Example Aurora DSQL Configuration
+# Copy this to database.yml when ready to switch to Aurora DSQL
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  
+production:
+  primary:
+    <<: *default
+    # Using Rails credentials to fetch from AWS Secrets Manager
+    host: <%= Rails.application.credentials.dig(:aurora_dsql, :endpoint) %>
+    port: <%= Rails.application.credentials.dig(:aurora_dsql, :port) || 5432 %>
+    database: <%= Rails.application.credentials.dig(:aurora_dsql, :database) %>
+    username: <%= Rails.application.credentials.dig(:aurora_dsql, :username) %>
+    password: <%= Rails.application.credentials.dig(:aurora_dsql, :password) %>
+    
+  # Solid Cache, Queue, and Cable can use the same database with different schemas
+  cache:
+    <<: *default
+    host: <%= Rails.application.credentials.dig(:aurora_dsql, :endpoint) %>
+    port: <%= Rails.application.credentials.dig(:aurora_dsql, :port) || 5432 %>
+    database: <%= Rails.application.credentials.dig(:aurora_dsql, :database) %>
+    username: <%= Rails.application.credentials.dig(:aurora_dsql, :username) %>
+    password: <%= Rails.application.credentials.dig(:aurora_dsql, :password) %>
+    schema_search_path: "solid_cache,public"
+    migrations_paths: db/cache_migrate
+    
+  queue:
+    <<: *default
+    host: <%= Rails.application.credentials.dig(:aurora_dsql, :endpoint) %>
+    port: <%= Rails.application.credentials.dig(:aurora_dsql, :port) || 5432 %>
+    database: <%= Rails.application.credentials.dig(:aurora_dsql, :database) %>
+    username: <%= Rails.application.credentials.dig(:aurora_dsql, :username) %>
+    password: <%= Rails.application.credentials.dig(:aurora_dsql, :password) %>
+    schema_search_path: "solid_queue,public"
+    migrations_paths: db/queue_migrate
+    
+  cable:
+    <<: *default
+    host: <%= Rails.application.credentials.dig(:aurora_dsql, :endpoint) %>
+    port: <%= Rails.application.credentials.dig(:aurora_dsql, :port) || 5432 %>
+    database: <%= Rails.application.credentials.dig(:aurora_dsql, :database) %>
+    username: <%= Rails.application.credentials.dig(:aurora_dsql, :username) %>
+    password: <%= Rails.application.credentials.dig(:aurora_dsql, :password) %>
+    schema_search_path: "solid_cable,public"
+    migrations_paths: db/cable_migrate

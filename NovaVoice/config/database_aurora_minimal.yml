@@ -1,0 +1,66 @@
+# Minimal Aurora DSQL Configuration - Compatible with DSQL limitations
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  
+development:
+  adapter: sqlite3
+  database: storage/development.sqlite3
+
+test:
+  adapter: sqlite3
+  database: storage/test.sqlite3
+
+production:
+  # Primary database using Aurora DSQL
+  primary:
+    <<: *default
+    host: lyabugbxayepatoxdewlxwdo7q.dsql.us-east-1.on.aws
+    port: 5432
+    database: postgres
+    username: admin
+    password: <%= `#{Rails.root}/bin/generate_aurora_password`.strip %>
+    sslmode: require
+    # Disable features not supported by Aurora DSQL
+    prepared_statements: false
+    advisory_locks: false
+    # Don't set client_min_messages or other unsupported variables
+    
+  # Use same cluster for all databases with schema separation
+  cache:
+    <<: *default
+    host: lyabugbxayepatoxdewlxwdo7q.dsql.us-east-1.on.aws
+    port: 5432
+    database: postgres
+    username: admin
+    password: <%= `#{Rails.root}/bin/generate_aurora_password`.strip %>
+    sslmode: require
+    prepared_statements: false
+    advisory_locks: false
+    migrations_paths: db/cache_migrate
+    
+  queue:
+    <<: *default
+    host: lyabugbxayepatoxdewlxwdo7q.dsql.us-east-1.on.aws
+    port: 5432
+    database: postgres
+    username: admin
+    password: <%= `#{Rails.root}/bin/generate_aurora_password`.strip %>
+    sslmode: require
+    prepared_statements: false
+    advisory_locks: false
+    migrations_paths: db/queue_migrate
+    
+  cable:
+    <<: *default
+    host: lyabugbxayepatoxdewlxwdo7q.dsql.us-east-1.on.aws
+    port: 5432
+    database: postgres
+    username: admin
+    password: <%= `#{Rails.root}/bin/generate_aurora_password`.strip %>
+    sslmode: require
+    prepared_statements: false
+    advisory_locks: false
+    migrations_paths: db/cable_migrate

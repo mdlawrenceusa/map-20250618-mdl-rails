@@ -10,7 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_26_221241) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_29_011646) do
+  create_table "calling_queues", force: :cascade do |t|
+    t.integer "lead_id", null: false
+    t.datetime "scheduled_call_time", null: false
+    t.integer "priority", default: 1, null: false
+    t.string "status", default: "pending", null: false
+    t.integer "attempt_count", default: 0, null: false
+    t.text "notes"
+    t.datetime "last_attempt_at"
+    t.text "failure_reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lead_id", "status"], name: "index_calling_queues_on_lead_id_and_status"
+    t.index ["lead_id"], name: "index_calling_queues_on_lead_id"
+    t.index ["scheduled_call_time"], name: "index_calling_queues_on_scheduled_call_time"
+    t.index ["status", "scheduled_call_time"], name: "index_calling_queues_on_status_and_scheduled_call_time"
+  end
+
+  create_table "calling_schedules", force: :cascade do |t|
+    t.integer "day_of_week", null: false
+    t.time "start_time", null: false
+    t.time "end_time", null: false
+    t.boolean "enabled", default: true, null: false
+    t.string "name", null: false
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["day_of_week", "enabled"], name: "index_calling_schedules_on_day_of_week_and_enabled"
+    t.index ["enabled"], name: "index_calling_schedules_on_enabled"
+  end
+
   create_table "campaign_calls", force: :cascade do |t|
     t.integer "campaign_id", null: false
     t.integer "lead_id", null: false
@@ -53,6 +83,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_26_221241) do
     t.boolean "unread_by_owner"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "calling_schedule_enabled", default: true, null: false
+    t.string "time_zone", default: "EST", null: false
+    t.datetime "last_call_attempt"
+    t.datetime "next_available_call_time"
+    t.index ["calling_schedule_enabled"], name: "index_leads_on_calling_schedule_enabled"
+    t.index ["next_available_call_time"], name: "index_leads_on_next_available_call_time"
   end
 
   create_table "prompts", force: :cascade do |t|
@@ -78,6 +114,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_26_221241) do
     t.index ["published_at", "is_active"], name: "index_prompts_on_published_at_and_is_active"
   end
 
+  create_table "sync_records", force: :cascade do |t|
+    t.string "resource_type"
+    t.integer "resource_id"
+    t.string "synced_by"
+    t.datetime "synced_at"
+    t.string "environment"
+    t.text "sync_details"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "calling_queues", "leads"
   add_foreign_key "campaign_calls", "campaigns"
   add_foreign_key "campaign_calls", "leads"
   add_foreign_key "prompts", "leads"

@@ -18,6 +18,7 @@ import { OutboundCallManager } from "./telephony/outbound";
 // import { TwilioIntegration } from "./telephony/twilio";
 import * as path from "path";
 import { minimalTranscriptLogger } from "./simple-transcript-logger-minimal";
+import { PhoneNormalizationService } from "./utils/phoneNormalization";
 // import { CognitoAuth } from "./auth/cognito";
 // import cookieParser from "cookie-parser";
 
@@ -550,11 +551,25 @@ app.post("/call/simple", async (req: Request, res: Response) => {
       return;
     }
 
-    const result = await outboundCallManager.makeSimpleCall(to, message);
+    // Normalize phone number for Vonage API
+    const phoneResult = PhoneNormalizationService.prepareForVonage(to);
+    if (!phoneResult.isValid) {
+      res.status(400).json({
+        error: "Invalid phone number",
+        details: phoneResult.error,
+        provided: to
+      });
+      return;
+    }
+
+    console.log(`📞 Simple call: ${to} → ${phoneResult.e164} (normalized)`);
+    
+    const result = await outboundCallManager.makeSimpleCall(phoneResult.e164!, message);
     res.status(200).json({ 
       success: true, 
       callId: result.uuid,
-      status: result.status 
+      status: result.status,
+      normalizedPhone: phoneResult.display
     });
   } catch (error) {
     console.error("Error making simple call:", error);
@@ -576,11 +591,25 @@ app.post("/call/ai", async (req: Request, res: Response) => {
       return;
     }
 
-    const result = await outboundCallManager.makeAICall(to, initialMessage, systemPrompt);
+    // Normalize phone number for Vonage API
+    const phoneResult = PhoneNormalizationService.prepareForVonage(to);
+    if (!phoneResult.isValid) {
+      res.status(400).json({
+        error: "Invalid phone number",
+        details: phoneResult.error,
+        provided: to
+      });
+      return;
+    }
+
+    console.log(`🤖 AI call: ${to} → ${phoneResult.e164} (normalized)`);
+    
+    const result = await outboundCallManager.makeAICall(phoneResult.e164!, initialMessage, systemPrompt);
     res.status(200).json({ 
       success: true, 
       callId: result.uuid,
-      status: result.status 
+      status: result.status,
+      normalizedPhone: phoneResult.display
     });
   } catch (error) {
     console.error("Error making AI call:", error);

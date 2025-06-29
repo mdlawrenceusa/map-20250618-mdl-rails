@@ -1,0 +1,117 @@
+# Aurora DSQL Compatibility for Rails
+# Handles Aurora DSQL limitations with ActiveRecord
+
+if Rails.env.production? && ENV['AURORA_DSQL_ENABLED'] != 'false'
+  # Monkey patch PostgreSQL adapter to skip unsupported operations for Aurora DSQL
+  require 'active_record/connection_adapters/postgresql_adapter'
+  
+  module AuroraDSQLCompatibility
+    def configure_connection
+      # Skip setting client_min_messages and other unsupported variables
+      # that Aurora DSQL doesn't support
+      return true
+    end
+    
+    def set_standard_conforming_strings
+      # Aurora DSQL doesn't support this setting
+      return true
+    end
+    
+    def supports_advisory_locks?
+      false
+    end
+    
+    def supports_explain?
+      false
+    end
+    
+    def supports_extensions?
+      false
+    end
+    
+    def supports_ranges?
+      false
+    end
+    
+    def supports_materialized_views?
+      false
+    end
+    
+    def supports_foreign_tables?
+      false
+    end
+    
+    def supports_check_constraints?
+      false
+    end
+    
+    def supports_validate_constraints?
+      false
+    end
+    
+    def supports_partial_index?
+      false
+    end
+    
+    def supports_expression_index?
+      false
+    end
+    
+    def supports_datetime_with_precision?
+      true
+    end
+    
+    def supports_json?
+      true
+    end
+    
+    def supports_comments?
+      false
+    end
+    
+    def supports_savepoints?
+      true
+    end
+    
+    def supports_lazy_transactions?
+      true
+    end
+  end
+  
+  # Apply compatibility patches to PostgreSQL adapter when connecting to Aurora DSQL
+  Rails.application.config.to_prepare do
+    ActiveRecord::ConnectionAdapters::PostgreSQLAdapter.class_eval do
+      alias_method :original_configure_connection, :configure_connection
+      
+      def configure_connection
+        if @config[:host]&.include?('dsql')
+          # Skip configuration for Aurora DSQL
+          # Just set up basic connection without type maps
+          @connection.exec("SET client_encoding TO 'UTF8'") rescue nil
+          @type_map_for_results = nil
+          @type_map_for_queries = nil
+          return true
+        else
+          original_configure_connection
+        end
+      end
+      
+      # Override methods for Aurora DSQL connections
+      def supports_advisory_locks?
+        if @config[:host]&.include?('dsql')
+          false
+        else
+          super
+        end
+      end
+      
+      def supports_explain?
+        if @config[:host]&.include?('dsql')
+          false
+        else
+          super
+        end
+      end
+    end
+  end
+end

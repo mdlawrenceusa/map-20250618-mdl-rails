@@ -1,0 +1,56 @@
+# Aurora DSQL Configuration for NovaVoice
+# Enables shared data between dev and production with proper isolation
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  
+  # Aurora DSQL connection settings
+  host: <%= ENV['AURORA_DSQL_ENDPOINT'] %>
+  port: 5432
+  
+  # Connection pooling for serverless
+  checkout_timeout: 10
+  reaping_frequency: 10
+  idle_timeout: 300
+
+development:
+  <<: *default
+  database: novavoice_shared
+  username: dev_user
+  password: <%= ENV['AURORA_DSQL_DEV_PASSWORD'] %>
+  
+  # Dev-specific settings
+  schema_search_path: "dev,shared,public"
+  
+  # Enable query logging in dev
+  min_messages: debug
+
+production:
+  <<: *default
+  database: novavoice_shared
+  username: prod_user
+  password: <%= ENV['AURORA_DSQL_PROD_PASSWORD'] %>
+  
+  # Production-specific settings
+  schema_search_path: "prod,shared,public"
+  
+  # Performance settings
+  statement_timeout: 30000
+  connect_timeout: 10
+  
+  # Read replica for heavy queries (optional)
+  replica:
+    <<: *default
+    host: <%= ENV['AURORA_DSQL_READ_ENDPOINT'] %>
+    username: prod_reader
+    password: <%= ENV['AURORA_DSQL_READ_PASSWORD'] %>
+
+# Shared test environment
+test:
+  <<: *default
+  database: novavoice_test
+  username: test_user
+  password: <%= ENV['AURORA_DSQL_TEST_PASSWORD'] %>
+  schema_search_path: "test,public"

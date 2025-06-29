@@ -1,0 +1,51 @@
+# Aurora DSQL IAM Authentication for Rails
+
+if Rails.env.production?
+  require 'aws-sdk-core'
+  
+  # Hook into ActiveRecord connection to generate IAM auth tokens
+  module AuroraDSQLAuth
+    def self.generate_auth_token(hostname, region = 'us-east-1')
+      require 'aws-sdk-core'
+      
+      signer = Aws::Sigv4::Signer.new(
+        service: 'dsql',
+        region: region,
+        credentials: Aws::CredentialProviderChain.new.resolve
+      )
+      
+      # Generate auth token for Aurora DSQL
+      url = "https://#{hostname}/?Action=DbConnectAdmin"
+      
+      signed_url = signer.presign_url(
+        http_method: 'GET',
+        url: url,
+        expires_in: 900 # 15 minutes
+      )
+      
+      # Extract the auth token from the signed URL
+      uri = URI.parse(signed_url)
+      "#{uri.query}"
+    end
+  end
+  
+  # Override database configuration to inject auth tokens
+  Rails.application.configure do
+    config.before_initialize do
+      # Only for Aurora DSQL connections in production
+      original_establish_connection = ActiveRecord::Base.method(:establish_connection)
+      
+      ActiveRecord::Base.define_singleton_method(:establish_connection) do |config = nil|
+        config ||= ActiveRecord::Base.connection_db_config.configuration_hash
+        
+        if config.is_a?(Hash) && config[:host]&.include?('dsql')
+          # Inject IAM auth token as password
+          config = config.dup
+          config[:password] = AuroraDSQLAuth.generate_auth_token(config[:host])
+        end
+        
+        original_establish_connection.call(config)
+      end
+    end
+  end
+end

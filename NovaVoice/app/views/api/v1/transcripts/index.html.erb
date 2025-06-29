@@ -334,34 +334,171 @@
       </form>
     </div>
     
-    <!-- Call List -->
+    <!-- Call List with DataTables -->
     <div class="calls-section">
       <div class="call-header">
         Recent Calls (<%= @calls.length %> shown)
       </div>
       
       <% if @calls.any? %>
-        <% @calls.each do |call| %>
-          <div class="call-item" onclick="viewCall('<%= call[:call_id] %>')">
-            <div class="call-meta">
-              <div>
-                <span class="call-id"><%= call[:call_id][0..7] %>...</span>
-                <span class="call-phone">📱 <%= call[:phone_number] || 'Unknown' %></span>
-              </div>
-              <div>
-                <span class="call-time">🕐 <%= call[:start_time] ? Time.parse(call[:start_time]).in_time_zone('Eastern Time (US & Canada)').strftime('%m/%d %I:%M %p EST') : 'Unknown' %></span>
-                <span class="call-duration">⏱️ <%= call[:duration] || 0 %>s</span>
-                <span class="call-status status-<%= call[:status] || 'unknown' %>">
-                  <%= (call[:status] || 'unknown').humanize %>
-                </span>
-              </div>
-            </div>
-            
-            <div class="call-preview">
-              <%= truncate(call[:transcript] || 'No transcript available', length: 200) %>
-            </div>
-          </div>
-        <% end %>
+        <div style="padding: 20px;">
+          <table id="transcripts-table" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+              <tr>
+                <th>Call ID</th>
+                <th>Phone Number</th>
+                <th>Date & Time</th>
+                <th>Duration</th>
+                <th>Status</th>
+                <th>Transcript Preview</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @calls.each do |call| %>
+                <tr>
+                  <td>
+                    <code style="font-size: 0.8em;">
+                      <%= call[:call_id][0..7] %>...
+                    </code>
+                    <br><small class="text-muted">
+                      <%= call[:call_id] %>
+                    </small>
+                  </td>
+                  <td>
+                    <% if call[:phone_number] %>
+                      <a href="tel:<%= call[:phone_number] %>" class="text-primary">
+                        📱 <%= call[:phone_number] %>
+                      </a>
+                    <% else %>
+                      <span class="text-muted">Unknown</span>
+                    <% end %>
+                  </td>
+                  <td data-order="<%= call[:start_time] ? Time.parse(call[:start_time]).to_i : 0 %>">
+                    <% if call[:start_time] %>
+                      <%= Time.parse(call[:start_time]).in_time_zone('Eastern Time (US & Canada)').strftime('%m/%d/%Y') %>
+                      <br><small class="text-muted">
+                        <%= Time.parse(call[:start_time]).in_time_zone('Eastern Time (US & Canada)').strftime('%I:%M %p EST') %>
+                      </small>
+                    <% else %>
+                      <span class="text-muted">Unknown</span>
+                    <% end %>
+                  </td>
+                  <td data-order="<%= call[:duration] || 0 %>">
+                    <% duration = call[:duration] || 0 %>
+                    <% if duration > 60 %>
+                      <strong><%= (duration / 60.0).round(1) %>m</strong>
+                    <% else %>
+                      <strong><%= duration %>s</strong>
+                    <% end %>
+                    <br><small class="text-muted">
+                      ⏱️ <%= duration %> seconds
+                    </small>
+                  </td>
+                  <td data-order="<%= call[:status] || 'unknown' %>">
+                    <span class="badge <%= 
+                      case call[:status]
+                      when 'completed' then 'bg-success'
+                      when 'failed' then 'bg-danger'
+                      when 'in-progress', 'in_progress' then 'bg-warning'
+                      else 'bg-secondary'
+                      end
+                    %>">
+                      <%= (call[:status] || 'unknown').humanize %>
+                    </span>
+                  </td>
+                  <td style="max-width: 300px;">
+                    <div style="max-height: 60px; overflow: hidden; line-height: 1.4;">
+                      <%= truncate(call[:transcript] || 'No transcript available', length: 150) %>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="btn-group btn-group-sm" role="group">
+                      <button class="btn btn-outline-primary btn-sm" 
+                              onclick="viewCall('<%= call[:call_id] %>')"
+                              title="View Full Transcript"
+                              data-toggle="tooltip">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      
+                      <button class="btn btn-outline-success btn-sm" 
+                              onclick="copyTranscriptQuick('<%= call[:call_id] %>')"
+                              title="Quick Copy"
+                              data-toggle="tooltip">
+                        <i class="fas fa-copy"></i>
+                      </button>
+                      
+                      <button class="btn btn-outline-info btn-sm" 
+                              onclick="downloadTranscriptQuick('<%= call[:call_id] %>')"
+                              title="Download"
+                              data-toggle="tooltip">
+                        <i class="fas fa-download"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- DataTables Initialization -->
+        <script>
+        $(document).ready(function() {
+          $('#transcripts-table').DataTable({
+            pageLength: 15,
+            lengthMenu: [[10, 15, 25, 50, -1], [10, 15, 25, 50, "All"]],
+            responsive: true,
+            processing: true,
+            order: [[2, "desc"]], // Sort by date/time (newest first)
+            columnDefs: [
+              { targets: [0], width: "15%" },  // Call ID
+              { targets: [1], width: "12%" },  // Phone
+              { targets: [2], width: "12%" },  // Date/Time
+              { targets: [3], width: "8%" },   // Duration
+              { targets: [4], width: "8%" },   // Status
+              { targets: [5], width: "35%" },  // Transcript Preview
+              { targets: [6], orderable: false, searchable: false, width: "10%" } // Actions
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+              {
+                extend: 'copy',
+                text: '<i class="fas fa-copy"></i> Copy',
+                className: 'btn btn-outline-primary btn-sm',
+                exportOptions: { columns: [0, 1, 2, 3, 4, 5] }
+              },
+              {
+                extend: 'csv',
+                text: '<i class="fas fa-file-csv"></i> CSV',
+                className: 'btn btn-outline-success btn-sm',
+                filename: 'call_transcripts_' + new Date().toISOString().slice(0,10),
+                exportOptions: { columns: [0, 1, 2, 3, 4, 5] }
+              },
+              {
+                extend: 'excel',
+                text: '<i class="fas fa-file-excel"></i> Excel',
+                className: 'btn btn-outline-success btn-sm',
+                filename: 'call_transcripts_' + new Date().toISOString().slice(0,10),
+                exportOptions: { columns: [0, 1, 2, 3, 4, 5] }
+              }
+            ],
+            language: {
+              search: "Search transcripts:",
+              lengthMenu: "Show _MENU_ calls per page",
+              info: "Showing _START_ to _END_ of _TOTAL_ calls",
+              infoEmpty: "No calls found",
+              infoFiltered: "(filtered from _MAX_ total calls)",
+              emptyTable: "No call transcripts available",
+              zeroRecords: "No matching calls found"
+            }
+          });
+          
+          // Initialize tooltips
+          $('[data-toggle="tooltip"]').tooltip();
+        });
+        </script>
+        
       <% else %>
         <div class="no-calls">
           <% if params[:query] || params[:phone_number] %>
@@ -592,6 +729,65 @@ ${messages.map(msg =>
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
+    }
+    
+    // Quick copy function for table buttons
+    function copyTranscriptQuick(callId) {
+      fetch(`/api/v1/transcripts/${callId}.json`)
+        .then(response => response.json())
+        .then(data => {
+          const call = data.call;
+          const messages = parseTranscript(call.transcript);
+          const formattedText = messages.map(msg => 
+            `${msg.speaker}${msg.time ? ` (${formatTimeToEST(msg.time)})` : ''}: ${msg.text}`
+          ).join('\n\n');
+          
+          navigator.clipboard.writeText(formattedText).then(() => {
+            alert('Transcript copied to clipboard!');
+          }).catch(() => {
+            alert('Failed to copy transcript');
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching transcript:', error);
+          alert('Error fetching transcript');
+        });
+    }
+    
+    // Quick download function for table buttons
+    function downloadTranscriptQuick(callId) {
+      fetch(`/api/v1/transcripts/${callId}.json`)
+        .then(response => response.json())
+        .then(data => {
+          const call = data.call;
+          const messages = parseTranscript(call.transcript);
+          const formattedText = `Call Transcript
+Call ID: ${call.call_id}
+Phone: ${call.phone_number || 'Unknown'}
+Date: ${call.start_time ? formatToEST(new Date(call.start_time)) : 'Unknown'}
+Duration: ${formatDuration(call.duration)}
+Status: ${call.status}
+
+=== CONVERSATION ===
+
+${messages.map(msg => 
+  `${msg.speaker}${msg.time ? ` (${formatTimeToEST(msg.time)})` : ''}: ${msg.text}`
+).join('\n\n')}`;
+          
+          const blob = new Blob([formattedText], { type: 'text/plain' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `transcript_${call.call_id.substring(0, 8)}_${new Date().toISOString().split('T')[0]}.txt`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+          console.error('Error fetching transcript:', error);
+          alert('Error downloading transcript');
+        });
     }
     
     // Close modal when clicking outside of it

@@ -1,0 +1,9 @@
+-- Data export for calling_schedules
+DELETE FROM calling_schedules;
+
+INSERT INTO calling_schedules (id, day_of_week, start_time, end_time, enabled, name, description, created_at, updated_at) VALUES (7, 2, '2000-01-01T09:00:00Z', '2000-01-01T11:30:00Z', true, 'Tuesday Morning Window', 'Optimal morning calling time for pastors', '2025-06-27T06:11:51Z', '2025-06-27T06:11:51Z');
+INSERT INTO calling_schedules (id, day_of_week, start_time, end_time, enabled, name, description, created_at, updated_at) VALUES (8, 2, '2000-01-01T13:30:00Z', '2000-01-01T16:00:00Z', true, 'Tuesday Afternoon Window', 'Optimal afternoon calling time for pastors', '2025-06-27T06:11:51Z', '2025-06-27T06:11:51Z');
+INSERT INTO calling_schedules (id, day_of_week, start_time, end_time, enabled, name, description, created_at, updated_at) VALUES (9, 3, '2000-01-01T09:00:00Z', '2000-01-01T11:30:00Z', true, 'Wednesday Morning Window', 'Optimal morning calling time for pastors', '2025-06-27T06:11:51Z', '2025-06-27T06:11:51Z');
+INSERT INTO calling_schedules (id, day_of_week, start_time, end_time, enabled, name, description, created_at, updated_at) VALUES (10, 3, '2000-01-01T13:30:00Z', '2000-01-01T16:00:00Z', true, 'Wednesday Afternoon Window', 'Afternoon calling before evening service prep', '2025-06-27T06:11:51Z', '2025-06-27T06:11:51Z');
+INSERT INTO calling_schedules (id, day_of_week, start_time, end_time, enabled, name, description, created_at, updated_at) VALUES (11, 4, '2000-01-01T09:00:00Z', '2000-01-01T11:30:00Z', true, 'Thursday Morning Window', 'Optimal morning calling time for pastors', '2025-06-27T06:11:51Z', '2025-06-27T06:11:51Z');
+INSERT INTO calling_schedules (id, day_of_week, start_time, end_time, enabled, name, description, created_at, updated_at) VALUES (12, 4, '2000-01-01T13:30:00Z', '2000-01-01T16:00:00Z', true, 'Thursday Afternoon Window', 'Optimal afternoon calling time for pastors', '2025-06-27T06:11:51Z', '2025-06-27T06:11:51Z');
