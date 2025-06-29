@@ -67,6 +67,15 @@ class AwsCredentialsService
     get_parameter('/novavoice/production/iam/application_role_arn')
   end
 
+  # Get AWS credentials for Cognito and other services
+  def aws_credentials
+    # Use default credential chain for Cloud9/EC2 instance profile
+    Aws::Credentials.new(
+      ENV['AWS_ACCESS_KEY_ID'] || '',
+      ENV['AWS_SECRET_ACCESS_KEY'] || ''
+    )
+  end
+
   # Assume application role for restricted access
   def assume_application_role
     return @application_credentials if @application_credentials&.valid?

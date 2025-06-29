@@ -8,6 +8,7 @@ RUN apt-get update -qq && \
     git \
     libvips \
     libpq-dev \
+    libyaml-dev \
     pkg-config \
     sqlite3 \
     && rm -rf /var/lib/apt/lists /var/cache/apt/archives

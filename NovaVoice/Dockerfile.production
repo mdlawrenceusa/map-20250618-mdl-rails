@@ -14,7 +14,8 @@ RUN apt-get update -qq && \
       curl \
       git \
       nodejs \
-      npm && \
+      npm \
+      libyaml-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # Set working directory
