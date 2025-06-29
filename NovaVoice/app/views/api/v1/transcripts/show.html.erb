@@ -106,8 +106,8 @@
 <body>
   <div class="container">
     <div class="nav-section">
-      <a href="/api/v1/transcripts" class="nav-link">← Back to All Calls</a>
-      <a href="/api/v1/prompts/admin" class="nav-link">Prompt Management</a>
+      <a href="<%= request.path.start_with?('/app') ? '/app' : '' %>/api/v1/transcripts" class="nav-link">← Back to All Calls</a>
+      <a href="<%= request.path.start_with?('/app') ? '/app' : '' %>/api/v1/prompts/admin" class="nav-link">Prompt Management</a>
     </div>
     
     <h1>📞 Call Transcript Details</h1>
@@ -150,7 +150,7 @@
     <div class="actions-section">
       <button onclick="copyToClipboard()" class="btn btn-primary">📋 Copy Transcript</button>
       <button onclick="downloadTranscript()" class="btn btn-secondary">💾 Download</button>
-      <a href="/api/v1/transcripts/<%= @call[:call_id] %>.json" class="btn btn-secondary">📄 View JSON</a>
+      <a href="<%= request.path.start_with?('/app') ? '/app' : '' %>/api/v1/transcripts/<%= @call[:call_id] %>.json" class="btn btn-secondary">📄 View JSON</a>
     </div>
     
     <!-- Transcript Content -->
