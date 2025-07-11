@@ -10,10 +10,39 @@ class TranscriptService
 
   def get_recent_calls(limit: 50)
     begin
-      # Scan table to get recent calls (in production, you'd want GSI for better performance)
+      # Scan ALL records then sort by timestamp to get truly recent calls
       response = @dynamodb.scan(
-        table_name: @table_name,
-        limit: limit
+        table_name: @table_name
+        # Remove limit to get all records for proper sorting
+      )
+      
+      calls = response.items.map do |item|
+        {
+          call_id: item['call_uuid'],
+          phone_number: item['phone_number'],
+          start_time: item['start_time'],
+          end_time: item['end_time'],
+          duration: item['duration_seconds'],
+          status: item['status'],
+          transcript: item['transcript']
+        }
+      end
+      
+      # Sort by start_time (most recent first) and take the limit
+      sorted_calls = calls.sort_by { |call| call[:start_time] || '' }.reverse
+      sorted_calls.first(limit)
+      
+    rescue Aws::DynamoDB::Errors::ServiceError => e
+      Rails.logger.error "DynamoDB error: #{e.message}"
+      []
+    end
+  end
+
+  def get_all_calls
+    begin
+      # Scan ALL records without any limit
+      response = @dynamodb.scan(
+        table_name: @table_name
       )
       
       calls = response.items.map do |item|

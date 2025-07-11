@@ -60,7 +60,7 @@ export class VonageIntegration {
     
     if (isOutbound) {
       // Outbound call - use Esther's greeting
-      greeting = "Hello, this is Esther calling from Mike Lawrence Productions. Could I please speak with your senior pastor or lead pastor?";
+      greeting = "This is Esther calling from GlobalOutreachEvent.com. May I speak with your senior pastor?";
       fromName = "Esther - Mike Lawrence Productions";
     } else {
       // Inbound call - use Esther's greeting for church outreach
@@ -72,6 +72,7 @@ export class VonageIntegration {
     const protocol = 'wss';
     const host = 'gospelshare.io';
     
+    // Use TTS for initial greeting on all calls, then connect to WebSocket for AI conversation
     const nccoResponse: WebhookResponse[] = [
       {
         action: "talk",

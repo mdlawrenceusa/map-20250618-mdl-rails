@@ -3,6 +3,31 @@
 <head>
   <title>Call Transcripts - NovaVoice</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <!-- DataTables CSS and JS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
+  
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+  
+  <!-- DataTables Buttons Extension -->
+  <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
     .container { max-width: 1400px; margin: 0 auto; }
@@ -539,8 +564,12 @@
       // Show modal
       document.getElementById('transcriptModal').style.display = 'block';
       
+      // Build the correct API path based on current location
+      const currentPath = window.location.pathname;
+      const apiBasePath = currentPath.includes('/app/') ? '/app/api/v1/transcripts' : '/api/v1/transcripts';
+      
       // Fetch call details
-      fetch(`/api/v1/transcripts/${callId}.json`)
+      fetch(`${apiBasePath}/${callId}.json`)
         .then(response => response.json())
         .then(data => {
           currentCall = data.call;
@@ -733,7 +762,11 @@ ${messages.map(msg =>
     
     // Quick copy function for table buttons
     function copyTranscriptQuick(callId) {
-      fetch(`/api/v1/transcripts/${callId}.json`)
+      // Build the correct API path based on current location
+      const currentPath = window.location.pathname;
+      const apiBasePath = currentPath.includes('/app/') ? '/app/api/v1/transcripts' : '/api/v1/transcripts';
+      
+      fetch(`${apiBasePath}/${callId}.json`)
         .then(response => response.json())
         .then(data => {
           const call = data.call;
@@ -756,7 +789,11 @@ ${messages.map(msg =>
     
     // Quick download function for table buttons
     function downloadTranscriptQuick(callId) {
-      fetch(`/api/v1/transcripts/${callId}.json`)
+      // Build the correct API path based on current location
+      const currentPath = window.location.pathname;
+      const apiBasePath = currentPath.includes('/app/') ? '/app/api/v1/transcripts' : '/api/v1/transcripts';
+      
+      fetch(`${apiBasePath}/${callId}.json`)
         .then(response => response.json())
         .then(data => {
           const call = data.call;

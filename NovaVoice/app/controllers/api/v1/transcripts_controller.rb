@@ -3,7 +3,8 @@ class Api::V1::TranscriptsController < Api::V1::BaseController
 
   def index
     @transcript_service = TranscriptService.new
-    @calls = @transcript_service.get_recent_calls(limit: params[:limit]&.to_i || 50)
+    # Get ALL calls for DataTables sorting/filtering
+    @calls = @transcript_service.get_all_calls
     @stats = @transcript_service.get_call_stats
     
     respond_to do |format|

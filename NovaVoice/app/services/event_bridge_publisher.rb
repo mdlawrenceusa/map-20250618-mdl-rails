@@ -10,13 +10,22 @@ class EventBridgePublisher
 
   # Publish a single call request
   def publish_single_call(phone_number, lead_id = nil, campaign_id = nil)
-    Rails.logger.info "Publishing single call request for #{phone_number}"
+    formatted_phone = format_phone(phone_number)
+    Rails.logger.info "Publishing single call request for #{formatted_phone}"
+    
+    # Check call frequency protection
+    guard = CallFrequencyGuard.new
+    if guard.recently_called?(formatted_phone)
+      Rails.logger.warn "🚫 CALL BLOCKED: #{formatted_phone} was recently called (24h protection)"
+      guard.analyze_recent_activity(formatted_phone)
+      raise "Phone number #{formatted_phone} was called within the last 24 hours. Call blocked to prevent harassment."
+    end
     
     event = {
       source: 'nova-voice.rails',
       detail_type: 'SingleCallRequested',
       detail: {
-        phoneNumber: format_phone(phone_number),
+        phoneNumber: formatted_phone,
         leadId: lead_id,
         campaignId: campaign_id,
         timestamp: Time.current.iso8601,
@@ -32,9 +41,26 @@ class EventBridgePublisher
   def publish_campaign_launch(campaign, leads)
     Rails.logger.info "Publishing campaign launch for #{campaign.name} with #{leads.count} leads"
     
+    # Filter out recently called numbers
+    guard = CallFrequencyGuard.new
+    filtered_leads = leads.select do |lead|
+      formatted_phone = format_phone(lead.phone)
+      if guard.recently_called?(formatted_phone)
+        Rails.logger.warn "🚫 CAMPAIGN FILTER: Skipping #{formatted_phone} - recently called (24h protection)"
+        false
+      else
+        true
+      end
+    end
+    
+    skipped_count = leads.count - filtered_leads.count
+    if skipped_count > 0
+      Rails.logger.warn "⚠️ Skipped #{skipped_count} leads due to recent call protection"
+    end
+    
     events = []
     
-    leads.each_with_index do |lead, index|
+    filtered_leads.each_with_index do |lead, index|
       # Calculate scheduled time with spacing
       scheduled_time = Time.current + (index * campaign.call_spacing_seconds).seconds
       
@@ -76,12 +102,14 @@ class EventBridgePublisher
     
     # Publish campaign status event
     publish_campaign_status(campaign, 'launched', {
-      totalCalls: leads.count,
+      totalCalls: filtered_leads.count,
+      skippedDueToFrequency: skipped_count,
+      originalLeadCount: leads.count,
       firstCallAt: Time.current.iso8601,
-      lastCallAt: (Time.current + ((leads.count - 1) * campaign.call_spacing_seconds).seconds).iso8601
+      lastCallAt: filtered_leads.any? ? (Time.current + ((filtered_leads.count - 1) * campaign.call_spacing_seconds).seconds).iso8601 : Time.current.iso8601
     })
     
-    Rails.logger.info "Published #{events.count} events for campaign #{campaign.name}"
+    Rails.logger.info "Published #{events.count} events for campaign #{campaign.name} (#{skipped_count} skipped due to frequency protection)"
   end
 
   # Publish campaign status updates
